@@ -1,0 +1,221 @@
+@layout('layouts/main')
+
+@section('title')
+Modifier Événement de Suivi
+@endsection
+
+@section('content')
+<!-- Premium Page Header -->
+<div class="relative bg-gradient-to-br from-teal-600/90 via-cyan-700/90 to-blue-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center gap-8">
+      <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+        <i class="fas fa-edit text-white text-6xl drop-shadow-lg"></i>
+      </div>
+      <div>
+        <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+          Modifier l'Événement
+        </h1>
+        <p class="text-teal-100 text-xl font-medium">
+          {{ tracking.employee.fullName }} - {{ tracking.typeEvenement }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form Container -->
+<div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+  <div class="bg-gradient-to-r from-teal-50 to-cyan-50 p-8 border-b border-gray-200/50">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Modification de l'Événement</h2>
+    <p class="text-gray-600">Ajustez les détails de l'activité de suivi</p>
+  </div>
+
+  <div class="p-10">
+    <form action="{{ route('tracking.update', [tracking.id]) }}" method="POST" class="space-y-10">
+      {{ csrfField() }}
+      @method('PUT')
+
+      <!-- Employee Selection -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-user text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Employé Concerné</h3>
+            <p class="text-gray-600">{{ tracking.employee.fullName }}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="employee_id" class="form-label">
+            <i class="fas fa-user-tag text-blue-500 mr-2"></i>
+            Employé
+          </label>
+          <select id="employee_id" name="employee_id" class="form-select" required>
+            @each(employee in employees)
+              <option value="{{ employee.id }}" {{ tracking.employeeId === employee.id ? 'selected' : '' }}>
+                {{ employee.fullName }} - {{ employee.departement }}
+              </option>
+            @endeach
+          </select>
+        </div>
+      </div>
+
+      <!-- Event Details -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-calendar-alt text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Détails de l'Événement</h3>
+            <p class="text-gray-600">Type et informations temporelles</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="form-group">
+            <label for="type_evenement" class="form-label">
+              <i class="fas fa-tags text-purple-500 mr-2"></i>
+              Type d'Événement
+            </label>
+            <select id="type_evenement" name="type_evenement" class="form-select" required>
+              <option value="Arrivée" {{ tracking.typeEvenement === 'Arrivée' ? 'selected' : '' }}>🟢 Arrivée</option>
+              <option value="Départ" {{ tracking.typeEvenement === 'Départ' ? 'selected' : '' }}>🔴 Départ</option>
+              <option value="Pause" {{ tracking.typeEvenement === 'Pause' ? 'selected' : '' }}>⏸️ Pause</option>
+              <option value="Retour" {{ tracking.typeEvenement === 'Retour' ? 'selected' : '' }}>▶️ Retour</option>
+              <option value="Mission" {{ tracking.typeEvenement === 'Mission' ? 'selected' : '' }}>🚗 Mission</option>
+              <option value="Congé" {{ tracking.typeEvenement === 'Congé' ? 'selected' : '' }}>🏖️ Congé</option>
+              <option value="Maladie" {{ tracking.typeEvenement === 'Maladie' ? 'selected' : '' }}>🏥 Maladie</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="date_heure" class="form-label">
+              <i class="fas fa-clock text-purple-500 mr-2"></i>
+              Date et Heure
+            </label>
+            <input type="datetime-local" id="date_heure" name="date_heure" value="{{ tracking.dateHeure.toFormat('yyyy-MM-dd\'T\'HH:mm') }}" class="form-input" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location and Status -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-green-500 to-teal-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-map-marker-alt text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Localisation et Statut</h3>
+            <p class="text-gray-600">Lieu et état de l'événement</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="form-group">
+            <label for="lieu" class="form-label">
+              <i class="fas fa-location-dot text-green-500 mr-2"></i>
+              Lieu
+            </label>
+            <select id="lieu" name="lieu" class="form-select">
+              <option value="">Sélectionner un lieu</option>
+              <option value="Bureau principal" {{ tracking.lieu === 'Bureau principal' ? 'selected' : '' }}>🏢 Bureau principal</option>
+              <option value="Salle de réunion" {{ tracking.lieu === 'Salle de réunion' ? 'selected' : '' }}>🏛️ Salle de réunion</option>
+              <option value="Cafétéria" {{ tracking.lieu === 'Cafétéria' ? 'selected' : '' }}>☕ Cafétéria</option>
+              <option value="Client" {{ tracking.lieu === 'Client' ? 'selected' : '' }}>🤝 Chez le client</option>
+              <option value="Télétravail" {{ tracking.lieu === 'Télétravail' ? 'selected' : '' }}>🏠 Télétravail</option>
+              <option value="Extérieur" {{ tracking.lieu === 'Extérieur' ? 'selected' : '' }}>🌍 Mission extérieure</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="statut" class="form-label">
+              <i class="fas fa-toggle-on text-green-500 mr-2"></i>
+              Statut
+            </label>
+            <select id="statut" name="statut" class="form-select">
+              <option value="Actif" {{ tracking.statut === 'Actif' ? 'selected' : '' }}>✅ Actif</option>
+              <option value="Terminé" {{ tracking.statut === 'Terminé' ? 'selected' : '' }}>✔️ Terminé</option>
+              <option value="Annulé" {{ tracking.statut === 'Annulé' ? 'selected' : '' }}>❌ Annulé</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group mt-8">
+          <label for="commentaire" class="form-label">
+            <i class="fas fa-comment-alt text-green-500 mr-2"></i>
+            Commentaires
+          </label>
+          <textarea id="commentaire" name="commentaire" rows="4" class="form-textarea" placeholder="Commentaires ou notes...">{{ tracking.commentaire }}</textarea>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+        <a href="{{ route('tracking.index') }}" class="btn-secondary">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Retour au Suivi
+        </a>
+
+        <div class="flex gap-4">
+          <button type="button" onclick="resetForm()" class="btn-outline">
+            <i class="fas fa-undo mr-2"></i>
+            Réinitialiser
+          </button>
+          <button type="submit" class="btn-primary-gradient">
+            <i class="fas fa-save mr-2"></i>
+            Enregistrer les Modifications
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.form-section {
+  @apply bg-gradient-to-br from-gray-50/80 to-white rounded-2xl p-8 border border-gray-100 shadow-sm;
+}
+
+.form-group {
+  @apply relative;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-3 flex items-center;
+}
+
+.form-input, .form-select {
+  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300;
+}
+
+.form-textarea {
+  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300 resize-none;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center;
+}
+
+.btn-outline {
+  @apply px-6 py-3 border-2 border-blue-300 rounded-xl text-blue-600 font-semibold hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 flex items-center;
+}
+
+.btn-primary-gradient {
+  @apply relative px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center overflow-hidden;
+}
+</style>
+
+<script>
+function resetForm() {
+  if (confirm('Êtes-vous sûr de vouloir réinitialiser les modifications ?')) {
+    location.reload();
+  }
+}
+</script>
+@endsection

@@ -1,0 +1,266 @@
+@layout('layouts/main')
+
+@section('title')
+Modifier Démotion - {{ demotion.employee.fullName }}
+@endsection
+
+@section('content')
+<!-- Premium Page Header -->
+<div class="relative bg-gradient-to-br from-red-600/90 via-pink-700/90 to-rose-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center gap-8">
+      <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+        <i class="fas fa-edit text-white text-6xl drop-shadow-lg"></i>
+      </div>
+      <div>
+        <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+          Modifier la Démotion
+        </h1>
+        <p class="text-red-100 text-xl font-medium">
+          {{ demotion.employee.fullName }} - {{ demotion.ancienPoste }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form Container -->
+<div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+  <div class="bg-gradient-to-r from-red-50 to-pink-50 p-8 border-b border-gray-200/50">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Modification de la Démotion</h2>
+    <p class="text-gray-600">Ajustez les détails de la rétrogradation</p>
+  </div>
+
+  <div class="p-10">
+    <form action="{{ route('demotions.update', [demotion.id]) }}" method="POST" class="space-y-10">
+      {{ csrfField() }}
+      @method('PUT')
+
+      <!-- Employee Info (Read-only) -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-user text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Employé Concerné</h3>
+            <p class="text-gray-600">{{ demotion.employee.fullName }}</p>
+          </div>
+        </div>
+
+        <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="text-gray-600 text-sm">Nom complet:</span>
+              <div class="font-semibold text-gray-800">{{ demotion.employee.fullName }}</div>
+            </div>
+            <div>
+              <span class="text-gray-600 text-sm">Département:</span>
+              <div class="font-semibold text-gray-800">{{ demotion.employee.departement }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Position Details -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-briefcase text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Changement de Poste</h3>
+            <p class="text-gray-600">Ancien et nouveau poste</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="form-group">
+            <label for="ancien_poste" class="form-label">
+              <i class="fas fa-briefcase text-purple-500 mr-2"></i>
+              Poste Précédent
+            </label>
+            <input type="text" id="ancien_poste" name="ancien_poste" value="{{ demotion.ancienPoste }}" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="nouveau_poste" class="form-label">
+              <i class="fas fa-level-down-alt text-purple-500 mr-2"></i>
+              Nouveau Poste
+            </label>
+            <input type="text" id="nouveau_poste" name="nouveau_poste" value="{{ demotion.nouveauPoste }}" class="form-input" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Salary Details -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-red-500 to-pink-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-money-bill-wave text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Ajustement Salarial</h3>
+            <p class="text-gray-600">Réduction de rémunération</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="form-group">
+            <label for="ancien_salaire" class="form-label">
+              <i class="fas fa-money-bill text-red-500 mr-2"></i>
+              Salaire Précédent (FCFA)
+            </label>
+            <input type="number" id="ancien_salaire" name="ancien_salaire" value="{{ demotion.ancienSalaire }}" class="form-input" min="0" required>
+          </div>
+
+          <div class="form-group">
+            <label for="nouveau_salaire" class="form-label">
+              <i class="fas fa-coins text-red-500 mr-2"></i>
+              Nouveau Salaire (FCFA)
+            </label>
+            <input type="number" id="nouveau_salaire" name="nouveau_salaire" value="{{ demotion.nouveauSalaire }}" class="form-input" min="0" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-chart-line-down text-red-500 mr-2"></i>
+              Réduction
+            </label>
+            <div class="form-input bg-red-50 border-red-200 text-red-700 font-semibold" id="salaryReduction">
+              -{{ demotion.montantReduction.toLocaleString() }} FCFA
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reason -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-yellow-500 to-orange-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-clipboard-list text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Motif de la Démotion</h3>
+            <p class="text-gray-600">Justification de la mesure</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="motif_demotion" class="form-label">
+            <i class="fas fa-file-alt text-yellow-500 mr-2"></i>
+            Motif Détaillé
+          </label>
+          <textarea id="motif_demotion" name="motif_demotion" rows="6" class="form-textarea" required>{{ demotion.motifDemotion }}</textarea>
+        </div>
+      </div>
+
+      <!-- Date and Status -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-calendar-alt text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Planification</h3>
+            <p class="text-gray-600">Date et statut</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="form-group">
+            <label for="date_vigueur" class="form-label">
+              <i class="fas fa-calendar-check text-orange-500 mr-2"></i>
+              Date de Prise d'Effet
+            </label>
+            <input type="date" id="date_vigueur" name="date_vigueur" value="{{ demotion.dateVigueur.toISODate() }}" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="statut" class="form-label">
+              <i class="fas fa-toggle-on text-orange-500 mr-2"></i>
+              Statut
+            </label>
+            <select id="statut" name="statut" class="form-select">
+              <option value="En attente" {{ demotion.statut === 'En attente' ? 'selected' : '' }}>⏳ En attente</option>
+              <option value="Appliquée" {{ demotion.statut === 'Appliquée' ? 'selected' : '' }}>✅ Appliquée</option>
+              <option value="Annulée" {{ demotion.statut === 'Annulée' ? 'selected' : '' }}>❌ Annulée</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+        <a href="{{ route('demotions.show', [demotion.id]) }}" class="btn-secondary">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Retour à la Démotion
+        </a>
+
+        <div class="flex gap-4">
+          <a href="{{ route('demotions.index') }}" class="btn-outline">
+            <i class="fas fa-list mr-2"></i>
+            Liste des Démotions
+          </a>
+          <button type="submit" class="btn-primary-gradient">
+            <i class="fas fa-save mr-2"></i>
+            Enregistrer les Modifications
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.form-section {
+  @apply bg-gradient-to-br from-gray-50/80 to-white rounded-2xl p-8 border border-gray-100 shadow-sm;
+}
+
+.form-group {
+  @apply relative;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-3 flex items-center;
+}
+
+.form-input, .form-select {
+  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300;
+}
+
+.form-textarea {
+  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300 resize-none;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center;
+}
+
+.btn-outline {
+  @apply px-6 py-3 border-2 border-blue-300 rounded-xl text-blue-600 font-semibold hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 flex items-center;
+}
+
+.btn-primary-gradient {
+  @apply relative px-8 py-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center overflow-hidden;
+}
+</style>
+
+<script>
+// Salary calculation
+document.getElementById('nouveau_salaire').addEventListener('input', function() {
+  const oldSalary = parseInt(document.getElementById('ancien_salaire').value) || 0;
+  const newSalary = parseInt(this.value) || 0;
+
+  if (oldSalary > 0 && newSalary > 0) {
+    const reduction = oldSalary - newSalary;
+    const percentage = ((reduction / oldSalary) * 100).toFixed(1);
+
+    document.getElementById('salaryReduction').textContent =
+      `-${reduction.toLocaleString()} FCFA (-${percentage}%)`;
+  }
+});
+</script>
+@endsection

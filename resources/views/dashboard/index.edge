@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord - RELIANCE ESCALADE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/all.min.css" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <link href="/public/css/app.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900 flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white border-r min-h-screen shadow-sm flex flex-col py-5 px-4">
+    {{-- <div class="mb-8"> --}}
+      {{-- <h2 class="flex items-center px-5 py-4 rounded-lg bg-blue-600 text-white font-semibold">
+        Copyright RWA 2025
+      </h2> --}}
+
+       <!-- Logo -->
+        {{-- <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div> --}}
+    {{-- </div> --}}
+
+    <nav class="flex flex-col space-y-2 text-md font-medium">
+      <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url() === route('dashboard') ? 'bg-blue-700/90 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-th-large mr-3"></i> --}}
+        <ion-icon name="logo-tableau" class="mr-3 text-2xl"></ion-icon> Dashboard
+        <ion-icon name="chevron-down-outline" class="ml-auto text-xs"></ion-icon>
+        {{-- <i class="fas fa-chevron-down ml-auto text-xs"></i> --}}
+      </a>
+      <a href="{{ route('posts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/posts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="albums-outline" class="mr-3 text-2xl"></ion-icon>Postes
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('employees.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/employees') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-users mr-3"></i> --}}
+        <ion-icon name="people-outline" class="mr-3 text-2xl"></ion-icon>Personnel
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('promotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/promotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-up mr-3"></i> --}}
+        <ion-icon name="trending-up-outline" class="mr-3 text-2xl"></ion-icon>Promotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('demotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/demotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-down mr-3"></i> --}}
+        <ion-icon name="trending-down-outline" class="mr-3 text-2xl"></ion-icon>Démotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('tracking.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/tracking') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="pulse-outline" class="mr-3 text-2xl"></ion-icon> Suivi Employés
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('pay_slips.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/pay-slips') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('statistics.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/statistics') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @if(auth.user.role === 'Admin')
+      <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-user-cog mr-3"></i> --}}
+        <ion-icon name="finger-print-outline" class="mr-3 text-2xl"></ion-icon>Utilisateurs
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @endif
+    </nav>
+  </aside>
+
+  <!-- Main Panel -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="h-24 bg-white border-b px-6 flex items-center justify-between shadow-sm">
+      <div>
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div>
+      </div> <!-- Espace vide pour futur breadcrumb -->
+
+      <div class="flex items-center space-x-6">
+        <!-- Notifications -->
+        {{-- <div class="relative">
+          <i class="fas fa-bell text-gray-600 text-lg"></i>
+          <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+        </div> --}}
+
+        <!-- User Menu -->
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm shadow">
+            {{-- <i class="fas fa-user"></i> --}}
+            <ion-icon name="logo-octocat" class="text-3xl"></ion-icon>
+          </div>
+          <div class="text-md">
+            <div class="font-semibold">{{ auth.user.fullName }}</div>
+            <div class="text-xs text-gray-500 capitalize">{{ auth.user.role }}</div>
+          </div>
+
+          <form action="{{ route('auth.logout') }}" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="ml-3 text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all">
+              <ion-icon name="log-out-outline" class="text-2xl"></ion-icon>
+              {{-- <i class="fas fa-share-square"></i> --}}
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 overflow-y-auto flex-1 bg-gray-50">
+      <!-- Flash Messages -->
+      @if(flashMessages.has('success'))
+        <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-check-circle mr-2"></i>
+          {{ flashMessages.get('success') }}
+        </div>
+      @endif
+
+      @if(flashMessages.has('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {{ flashMessages.get('error') }}
+        </div>
+      @endif
+
+      {{-- @section('title')
+      Dashboard
+      @endsection
+
+      @section('content') --}}
+      <!-- Banner -->
+      <div class="relative bg-gradient-to-r from-blue-600/80 via-blue-700/80 to-blue-800/80 rounded-2xl overflow-hidden mb-6"
+          style="background-image: url('https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-700/90 to-gray-800"></div>
+
+        <!-- Animated Background Elements -->
+          <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-blue-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+          </div>
+
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+        <div class="relative z-10 p-8">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+              {{-- <div class="bg-white/20 backdrop-blur-sm p-6 rounded-2xl" style="border-radius: 70%;">
+                <ion-icon name="logo-tableau" class="text-3xl text-white"></ion-icon>
+                <i class="fas fa-building text-white text-5xl"></i>
+              </div> --}}
+              <div>
+                <h1 class="text-3xl font-bold text-white mb-2">
+                  Tableau de Bord RH
+                </h1>
+                <p class="text-blue-100 text-lg">
+                  Gestion complète des ressources humaines de RELIANCE WEST AFRICA
+                </p>
+                <div class="flex items-center gap-4 mt-4">
+                  <div class="flex items-center gap-2">
+                    {{-- <i class="fas fa-users text-blue-200"></i> --}}
+                    {{-- <ion-icon name="people-outline" class="text-blue-200"></ion-icon> --}}
+                    <span class="text-sm text-green-100">Personnel actif : {{ stats.totalEmployees }} employés</span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    {{-- <i class="fas fa-chart-line text-green-300"></i> --}}
+                    <ion-icon name="analytics-outline" class="text-2xl text-green-300"></ion-icon>
+                    <span class="text-sm text-blue-100">Croissance interne : <span class="text-md text-green-300 font-semibold">{{currentDate}}</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-right">
+              <div class="text-4xl font-bold text-white mb-1">2025</div>
+              <div class="text-blue-200">Excellence RH</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 text-sm font-medium mb-1">Total Employés</p>
+              <p class="text-3xl font-bold text-gray-800 mb-2">{{ stats.totalEmployees }}</p>
+              <div class="text-green-600 text-sm font-medium">+{{ stats.employeesAddedThisMonth }} ce mois</div>
+            </div>
+            <div class="bg-gradient-to-r from-blue-500 to-blue-700 p-3 rounded-lg">
+              <ion-icon name="people-outline" class="text-white text-3xl"></ion-icon>
+              {{-- <i class="fas fa-users text-white text-xl"></i> --}}
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="bg-white border border-gray-200 rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 text-sm font-medium mb-1">Promotions Prévues</p>
+              <p class="text-3xl font-bold text-gray-800 mb-2">{{ stats.promotionsScheduled }}</p>
+              <div class="text-green-600 text-sm font-medium">{{ stats.upcomingPromotions }} à venir</div>
+            </div>
+            <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 p-3 rounded-lg">
+              <ion-icon name="trending-up-outline" class="text-white text-3xl"></ion-icon>
+              {{-- <i class="fas fa-arrow-up text-white text-xl"></i> --}}
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 text-sm font-medium mb-1">Fiches de Paie</p>
+              <p class="text-3xl font-bold text-gray-800 mb-2">{{ stats.paySlipsLastMonth }}</p>
+              <div class="text-gray-600 text-sm font-medium">Générées le mois passé</div>
+            </div>
+            <div class="bg-gradient-to-r from-purple-500 to-purple-700 p-3 rounded-lg">
+              <ion-icon name="receipt-outline" class="text-white text-3xl"></ion-icon>
+              {{-- <i class="fas fa-file-invoice text-white text-xl"></i> --}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 text-sm font-medium mb-1">Postes Actifs</p>
+              <p class="text-3xl font-bold text-gray-800 mb-2">{{ stats.totalPosts }}</p>
+              <div class="text-gray-600 text-sm font-medium">Stable</div>
+            </div>
+            <div class="bg-gradient-to-r from-green-500 to-green-700 p-3 rounded-lg">
+              <ion-icon name="albums-outline" class="text-white text-3xl"></ion-icon>
+              {{-- <i class="fas fa-briefcase text-white text-xl"></i> --}}
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-xl p-6 card-hover">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 text-sm font-medium mb-1">Utilisateurs Actifs</p>
+              <p class="text-3xl font-bold text-gray-800 mb-2">{{ stats.totalUsers }}</p>
+              <div class="text-gray-600 text-sm font-medium">Stable</div>
+            </div>
+            <div class="bg-gradient-to-r from-red-500 to-red-700 p-3 rounded-lg">
+              <ion-icon name="finger-print-outline" class="text-white text-3xl"></ion-icon>
+              {{-- <i class="fas fa-briefcase text-white text-xl"></i> --}}
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <!-- Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Recent Activity -->
+        <div class="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">Activités Récentes</h3>
+          <div class="space-y-4">
+            @each(employee in recentEmployees)
+              <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="flex-1">
+                  <p class="text-gray-800 font-medium">Nouvel employé ajouté</p>
+                  <p class="text-gray-600 text-sm">{{ employee.fullName }}</p>
+                </div>
+                <div class="text-gray-500 text-sm">{{ employee.createdAt.toRelative() }}</div>
+              </div>
+            @endeach
+
+            @each(promotion in recentPromotions)
+              <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                <div class="flex-1">
+                  <p class="text-gray-800 font-medium">Promotion programmée</p>
+                  <p class="text-gray-600 text-sm">{{ promotion.employee.fullName }}</p>
+                </div>
+                <div class="text-gray-500 text-sm">{{ promotion.createdAt.toRelative() }}</div>
+              </div>
+            @endeach
+          </div>
+        </div>
+
+        <!-- Department Overview -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">Départements</h3>
+          <div class="space-y-4">
+            @each(dept in employeesByDepartment)
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                  <span class="text-gray-700">{{ dept.departement }}</span>
+                </div>
+                <span class="text-gray-800 font-semibold">{{ dept.count }}</span>
+              </div>
+            @endeach
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="bg-white border border-gray-200 rounded-xl p-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Actions Rapides</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="{{ route('employees.create') }}" class="bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-4 text-center transition-colors card-hover">
+            <ion-icon name="person-add-sharp" class="text-blue-600 text-2xl mb-3"></ion-icon>
+            {{-- <i class="fas fa-users text-blue-600 text-2xl mb-2"></i> --}}
+            <h4 class="font-semibold text-blue-800 mb-1">Ajouter Employé</h4>
+            <p class="text-sm text-blue-600">Nouveau recrutement</p>
+          </a>
+
+          <a href="{{ route('promotions.create') }}" class="bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg p-4 text-center transition-colors card-hover">
+            <ion-icon name="share-sharp" class="text-green-600 text-2xl mb-3"></ion-icon>
+            {{-- <i class="fas fa-arrow-up text-green-600 text-2xl mb-2"></i> --}}
+            <h4 class="font-semibold text-green-800 mb-1">Nouvelle Promotion</h4>
+            <p class="text-sm text-green-600">Évolution de carrière</p>
+          </a>
+
+          <a href="{{ route('pay_slips.create') }}" class="bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-4 text-center transition-colors card-hover">
+            <ion-icon name="cloud-download-sharp" class="text-purple-600 text-2xl mb-3"></ion-icon>
+            {{-- <i class="fas fa-file-invoice text-purple-600 text-2xl mb-2"></i> --}}
+            <h4 class="font-semibold text-purple-800 mb-1">Générer Fiches</h4>
+            <p class="text-sm text-purple-600">Bulletins de paie</p>
+          </a>
+
+          <a href="{{ route('posts.create') }}" class="bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg p-4 text-center transition-colors card-hover">
+            {{-- <i class="fas fa-briefcase text-orange-600 text-2xl mb-2"></i> --}}
+            <ion-icon name="create-sharp" class="text-orange-600 text-2xl mb-3"></ion-icon>
+            <h4 class="font-semibold text-orange-800 mb-1">Nouveau Poste</h4>
+            <p class="text-sm text-orange-600">Création de poste</p>
+          </a>
+        </div>
+      </div>
+
+      </main>
+  </div>
+</body>
+</html>

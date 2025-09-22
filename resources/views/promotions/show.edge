@@ -1,0 +1,249 @@
+@layout('layouts/main')
+
+@section('title')
+Promotion - {{ promotion.employee.fullName }}
+@endsection
+
+@section('content')
+<!-- Premium Promotion Header -->
+<div class="relative bg-gradient-to-br from-emerald-600/90 via-green-700/90 to-teal-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-emerald-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
+  </div>
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+          <i class="fas fa-arrow-up text-white text-6xl drop-shadow-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+            Promotion de {{ promotion.employee.fullName }}
+          </h1>
+          <p class="text-emerald-100 text-xl font-medium">
+            {{ promotion.ancienPoste }} → {{ promotion.nouveauPoste }}
+          </p>
+          <div class="flex items-center gap-6 mt-4">
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-green-300">
+              <i class="fas fa-calendar text-green-300 mr-2"></i>
+              {{ promotion.dateVigueur.toFormat('dd/MM/yyyy') }}
+            </span>
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ promotion.statut === 'Appliquée' ? 'border border-green-300' : promotion.statut === 'En attente' ? 'border border-yellow-300' : 'border border-red-300' }}">
+              <i class="fas {{ promotion.statut === 'Appliquée' ? 'fa-check-circle text-green-300' : promotion.statut === 'En attente' ? 'fa-clock text-yellow-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
+              {{ promotion.statut }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        @if(promotion.statut === 'En attente')
+          <form action="{{ route('promotions.apply', [promotion.id]) }}" method="POST" class="inline">
+            {{ csrfField() }}
+            <button type="submit" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg" onclick="return confirm('Appliquer cette promotion ?')">
+              <i class="fas fa-check"></i>
+              Appliquer
+            </button>
+          </form>
+        @endif
+        <a href="{{ route('promotions.edit', [promotion.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+          <i class="fas fa-edit"></i>
+          Modifier
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Promotion Details Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+  <!-- Employee Information -->
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-user text-white text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Employé</h3>
+    </div>
+
+    <div class="text-center mb-6">
+      <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-user text-white text-2xl"></i>
+      </div>
+      <h4 class="text-lg font-bold text-gray-800">{{ promotion.employee.fullName }}</h4>
+      <p class="text-gray-600">{{ promotion.employee.departement }}</p>
+    </div>
+
+    <div class="space-y-3">
+      <div class="flex justify-between">
+        <span class="text-gray-600">Contact:</span>
+        <span class="font-medium">{{ promotion.employee.contact }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-gray-600">Ancienneté:</span>
+        <span class="font-medium">{{ Math.floor((Date.now() - promotion.employee.datePriseFunction.toMillis()) / (365.25 * 24 * 60 * 60 * 1000)) }} ans</span>
+      </div>
+    </div>
+
+    <a href="{{ route('employees.show', [promotion.employee.id]) }}" class="btn-outline w-full mt-6">
+      <i class="fas fa-eye mr-2"></i>
+      Voir Profil Complet
+    </a>
+  </div>
+
+  <!-- Position Evolution -->
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-briefcase text-white text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Évolution du Poste</h3>
+    </div>
+
+    <div class="space-y-6">
+      <div class="text-center">
+        <div class="bg-gray-100 rounded-xl p-4 mb-4">
+          <div class="text-sm text-gray-600 mb-1">Poste Actuel</div>
+          <div class="font-bold text-gray-800">{{ promotion.ancienPoste }}</div>
+        </div>
+
+        <div class="flex justify-center mb-4">
+          <div class="bg-green-500 p-3 rounded-full">
+            <i class="fas fa-arrow-down text-white text-xl"></i>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
+          <div class="text-sm text-gray-600 mb-1">Nouveau Poste</div>
+          <div class="font-bold text-green-700">{{ promotion.nouveauPoste }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Salary Evolution -->
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-money-bill-wave text-white text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Évolution Salariale</h3>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-gray-50 rounded-xl p-4">
+        <div class="text-sm text-gray-600 mb-1">Salaire Actuel</div>
+        <div class="text-xl font-bold text-gray-800">{{ promotion.ancienSalaire.toLocaleString() }} FCFA</div>
+      </div>
+
+      <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
+        <div class="text-sm text-gray-600 mb-1">Nouveau Salaire</div>
+        <div class="text-xl font-bold text-green-700">{{ promotion.nouveauSalaire.toLocaleString() }} FCFA</div>
+      </div>
+
+      <div class="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl p-4 border border-yellow-200">
+        <div class="text-sm text-gray-600 mb-1">Augmentation</div>
+        <div class="text-lg font-bold text-yellow-700">+{{ promotion.montantAugmentation.toLocaleString() }} FCFA</div>
+        <div class="text-sm text-yellow-600">+{{ ((promotion.montantAugmentation / promotion.ancienSalaire) * 100).toFixed(1) }}%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Timeline and Impact -->
+<div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
+  <div class="flex items-center gap-4 mb-8">
+    <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+      <i class="fas fa-timeline text-white text-xl"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-gray-800">Impact et Chronologie</h3>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Timeline -->
+    <div>
+      <h4 class="font-semibold text-gray-800 mb-4">Chronologie de la Promotion</h4>
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-plus text-white"></i>
+          </div>
+          <div class="flex-1">
+            <h5 class="font-medium text-gray-800">Promotion Créée</h5>
+            <p class="text-sm text-gray-600">{{ promotion.createdAt.toFormat('dd/MM/yyyy à HH:mm') }}</p>
+          </div>
+        </div>
+
+        @if(promotion.statut === 'Appliquée')
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-check text-white"></i>
+            </div>
+            <div class="flex-1">
+              <h5 class="font-medium text-gray-800">Promotion Appliquée</h5>
+              <p class="text-sm text-gray-600">{{ promotion.updatedAt.toFormat('dd/MM/yyyy à HH:mm') }}</p>
+            </div>
+          </div>
+        @endif
+
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-calendar text-white"></i>
+          </div>
+          <div class="flex-1">
+            <h5 class="font-medium text-gray-800">Date d'Effet</h5>
+            <p class="text-sm text-gray-600">{{ promotion.dateVigueur.toFormat('dd/MM/yyyy') }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact Analysis -->
+    <div>
+      <h4 class="font-semibold text-gray-800 mb-4">Analyse d'Impact</h4>
+      <div class="space-y-4">
+        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fas fa-chart-line text-green-600"></i>
+            <span class="font-medium text-green-800">Impact Salarial</span>
+          </div>
+          <p class="text-sm text-green-700">
+            Augmentation de {{ ((promotion.montantAugmentation / promotion.ancienSalaire) * 100).toFixed(1) }}%
+            représentant {{ (promotion.montantAugmentation * 12).toLocaleString() }} FCFA par an
+          </p>
+        </div>
+
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fas fa-users text-blue-600"></i>
+            <span class="font-medium text-blue-800">Impact Organisationnel</span>
+          </div>
+          <p class="text-sm text-blue-700">
+            Évolution vers un poste de niveau supérieur avec nouvelles responsabilités
+          </p>
+        </div>
+
+        <div class="bg-purple-50 rounded-xl p-4 border border-purple-200">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fas fa-star text-purple-600"></i>
+            <span class="font-medium text-purple-800">Reconnaissance</span>
+          </div>
+          <p class="text-sm text-purple-700">
+            Valorisation des compétences et de la performance de l'employé
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.btn-outline {
+  @apply px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center;
+}
+</style>
+@endsection

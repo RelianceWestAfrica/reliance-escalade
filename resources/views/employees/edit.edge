@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails employés - RELIANCE ESCALADE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/all.min.css" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <link href="/public/css/app.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900 flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white border-r min-h-screen shadow-sm flex flex-col py-5 px-4">
+    {{-- <div class="mb-8"> --}}
+      {{-- <h2 class="flex items-center px-5 py-4 rounded-lg bg-blue-600 text-white font-semibold">
+        Copyright RWA 2025
+      </h2> --}}
+
+       <!-- Logo -->
+        {{-- <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div> --}}
+    {{-- </div> --}}
+
+    <nav class="flex flex-col space-y-2 text-md font-medium">
+      <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url() === route('dashboard') ? 'bg-blue-700/90 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-th-large mr-3"></i> --}}
+        <ion-icon name="logo-tableau" class="mr-3 text-2xl"></ion-icon> Dashboard
+        <ion-icon name="chevron-down-outline" class="ml-auto text-xs"></ion-icon>
+        {{-- <i class="fas fa-chevron-down ml-auto text-xs"></i> --}}
+      </a>
+      <a href="{{ route('posts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/posts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="albums-outline" class="mr-3 text-2xl"></ion-icon>Postes
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('employees.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/employees') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-users mr-3"></i> --}}
+        <ion-icon name="people-outline" class="mr-3 text-2xl"></ion-icon>Personnel
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('promotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/promotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-up mr-3"></i> --}}
+        <ion-icon name="trending-up-outline" class="mr-3 text-2xl"></ion-icon>Promotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('demotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/demotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-down mr-3"></i> --}}
+        <ion-icon name="trending-down-outline" class="mr-3 text-2xl"></ion-icon>Démotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('tracking.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/tracking') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="pulse-outline" class="mr-3 text-2xl"></ion-icon> Suivi Employés
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('pay_slips.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/pay-slips') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('statistics.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/statistics') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @if(auth.user.role === 'Admin')
+      <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-user-cog mr-3"></i> --}}
+        <ion-icon name="finger-print-outline" class="mr-3 text-2xl"></ion-icon>Utilisateurs
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @endif
+    </nav>
+  </aside>
+
+  <!-- Main Panel -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="h-24 bg-white border-b px-6 flex items-center justify-between shadow-sm">
+      <div>
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div>
+      </div> <!-- Espace vide pour futur breadcrumb -->
+
+      <div class="flex items-center space-x-6">
+        <!-- Notifications -->
+        {{-- <div class="relative">
+          <i class="fas fa-bell text-gray-600 text-lg"></i>
+          <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+        </div> --}}
+
+        <!-- User Menu -->
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm shadow">
+            {{-- <i class="fas fa-user"></i> --}}
+            <ion-icon name="logo-octocat" class="text-3xl"></ion-icon>
+          </div>
+          <div class="text-md">
+            <div class="font-semibold">{{ auth.user.fullName }}</div>
+            <div class="text-xs text-gray-500 capitalize">{{ auth.user.role }}</div>
+          </div>
+
+          <form action="{{ route('auth.logout') }}" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="ml-3 text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all">
+              <ion-icon name="log-out-outline" class="text-2xl"></ion-icon>
+              {{-- <i class="fas fa-share-square"></i> --}}
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 overflow-y-auto flex-1 bg-gray-50">
+      <!-- Flash Messages -->
+      @if(flashMessages.has('success'))
+        <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-check-circle mr-2"></i>
+          {{ flashMessages.get('success') }}
+        </div>
+      @endif
+
+      @if(flashMessages.has('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {{ flashMessages.get('error') }}
+        </div>
+      @endif
+
+      {{-- @section('title')
+      Employés
+      @endsection
+
+      @section('content') --}}
+      <!-- Page Header -->
+      <div class="page-header bg-gradient-to-r from-blue-600/80 via-indigo-700/80 to-purple-800/80 rounded-2xl overflow-hidden mb-8"
+          style="background-image: url('https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+        <div class="relative z-10 p-8">
+          <div class="flex items-center gap-6">
+            <div class="bg-white/20 backdrop-blur-sm p-4 rounded-2xl">
+              <i class="fas fa-user-edit text-white text-5xl"></i>
+            </div>
+            <div>
+              <h1 class="text-3xl font-bold text-white mb-2 text-shadow">
+                Modifier {{ employee.fullName }}
+              </h1>
+              <p class="text-blue-100 text-lg">
+                Mettre à jour les informations de l'employé
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="p-8">
+          <form action="{{ route('employees.update', [employee.id]) }}" method="POST" class="space-y-8">
+            {{ csrfField() }}
+            @method('PUT')
+
+            <!-- Personal Information -->
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-user mr-3 text-blue-600"></i>
+                Informations Personnelles
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                  <input type="text" id="nom" name="nom" value="{{ employee.nom }}" class="input-field" required>
+                </div>
+                <div>
+                  <label for="prenom" class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                  <input type="text" id="prenom" name="prenom" value="{{ employee.prenom }}" class="input-field" required>
+                </div>
+                <div>
+                  <label for="date_naissance" class="block text-sm font-medium text-gray-700 mb-2">Date de Naissance</label>
+                  <input type="date" id="date_naissance" name="date_naissance" value="{{ employee.dateNaissance.toISODate() }}" class="input-field" required>
+                </div>
+                <div>
+                  <label for="contact" class="block text-sm font-medium text-gray-700 mb-2">Contact</label>
+                  <input type="text" id="contact" name="contact" value="{{ employee.contact }}" class="input-field" required>
+                </div>
+                <div class="md:col-span-2">
+                  <label for="adresse" class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
+                  <textarea id="adresse" name="adresse" rows="3" class="input-field" required>{{ employee.adresse }}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Professional Information -->
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-briefcase mr-3 text-purple-600"></i>
+                Informations Professionnelles
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="poste" class="block text-sm font-medium text-gray-700 mb-2">Poste</label>
+                  <input type="text" id="poste" name="poste" value="{{ employee.poste }}" class="input-field" required>
+                </div>
+                <div>
+                  <label for="departement" class="block text-sm font-medium text-gray-700 mb-2">Département</label>
+                  <select id="departement" name="departement" class="input-field" required>
+                    <option value="">Sélectionner un département</option>
+                    <option value="Direction" {{ employee.departement === 'Direction' ? 'selected' : '' }}>Direction</option>
+                    <option value="Administration" {{ employee.departement === 'Administration' ? 'selected' : '' }}>Administration</option>
+                    <option value="Marketing et Communication" {{ employee.departement === 'Marketing et Communication' ? 'selected' : '' }}>Marketing et Communication</option>
+                    <option value="Commercial" {{ employee.departement === 'Commercial' ? 'selected' : '' }}>Commercial</option>
+                    <option value="Technique et développement" {{ employee.departement === 'Technique et développement' ? 'selected' : '' }}>Technique et développement</option>
+                    <option value="Comptabilité finances" {{ employee.departement === 'Comptabilité finances' ? 'selected' : '' }}>Comptabilité finances</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="date_prise_fonction" class="block text-sm font-medium text-gray-700 mb-2">Date de Prise de Fonction</label>
+                  <input type="date" id="date_prise_fonction" name="date_prise_fonction" value="{{ employee.datePriseFonction.toISODate() }}" class="input-field" required>
+                </div>
+                <div>
+                  <label for="salaire" class="block text-sm font-medium text-gray-700 mb-2">Salaire (FCFA)</label>
+                  <input type="number" id="salaire" name="salaire" value="{{ employee.salaire }}" class="input-field" min="0" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contract Information -->
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-file-contract mr-3 text-orange-600"></i>
+                Informations Contractuelles
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="type_contrat" class="block text-sm font-medium text-gray-700 mb-2">Type de Contrat</label>
+                  <select id="type_contrat" name="type_contrat" class="input-field" required>
+                    <option value="">Sélectionner un type</option>
+                    <option value="CDI" {{ employee.typeContrat === 'CDI' ? 'selected' : '' }}>CDI</option>
+                    <option value="CDD" {{ employee.typeContrat === 'CDD' ? 'selected' : '' }}>CDD</option>
+                    <option value="Intérim" {{ employee.typeContrat === 'Intérim' ? 'selected' : '' }}>Intérim</option>
+                    <option value="Contrat d'Essai" {{ employee.typeContrat === 'Contrat d\'Essai' ? 'selected' : '' }}>Contrat d'Essai</option>
+                    <option value="Stage" {{ employee.typeContrat === 'Stage' ? 'selected' : '' }}>Stage</option>
+                    <option value="Consultant" {{ employee.typeContrat === 'Consultant' ? 'selected' : '' }}>Consultant</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="duree_contrat" class="block text-sm font-medium text-gray-700 mb-2">Durée (mois)</label>
+                  <input type="number" id="duree_contrat" name="duree_contrat" value="{{ employee.dureeContrat }}" class="input-field" min="0" placeholder="0 pour CDI">
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+              <a href="{{ route('employees.show', [employee.id]) }}" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all">
+                <i class="fas fa-times mr-2"></i>
+                Annuler
+              </a>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-save mr-2"></i>
+                Enregistrer les Modifications
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      @endsection

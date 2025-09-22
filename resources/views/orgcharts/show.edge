@@ -1,0 +1,338 @@
+@layout('layouts/main')
+
+@section('title')
+{{ chart.nom }}
+@endsection
+
+@section('content')
+<!-- Premium OrgChart Header -->
+<div class="relative bg-gradient-to-br from-emerald-600/90 via-teal-700/90 to-cyan-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+          <i class="fas fa-sitemap text-white text-6xl drop-shadow-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+            {{ chart.nom }}
+          </h1>
+          <p class="text-emerald-100 text-xl font-medium">
+            {{ chart.description || 'Organigramme de l\'entreprise' }}
+          </p>
+          <div class="flex items-center gap-6 mt-4">
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-emerald-300">
+              <i class="fas fa-calendar text-emerald-300 mr-2"></i>
+              {{ chart.createdAt.toFormat('dd/MM/yyyy') }}
+            </span>
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ chart.actif ? 'border border-green-300' : 'border border-red-300' }}">
+              <i class="fas {{ chart.actif ? 'fa-check-circle text-green-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
+              {{ chart.actif ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="{{ route('orgcharts.edit', [chart.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+          <i class="fas fa-edit"></i>
+          Modifier
+        </a>
+        <button onclick="exportChart()" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+          <i class="fas fa-download"></i>
+          Exporter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Organizational Chart Visualization -->
+<div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+  <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-8 border-b border-gray-200/50">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Structure Organisationnelle</h2>
+        <p class="text-gray-600">Hiérarchie et relations de l'entreprise</p>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="zoomIn()" class="p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-all">
+          <i class="fas fa-search-plus text-gray-600"></i>
+        </button>
+        <button onclick="zoomOut()" class="p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-all">
+          <i class="fas fa-search-minus text-gray-600"></i>
+        </button>
+        <button onclick="resetZoom()" class="p-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-all">
+          <i class="fas fa-expand-arrows-alt text-gray-600"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-8">
+    <!-- Chart Container -->
+    <div id="orgChartContainer" class="min-h-96 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 p-8 overflow-auto">
+      <!-- Sample Organizational Structure -->
+      <div class="org-chart-wrapper" style="transform: scale(1); transition: transform 0.3s ease;">
+        <!-- Direction Level -->
+        <div class="text-center mb-8">
+          <div class="org-node direction-node mx-auto">
+            <div class="node-avatar">
+              <i class="fas fa-crown text-yellow-600"></i>
+            </div>
+            <div class="node-content">
+              <div class="node-title">Direction Générale</div>
+              <div class="node-subtitle">Yaya Latifou ESSOWAVARO</div>
+              <div class="node-department">Direction</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Level -->
+        <div class="flex justify-center mb-8">
+          <div class="org-connector-vertical"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <!-- Administration -->
+          <div class="text-center">
+            <div class="org-node department-node mx-auto">
+              <div class="node-avatar">
+                <i class="fas fa-user-tie text-blue-600"></i>
+              </div>
+              <div class="node-content">
+                <div class="node-title">DRH</div>
+                <div class="node-subtitle">Rodrigue PANASSA</div>
+                <div class="node-department">Administration</div>
+              </div>
+            </div>
+
+            <!-- Sub-employees -->
+            <div class="mt-6 space-y-3">
+              <div class="org-connector-vertical-small mx-auto"></div>
+              <div class="org-node employee-node mx-auto">
+                <div class="node-avatar-small">
+                  <i class="fas fa-user text-purple-600"></i>
+                </div>
+                <div class="node-content-small">
+                  <div class="node-title-small">Keli Princesse DOH</div>
+                  <div class="node-subtitle-small">Assistante Direction</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marketing -->
+          <div class="text-center">
+            <div class="org-node department-node mx-auto">
+              <div class="node-avatar">
+                <i class="fas fa-bullhorn text-pink-600"></i>
+              </div>
+              <div class="node-content">
+                <div class="node-title">Marketing</div>
+                <div class="node-subtitle">Charlotte MALM</div>
+                <div class="node-department">Marketing & Com</div>
+              </div>
+            </div>
+
+            <!-- Sub-employees -->
+            <div class="mt-6 space-y-3">
+              <div class="org-connector-vertical-small mx-auto"></div>
+              <div class="org-node employee-node mx-auto">
+                <div class="node-avatar-small">
+                  <i class="fas fa-user text-purple-600"></i>
+                </div>
+                <div class="node-content-small">
+                  <div class="node-title-small">Velias DIATA</div>
+                  <div class="node-subtitle-small">Designer Graphique</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Commercial -->
+          <div class="text-center">
+            <div class="org-node department-node mx-auto">
+              <div class="node-avatar">
+                <i class="fas fa-handshake text-green-600"></i>
+              </div>
+              <div class="node-content">
+                <div class="node-title">Commercial</div>
+                <div class="node-subtitle">Walter TAYE</div>
+                <div class="node-department">Ventes</div>
+              </div>
+            </div>
+
+            <!-- Sub-employees -->
+            <div class="mt-6 space-y-3">
+              <div class="org-connector-vertical-small mx-auto"></div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="org-node employee-node">
+                  <div class="node-avatar-small">
+                    <i class="fas fa-user text-purple-600"></i>
+                  </div>
+                  <div class="node-content-small">
+                    <div class="node-title-small">Commercial 1</div>
+                    <div class="node-subtitle-small">Ventes</div>
+                  </div>
+                </div>
+                <div class="org-node employee-node">
+                  <div class="node-avatar-small">
+                    <i class="fas fa-user text-purple-600"></i>
+                  </div>
+                  <div class="node-content-small">
+                    <div class="node-title-small">Commercial 2</div>
+                    <div class="node-subtitle-small">Ventes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Statistics -->
+  <div class="bg-gradient-to-r from-gray-50 to-white p-8 border-t border-gray-200">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-blue-600 mb-1">28</div>
+        <div class="text-sm text-gray-600">Total Employés</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600 mb-1">6</div>
+        <div class="text-sm text-gray-600">Départements</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-purple-600 mb-1">5</div>
+        <div class="text-sm text-gray-600">Niveaux Hiérarchiques</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-orange-600 mb-1">14</div>
+        <div class="text-sm text-gray-600">Postes Différents</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Organizational Chart Styles */
+.org-chart-wrapper {
+  min-width: 800px;
+}
+
+.org-node {
+  @apply bg-white rounded-2xl shadow-lg border border-gray-200 p-4 max-w-xs hover:shadow-xl transition-all duration-300;
+}
+
+.direction-node {
+  @apply border-yellow-300 bg-gradient-to-br from-yellow-50 to-amber-50;
+}
+
+.department-node {
+  @apply border-blue-300 bg-gradient-to-br from-blue-50 to-indigo-50;
+}
+
+.employee-node {
+  @apply border-purple-300 bg-gradient-to-br from-purple-50 to-pink-50 max-w-48;
+}
+
+.node-avatar {
+  @apply w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center mx-auto mb-3;
+}
+
+.node-avatar-small {
+  @apply w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center mx-auto mb-2;
+}
+
+.node-content {
+  @apply text-center;
+}
+
+.node-content-small {
+  @apply text-center;
+}
+
+.node-title {
+  @apply font-bold text-gray-800 text-sm mb-1;
+}
+
+.node-title-small {
+  @apply font-bold text-gray-800 text-xs mb-1;
+}
+
+.node-subtitle {
+  @apply text-gray-600 text-xs mb-1;
+}
+
+.node-subtitle-small {
+  @apply text-gray-600 text-xs;
+}
+
+.node-department {
+  @apply text-gray-500 text-xs;
+}
+
+.org-connector-vertical {
+  @apply w-0.5 h-12 bg-gray-300 mx-auto;
+}
+
+.org-connector-vertical-small {
+  @apply w-0.5 h-6 bg-gray-300;
+}
+
+/* Zoom controls */
+.zoom-controls {
+  @apply fixed bottom-6 right-6 flex gap-2 z-10;
+}
+</style>
+
+<script>
+let currentZoom = 1;
+
+function zoomIn() {
+  currentZoom = Math.min(currentZoom + 0.1, 2);
+  updateZoom();
+}
+
+function zoomOut() {
+  currentZoom = Math.max(currentZoom - 0.1, 0.5);
+  updateZoom();
+}
+
+function resetZoom() {
+  currentZoom = 1;
+  updateZoom();
+}
+
+function updateZoom() {
+  const wrapper = document.querySelector('.org-chart-wrapper');
+  wrapper.style.transform = `scale(${currentZoom})`;
+}
+
+function exportChart() {
+  // Export functionality
+  const chartElement = document.getElementById('orgChartContainer');
+  html2canvas(chartElement).then(canvas => {
+    const link = document.createElement('a');
+    link.download = '{{ chart.nom }}.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+// Add interactivity to nodes
+document.addEventListener('DOMContentLoaded', function() {
+  const nodes = document.querySelectorAll('.org-node');
+  nodes.forEach(node => {
+    node.addEventListener('click', function() {
+      // Add click functionality for nodes
+      this.classList.toggle('selected');
+    });
+  });
+});
+</script>
+@endsection

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion - RELIANCE ESCALADE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+
+  <style>
+    .blur-glass {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.2;
+      animation: float 18s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .blur-glass2 {
+      animation-delay: 5s;
+      animation-duration: 22s;
+    }
+
+    .blur-glass3 {
+      animation-delay: 10s;
+      animation-duration: 20s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+      50% {
+        transform: translateY(-30px) translateX(40px);
+      }
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+    }
+  </style>
+
+</head>
+<body class="min-h-screen gradient-bg from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
+  <!-- Glassmorphism Floating Backgrounds -->
+  <div class="blur-glass w-96 h-96 bg-gradient-to-br from-blue-500 to-purple-600 top-24 left-10 blur-glass"></div>
+  <div class="blur-glass w-72 h-72 bg-gradient-to-tr from-indigo-400 to-cyan-500 bottom-20 right-32 blur-glass blur-glass2"></div>
+  <div class="blur-glass w-80 h-80 bg-gradient-to-tl from-sky-500 to-pink-500 top-1/2 left-1/4 blur-glass blur-glass3"></div>
+
+  {{-- bg-gradient-to-br --}}
+  <!-- Background decorative elements -->
+  <div class="absolute top-32 right-32 w-64 h-64 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
+  <div class="absolute bottom-32 left-32 w-80 h-80 bg-blue-300 rounded-full opacity-15 blur-3xl"></div>
+
+  <div class="relative z-10 max-w-lg w-full mx-4 fade-in">
+    <div class="glass-effect rounded-3xl shadow-2xl p-10 border border-white/30">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="flex justify-center mb-6">
+          <div class="gradient-bg p-5 rounded-2xl shadow-lg">
+            <i class="fas fa-user-shield text-white text-4xl"></i>
+          </div>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Authentification</h1>
+        <p class="text-gray-600">Connectez-vous à votre espace professionnel</p>
+        <div class="h-1 w-24 bg-gradient-to-r from-blue-600 to-blue-500 mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <!-- Test Credentials Info -->
+      <div class="bg-blue-50 border border-blue-100 rounded-xl text-blue-800 text-s p-4 mb-6 text-center item-center">
+          {{-- <i class="fas fa-info-circle mr-2"></i> --}}
+        <p class="text-blue-800 text-sm font-medium mb-2 text-center">
+
+          Pour des mesures de sécurité, veillez à ne jamais communiquer vos identifiants à des personnes tiers
+        </p>
+        {{-- <div class="text-xs text-gray-600 space-y-1">
+          <p><strong>DG :</strong> dg@reliancewa.com</p>
+          <p><strong>DRH :</strong> drh@reliancewa.com</p>
+          <p><strong>Admin :</strong> admin@reliancewa.com</p>
+          <p class="text-blue-700 mt-2 font-medium">Mot de passe : password123</p>
+        </div> --}}
+      </div>
+
+      <!-- Flash Messages -->
+      @if(flashMessages.has('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {{ flashMessages.get('error') }}
+        </div>
+      @endif
+
+      <!-- Form -->
+      <form action="{{ route('auth.login') }}" method="POST" class="space-y-6">
+        {{ csrfField() }}
+
+        <div>
+          <label for="email" class="block text-md font-medium text-gray-700 mb-3">
+            <i class="fas fa-envelope mr-2"></i>
+            Adresse Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            class="w-full bg-white/10 border border-blue-100 rounded-xl px-4 py-4 text-black placeholder-blue-200 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm"
+            class="input-field"
+            placeholder="votre.email@reliancewa.com"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="password" class="block text-md font-medium text-gray-700 mb-3">
+            <i class="fas fa-lock mr-2"></i>
+            Mot de Passe
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            class="w-full bg-white/10 border border-blue-100 rounded-xl px-4 py-4 text-black placeholder-blue-200 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm"
+            placeholder="Votre mot de passe sécurisé"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full gradient-bg hover:opacity-90 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-lg"
+        >
+          <i class="fas fa-sign-in-alt"></i>
+          Se Connecter
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <p class="text-center text-xs text-gray-500">
+          Système sécurisé - © 2025 RELIANCE WEST AFRICA
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

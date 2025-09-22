@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrières - RELIANCE ESCALADE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/app.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-white to-blue-50 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white/95 backdrop-blur-sm shadow-xl border-b border-gray-200/50 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <div class="gradient-bg p-3 rounded-xl shadow-lg">
+            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-lg">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-2xl font-bold text-gray-800">RWA GLOBAL</h1>
+            {{-- <p class="text-sm text-gray-600">Opportunités de Carrière</p> --}}
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#offres" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Offres</a>
+          <a href="#entreprise" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">L'Entreprise</a>
+          <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative py-20 overflow-hidden">
+    <!-- Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="mb-8">
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+          Rejoignez Notre
+          <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Équipe Dynamique
+          </span>
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Découvrez des opportunités de carrière exceptionnelles chez RELIANCE ESCALADE.
+          Nous recherchons des talents passionnés pour façonner l'avenir ensemble.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <a href="#offres" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <i class="fas fa-search mr-2"></i>
+          Voir les Offres
+        </a>
+        <a href="#entreprise" class="bg-white/80 backdrop-blur-sm border-2 border-gray-300 hover:border-blue-400 text-gray-700 hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300">
+          <i class="fas fa-building mr-2"></i>
+          Découvrir l'Entreprise
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50">
+          <div class="text-3xl font-bold text-blue-600 mb-2">{{ offers.length }}</div>
+          <div class="text-gray-600 font-medium">Offres Disponibles</div>
+        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50">
+          <div class="text-3xl font-bold text-purple-600 mb-2">{{ departments.length }}</div>
+          <div class="text-gray-600 font-medium">Départements</div>
+        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50">
+          <div class="text-3xl font-bold text-green-600 mb-2">+100</div>
+          <div class="text-gray-600 font-medium">Collaborateurs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Job Offers Section -->
+  <section id="offres" class="py-20 bg-white/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">
+          Opportunités de Carrière
+        </h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Explorez nos offres d'emploi et trouvez le poste qui correspond à vos ambitions professionnelles.
+        </p>
+      </div>
+
+      @if(offers.length > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          @each(offer in offers)
+            <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <!-- Offer Header -->
+              <div class="bg-gradient-to-r from-{{
+                offer.departement === 'Direction' ? 'yellow-500 to-orange-500' :
+                offer.departement === 'Administration' ? 'blue-500 to-indigo-500' :
+                offer.departement === 'Marketing et Communication' ? 'pink-500 to-purple-500' :
+                offer.departement === 'Commercial' ? 'green-500 to-emerald-500' :
+                offer.departement === 'Technique et développement' ? 'indigo-500 to-purple-500' :
+                'gray-500 to-gray-600'
+              }} p-6 text-white">
+                <div class="flex items-start justify-between mb-4">
+                  <div class="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+                    <i class="fas fa-briefcase text-2xl"></i>
+                  </div>
+                  <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                    {{ offer.typeContrat }}
+                  </span>
+                </div>
+                <h3 class="text-xl font-bold mb-2">{{ offer.intitule }}</h3>
+                <p class="text-white/90 font-medium">{{ offer.poste }}</p>
+                <p class="text-white/80 text-sm">{{ offer.departement }}</p>
+              </div>
+
+              <!-- Offer Content -->
+              <div class="p-6">
+                @if(offer.description)
+                  <div class="mb-4">
+                    <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
+                      {{ offer.description.substring(0, 150) }}{{ offer.description.length > 150 ? '...' : '' }}
+                    </p>
+                  </div>
+                @endif
+
+                <div class="space-y-3 mb-6">
+                  @if(offer.salaire)
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                      <i class="fas fa-money-bill text-green-500"></i>
+                      <span>{{ offer.salaire.toLocaleString() }} FCFA/mois</span>
+                    </div>
+                  @endif
+                  <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <i class="fas fa-calendar text-orange-500"></i>
+                    <span>Candidatures jusqu'au {{ offer.dateCloture.toFormat('dd/MM/yyyy') }}</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <i class="fas fa-users text-blue-500"></i>
+                    <span>{{ offer.$extras.applications_count || 0 }} candidature(s)</span>
+                  </div>
+                </div>
+
+                <!-- Apply Button -->
+                <a href="{{ route('jobs.apply', [offer.id]) }}" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
+                  <i class="fas fa-paper-plane mr-2"></i>
+                  POSTULER
+                </a>
+              </div>
+            </div>
+          @endeach
+        </div>
+      @else
+        <div class="text-center py-16">
+          <div class="bg-gray-100 p-6 rounded-full w-24 h-24 mx-auto mb-6">
+            <i class="fas fa-briefcase text-gray-400 text-4xl"></i>
+          </div>
+          <h3 class="text-2xl font-semibold text-gray-800 mb-4">Aucune offre disponible</h3>
+          <p class="text-gray-600 text-lg">
+            Nous n'avons actuellement aucune offre d'emploi ouverte.
+            Revenez bientôt pour découvrir de nouvelles opportunités !
+          </p>
+        </div>
+      @endif
+    </div>
+  </section>
+
+  <!-- About Company Section -->
+  <section id="entreprise" class="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">
+          Pourquoi Rejoindre Reliance West Africa ?
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Une entreprise innovante qui place l'humain au cœur de sa stratégie de développement.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-200/50 text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-rocket text-blue-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Innovation Continue</h3>
+          <p class="text-gray-600">
+            Environnement stimulant favorisant la créativité et l'innovation technologique.
+          </p>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-200/50 text-center">
+          <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-chart-line text-green-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Évolution Professionnelle</h3>
+          <p class="text-gray-600">
+            Opportunités de formation et de progression de carrière adaptées à vos ambitions.
+          </p>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-200/50 text-center">
+          <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-users text-purple-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Équipe Collaborative</h3>
+          <p class="text-gray-600">
+            Culture d'entreprise basée sur la collaboration, le respect et l'excellence.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-bold text-gray-800 mb-8">
+        Vous ne trouvez pas l'offre idéale ?
+      </h2>
+      <p class="text-xl text-gray-600 mb-8">
+        Envoyez-nous votre candidature spontanée. Nous sommes toujours à la recherche de nouveaux talents !
+      </p>
+
+      <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-gray-200">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-envelope text-green-600 text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Email</h3>
+            <p class="text-gray-600">rh@reliancewa.com</p>
+          </div>
+
+          <div class="text-center">
+            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-phone text-blue-600 text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">Téléphone</h3>
+            <p class="text-gray-600">+228 XX XX XX XX</p>
+          </div>
+
+          <div class="text-center">
+            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fab fa-whatsapp text-purple-600 text-2xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-800 mb-2">WhatsApp</h3>
+            <a href="https://wa.me/22890000000" class="text-purple-600 hover:text-purple-700 font-medium">
+              Contactez-nous
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <div class="flex items-center mb-4">
+            <div class="gradient-bg p-2 rounded-lg">
+              <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+                <span class="text-blue-600 font-bold text-sm">RE</span>
+              </div>
+            </div>
+            <span class="ml-3 text-xl font-bold">RELIANCE ESCALADE</span>
+          </div>
+          <p class="text-gray-400">
+            Entreprise leader dans son secteur, offrant des opportunités de carrière exceptionnelles.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Liens Rapides</h3>
+          <ul class="space-y-2">
+            <li><a href="#offres" class="text-gray-400 hover:text-white transition-colors">Offres d'emploi</a></li>
+            <li><a href="#entreprise" class="text-gray-400 hover:text-white transition-colors">L'entreprise</a></li>
+            <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact</h3>
+          <div class="space-y-2 text-gray-400">
+            <p><i class="fas fa-map-marker-alt mr-2"></i>Lomé, Togo</p>
+            <p><i class="fas fa-envelope mr-2"></i>rh@reliancewa.com</p>
+            <p><i class="fas fa-phone mr-2"></i>+228 XX XX XX XX</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+        <p class="text-gray-400">
+          © 2025 RELIANCE WEST AFRICA. Tous droits réservés.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add scroll effect to header
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      if (window.scrollY > 100) {
+        header.classList.add('bg-white/98');
+        header.classList.remove('bg-white/95');
+      } else {
+        header.classList.add('bg-white/95');
+        header.classList.remove('bg-white/98');
+      }
+    });
+  </script>
+</body>
+</html>
