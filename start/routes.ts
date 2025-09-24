@@ -13,7 +13,6 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import { defineConfig } from '@adonisjs/core/bodyparser'
 
 
 // Route d'accès (page d'accueil)
