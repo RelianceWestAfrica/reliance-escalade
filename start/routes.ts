@@ -37,6 +37,8 @@ router.group(() => {
 
   // Postes
   router.resource('posts', '#controllers/posts_controller')
+  router.post('/posts/:id/update', '#controllers/posts_controller.update').as('posts.update_post')
+  router.post('/posts/:id/delete', '#controllers/posts_controller.destroy').as('posts.destroy_post')
 
   // Promotions
   router.resource('promotions', '#controllers/promotions_controller')
