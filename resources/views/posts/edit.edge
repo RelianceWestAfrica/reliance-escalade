@@ -210,9 +210,9 @@
         </div>
 
         <div class="p-10">
-          <form action="{{ route('posts.update', [post.id]) }}" method="POST" class="space-y-10">
+          <form action="{{ route('posts.update', [post.id]) }}" method="PUT" class="space-y-10">
             {{ csrfField() }}
-            <input type="hidden" name="_method" value="PUT">
+            {{-- <input type="hidden" name="_method" value="PUT"> --}}
 
             <!-- Main Information Section -->
             <div class="form-section">
