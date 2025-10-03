@@ -3,13 +3,26 @@ import PaySlip from '#models/pay_slip'
 import Employee from '#models/employee'
 
 export default class PaySlipsController {
-  async index({ view, request }: HttpContext) {
+  async index({ view, request, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const page = request.input('page', 1)
     const limit = 10
 
-    const employees = await Employee.query().where('actif', true)
+    const employees = await Employee.query()
+      .where('actif', true)
+      .where('rwa_country_id', rwaCountryId)
 
     const paySlips = await PaySlip.query()
+      .where('rwa_country_id', rwaCountryId)
       .preload('employee')
       .orderBy('created_at', 'desc')
       .paginate(page, limit)
@@ -17,21 +30,48 @@ export default class PaySlipsController {
     return view.render('pay_slips/index', { paySlips, employees })
   }
 
-  async create({ view }: HttpContext) {
-    const employees = await Employee.query().where('actif', true)
+  async create({ view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const employees = await Employee.query()
+      .where('actif', true)
+      .where('rwa_country_id', rwaCountryId)
+
     return view.render('pay_slips/create', { employees })
   }
 
-  async store({ request, response, session }: HttpContext) {
+  async store({ request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const { employee_id, mois, annee } = request.only(['employee_id', 'mois', 'annee'])
 
-    const employee = await Employee.findOrFail(employee_id)
+    const employee = await Employee.query()
+      .where('id', employee_id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
 
     // Vérifier si une fiche existe déjà
     const existing = await PaySlip.query()
       .where('employee_id', employee_id)
       .where('mois', mois)
       .where('annee', annee)
+      .where('rwa_country_id', rwaCountryId)
       .first()
 
     if (existing) {
@@ -39,7 +79,6 @@ export default class PaySlipsController {
       return response.redirect().back()
     }
 
-    // Calculer les cotisations (15%)
     const cotisations = Math.round(employee.salaire * 0.315)
     const salaireNet = employee.salaire - cotisations
 
@@ -50,25 +89,40 @@ export default class PaySlipsController {
       salaireBrut: employee.salaire,
       cotisations,
       salaireNet,
-      statut: 'Générée'
+      statut: 'Générée',
+      userId: user.id,
+      rwaCountryId,
     })
 
     session.flash('success', 'Fiche de paie générée avec succès')
     return response.redirect('/pay-slips')
   }
 
-  async generateAll({ request, response, session }: HttpContext) {
+  async generateAll({ request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const { mois, annee } = request.only(['mois', 'annee'])
 
-    const employees = await Employee.query().where('actif', true)
+    const employees = await Employee.query()
+      .where('actif', true)
+      .where('rwa_country_id', rwaCountryId)
+
     let generated = 0
 
     for (const employee of employees) {
-      // Vérifier si une fiche existe déjà
       const existing = await PaySlip.query()
         .where('employee_id', employee.id)
         .where('mois', mois)
         .where('annee', annee)
+        .where('rwa_country_id', rwaCountryId)
         .first()
 
       if (!existing) {
@@ -82,7 +136,9 @@ export default class PaySlipsController {
           salaireBrut: employee.salaire,
           cotisations,
           salaireNet,
-          statut: 'Générée'
+          statut: 'Générée',
+          userId: user.id,
+          rwaCountryId,
         })
         generated++
       }
@@ -92,20 +148,168 @@ export default class PaySlipsController {
     return response.redirect('/pay-slips')
   }
 
-  async cancel({ params, response, session }: HttpContext) {
-    const paySlip = await PaySlip.findOrFail(params.id)
+  async cancel({ params, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const paySlip = await PaySlip.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     paySlip.statut = 'Annulée'
+    paySlip.userId = user.id
+    paySlip.rwaCountryId = rwaCountryId
+
     await paySlip.save()
 
     session.flash('success', 'Fiche de paie annulée avec succès')
     return response.redirect('/pay-slips')
   }
 
-  async destroy({ params, response, session }: HttpContext) {
-    const paySlip = await PaySlip.findOrFail(params.id)
+  async destroy({ params, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const paySlip = await PaySlip.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     await paySlip.delete()
 
     session.flash('success', 'Fiche de paie supprimée avec succès')
     return response.redirect('/pay-slips')
   }
 }
+
+
+
+
+
+
+// import type { HttpContext } from '@adonisjs/core/http'
+// import PaySlip from '#models/pay_slip'
+// import Employee from '#models/employee'
+
+// export default class PaySlipsController {
+//   async index({ view, request }: HttpContext) {
+//     const page = request.input('page', 1)
+//     const limit = 10
+
+//     const employees = await Employee.query().where('actif', true)
+
+//     const paySlips = await PaySlip.query()
+//       .preload('employee')
+//       .orderBy('created_at', 'desc')
+//       .paginate(page, limit)
+
+//     return view.render('pay_slips/index', { paySlips, employees })
+//   }
+
+//   async create({ view }: HttpContext) {
+//     const employees = await Employee.query().where('actif', true)
+//     return view.render('pay_slips/create', { employees })
+//   }
+
+//   async store({ request, response, session }: HttpContext) {
+//     const { employee_id, mois, annee } = request.only(['employee_id', 'mois', 'annee'])
+
+//     const employee = await Employee.findOrFail(employee_id)
+
+//     // Vérifier si une fiche existe déjà
+//     const existing = await PaySlip.query()
+//       .where('employee_id', employee_id)
+//       .where('mois', mois)
+//       .where('annee', annee)
+//       .first()
+
+//     if (existing) {
+//       session.flash('error', 'Une fiche de paie existe déjà pour cette période')
+//       return response.redirect().back()
+//     }
+
+//     // Calculer les cotisations (15%)
+//     const cotisations = Math.round(employee.salaire * 0.315)
+//     const salaireNet = employee.salaire - cotisations
+
+//     await PaySlip.create({
+//       employeeId: employee.id,
+//       mois,
+//       annee,
+//       salaireBrut: employee.salaire,
+//       cotisations,
+//       salaireNet,
+//       statut: 'Générée'
+//     })
+
+//     session.flash('success', 'Fiche de paie générée avec succès')
+//     return response.redirect('/pay-slips')
+//   }
+
+//   async generateAll({ request, response, session }: HttpContext) {
+//     const { mois, annee } = request.only(['mois', 'annee'])
+
+//     const employees = await Employee.query().where('actif', true)
+//     let generated = 0
+
+//     for (const employee of employees) {
+//       // Vérifier si une fiche existe déjà
+//       const existing = await PaySlip.query()
+//         .where('employee_id', employee.id)
+//         .where('mois', mois)
+//         .where('annee', annee)
+//         .first()
+
+//       if (!existing) {
+//         const cotisations = Math.round(employee.salaire * 0.315)
+//         const salaireNet = employee.salaire - cotisations
+
+//         await PaySlip.create({
+//           employeeId: employee.id,
+//           mois,
+//           annee,
+//           salaireBrut: employee.salaire,
+//           cotisations,
+//           salaireNet,
+//           statut: 'Générée'
+//         })
+//         generated++
+//       }
+//     }
+
+//     session.flash('success', `${generated} fiches de paie générées avec succès`)
+//     return response.redirect('/pay-slips')
+//   }
+
+//   async cancel({ params, response, session }: HttpContext) {
+//     const paySlip = await PaySlip.findOrFail(params.id)
+//     paySlip.statut = 'Annulée'
+//     await paySlip.save()
+
+//     session.flash('success', 'Fiche de paie annulée avec succès')
+//     return response.redirect('/pay-slips')
+//   }
+
+//   async destroy({ params, response, session }: HttpContext) {
+//     const paySlip = await PaySlip.findOrFail(params.id)
+//     await paySlip.delete()
+
+//     session.flash('success', 'Fiche de paie supprimée avec succès')
+//     return response.redirect('/pay-slips')
+//   }
+// }

@@ -1,0 +1,173 @@
+@layout('layouts/main')
+
+@section('title')
+{{ country.rwaInstanceName }}
+@endsection
+
+@section('content')
+<!-- Premium Country Header -->
+<div class="relative bg-gradient-to-br from-blue-600/90 via-indigo-700/90 to-purple-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+          <i class="fas fa-flag text-white text-6xl drop-shadow-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+            {{ country.rwaInstanceName }}
+          </h1>
+          <p class="text-blue-100 text-xl font-medium">
+            {{ country.instanceCountry }} - {{ country.instanceCeo }}
+          </p>
+          <div class="flex items-center gap-6 mt-4">
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-blue-300">
+              <i class="fas fa-key text-blue-300 mr-2"></i>
+              {{ country.accessCode }}
+            </span>
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ country.actif ? 'border border-green-300' : 'border border-red-300' }}">
+              <i class="fas {{ country.actif ? 'fa-check-circle text-green-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
+              {{ country.actif ? 'Instance Active' : 'Instance Inactive' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="{{ route('rwa_countries.edit', [country.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+          <i class="fas fa-edit"></i>
+          Modifier
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Instance Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-600 text-sm font-medium mb-1">Utilisateurs</p>
+        <p class="text-3xl font-bold text-blue-600">{{ country.users.length }}</p>
+      </div>
+      <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-3 rounded-xl">
+        <i class="fas fa-users text-white text-xl"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-600 text-sm font-medium mb-1">Employés</p>
+        <p class="text-3xl font-bold text-green-600">{{ country.employees.length }}</p>
+      </div>
+      <div class="bg-gradient-to-r from-green-500 to-green-600 p-3 rounded-xl">
+        <i class="fas fa-user-tie text-white text-xl"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-600 text-sm font-medium mb-1">Statut</p>
+        <p class="text-2xl font-bold {{ country.actif ? 'text-green-600' : 'text-red-600' }}">{{ country.actif ? 'Actif' : 'Inactif' }}</p>
+      </div>
+      <div class="bg-gradient-to-r from-{{ country.actif ? 'green' : 'red' }}-500 to-{{ country.actif ? 'green' : 'red' }}-600 p-3 rounded-xl">
+        <i class="fas fa-{{ country.actif ? 'check' : 'times' }}-circle text-white text-xl"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-gray-600 text-sm font-medium mb-1">Créée le</p>
+        <p class="text-lg font-bold text-purple-600">{{ country.createdAt.toFormat('dd/MM/yyyy') }}</p>
+      </div>
+      <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-3 rounded-xl">
+        <i class="fas fa-calendar text-white text-xl"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Instance Details -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  <!-- Users List -->
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-users text-white text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Utilisateurs de l'Instance</h3>
+    </div>
+
+    @if(country.users.length > 0)
+      <div class="space-y-3">
+        @each(user in country.users)
+          <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-white text-sm"></i>
+              </div>
+              <div>
+                <div class="font-medium text-gray-800">{{ user.fullName }}</div>
+                <div class="text-sm text-gray-600">{{ user.role }}</div>
+              </div>
+            </div>
+            <span class="text-xs {{ user.actif ? 'text-green-600' : 'text-red-600' }}">
+              {{ user.actif ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+        @endeach
+      </div>
+    @else
+      <div class="text-center py-8 text-gray-500">
+        <i class="fas fa-users text-4xl mb-4"></i>
+        <p>Aucun utilisateur dans cette instance</p>
+      </div>
+    @endif
+  </div>
+
+  <!-- Employees List -->
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-user-tie text-white text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Employés de l'Instance</h3>
+    </div>
+
+    @if(country.employees.length > 0)
+      <div class="space-y-3 max-h-96 overflow-y-auto">
+        @each(employee in country.employees)
+          <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-white text-sm"></i>
+              </div>
+              <div>
+                <div class="font-medium text-gray-800">{{ employee.fullName }}</div>
+                <div class="text-sm text-gray-600">{{ employee.poste }} - {{ employee.departement }}</div>
+              </div>
+            </div>
+            <span class="text-xs {{ employee.actif ? 'text-green-600' : 'text-red-600' }}">
+              {{ employee.actif ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+        @endeach
+      </div>
+    @else
+      <div class="text-center py-8 text-gray-500">
+        <i class="fas fa-user-tie text-4xl mb-4"></i>
+        <p>Aucun employé dans cette instance</p>
+      </div>
+    @endif
+  </div>
+</div>
+@endsection

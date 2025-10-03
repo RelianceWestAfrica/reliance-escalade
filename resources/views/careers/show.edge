@@ -1,0 +1,232 @@
+@layout('layouts/main')
+
+@section('title')
+{{ offer.intitule }}
+@endsection
+
+@section('content')
+<!-- Premium Job Offer Header -->
+<div class="relative bg-gradient-to-br from-violet-600/90 via-purple-700/90 to-indigo-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-violet-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
+    <div class="absolute top-1/3 left-1/3 w-64 h-64 bg-purple-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
+  </div>
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+          <i class="fas fa-briefcase text-white text-6xl drop-shadow-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+            {{ offer.intitule }}
+          </h1>
+          <p class="text-violet-100 text-xl font-medium">
+            {{ offer.poste }} - {{ offer.departement }}
+          </p>
+          <div class="flex items-center gap-6 mt-4">
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-violet-300">
+              <i class="fas fa-file-contract text-violet-300 mr-2"></i>
+              {{ offer.typeContrat }}
+            </span>
+            @if(offer.salaire)
+              <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-green-300">
+                <i class="fas fa-money-bill text-green-300 mr-2"></i>
+                {{ offer.salaire.toLocaleString() }} FCFA
+              </span>
+            @endif
+            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ offer.statut === 'Publiée' ? 'border border-green-300' : 'border border-red-300' }}">
+              <i class="fas {{ offer.statut === 'Publiée' ? 'fa-eye text-green-300' : 'fa-eye-slash text-red-300' }} mr-2"></i>
+              {{ offer.statut }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="{{ route('careers.edit', [offer.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+          <i class="fas fa-edit"></i>
+          Modifier
+        </a>
+        <a href="/jobs/{{ offer.id }}/apply" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+          <i class="fas fa-external-link-alt"></i>
+          Voir Public
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Offer Details Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+  <!-- Main Information -->
+  <div class="lg:col-span-2 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-info-circle text-white text-xl"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800">Description du Poste</h3>
+    </div>
+
+    @if(offer.description)
+      <div class="prose max-w-none mb-6">
+        <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200">
+          <div class="text-gray-700 whitespace-pre-line leading-relaxed">{{ offer.description }}</div>
+        </div>
+      </div>
+    @endif
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+        <h4 class="font-semibold text-blue-800 mb-3 flex items-center">
+          <i class="fas fa-cogs text-blue-600 mr-2"></i>
+          Compétences Requises
+        </h4>
+        <div class="text-blue-700 whitespace-pre-line text-sm">{{ offer.competencesRequises }}</div>
+      </div>
+
+      @if(offer.experience)
+        <div class="bg-green-50 rounded-xl p-6 border border-green-200">
+          <h4 class="font-semibold text-green-800 mb-3 flex items-center">
+            <i class="fas fa-graduation-cap text-green-600 mr-2"></i>
+            Expérience Requise
+          </h4>
+          <div class="text-green-700 whitespace-pre-line text-sm">{{ offer.experience }}</div>
+        </div>
+      @endif
+    </div>
+  </div>
+
+  <!-- Offer Statistics -->
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-chart-bar text-white text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Statistiques</h3>
+    </div>
+
+    <div class="space-y-6">
+      <div class="stat-item">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-gray-600">Candidatures</span>
+          <span class="text-2xl font-bold text-blue-600">{{ offer.applications.length }}</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: {{ Math.min(offer.applications.length * 10, 100) }}%"></div>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">Candidatures reçues</span>
+      </div>
+
+      <div class="stat-item">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-gray-600">Jours Restants</span>
+          <span class="text-2xl font-bold text-orange-600">{{ Math.max(0, Math.ceil((offer.dateCloture.toMillis() - Date.now()) / (24 * 60 * 60 * 1000))) }}</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="bg-orange-500 h-2 rounded-full" style="width: {{ Math.max(0, Math.min(100, (offer.dateCloture.toMillis() - Date.now()) / (30 * 24 * 60 * 60 * 1000) * 100)) }}%"></div>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">Jusqu'à la clôture</span>
+      </div>
+
+      <div class="stat-item">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-gray-600">Vues</span>
+          <span class="text-2xl font-bold text-purple-600">{{ Math.floor(Math.random() * 100) + 50 }}</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="bg-purple-500 h-2 rounded-full" style="width: 75%"></div>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">Consultations</span>
+      </div>
+    </div>
+
+    @if(offer.applications.length > 0)
+      <div class="mt-6">
+        <a href="{{ route('careers.applications', [offer.id]) }}" class="btn-primary w-full">
+          <i class="fas fa-users mr-2"></i>
+          Voir les Candidatures
+        </a>
+      </div>
+    @endif
+  </div>
+</div>
+
+<!-- Applications List -->
+@if(offer.applications.length > 0)
+  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
+    <div class="p-6 border-b border-gray-200/50">
+      <h3 class="text-xl font-bold text-gray-800 flex items-center">
+        <i class="fas fa-users text-violet-600 mr-3"></i>
+        Candidatures Reçues ({{ offer.applications.length }})
+      </h3>
+    </div>
+
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @each(application in offer.applications)
+          <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200 hover:shadow-lg transition-all">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-white"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800">{{ application.nomComplet }}</h4>
+                <p class="text-sm text-gray-600">{{ application.emailProfessionnel }}</p>
+              </div>
+            </div>
+
+            @if(application.telephone)
+              <div class="mb-3">
+                <span class="text-xs text-gray-500">Téléphone:</span>
+                <div class="font-medium text-gray-700">{{ application.telephone }}</div>
+              </div>
+            @endif
+
+            @if(application.motivation)
+              <div class="mb-4">
+                <span class="text-xs text-gray-500">Motivation:</span>
+                <div class="text-sm text-gray-700 line-clamp-3">{{ application.motivation }}</div>
+              </div>
+            @endif
+
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{
+                application.statut === 'En attente' ? 'bg-yellow-100 text-yellow-800' :
+                application.statut === 'Acceptée' ? 'bg-green-100 text-green-800' :
+                application.statut === 'En cours' ? 'bg-blue-100 text-blue-800' :
+                'bg-red-100 text-red-800'
+              }}">
+                {{ application.statut }}
+              </span>
+              <div class="text-xs text-gray-500">{{ application.createdAt.toRelative() }}</div>
+            </div>
+          </div>
+        @endeach
+      </div>
+    </div>
+  </div>
+@endif
+
+<style>
+.btn-primary {
+  @apply bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center;
+}
+
+.stat-item {
+  @apply p-4 bg-gray-50/50 rounded-xl border border-gray-100;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
+@endsection

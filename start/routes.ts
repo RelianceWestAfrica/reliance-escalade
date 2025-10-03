@@ -13,7 +13,6 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import { defineConfig } from '@adonisjs/core/bodyparser'
 
 
 // Route d'accès (page d'accueil)
@@ -38,6 +37,8 @@ router.group(() => {
 
   // Postes
   router.resource('posts', '#controllers/posts_controller')
+  router.post('/posts/:id/update', '#controllers/posts_controller.update').as('posts.update_post')
+  router.post('/posts/:id/delete', '#controllers/posts_controller.destroy').as('posts.destroy_post')
 
   // Promotions
   router.resource('promotions', '#controllers/promotions_controller')
@@ -75,11 +76,18 @@ router.group(() => {
 
   // Careers routes (protected)
   router.resource('careers', '#controllers/job_offers_controller')
-  // Liste des candidatures pour une offre
   router.get('/careers/:id/applications', '#controllers/job_offers_controller.applications').as('careers.applications')
-  // Mise à jour du statut d’une candidature
   router.post('/applications/:id/status', '#controllers/job_offers_controller.updateApplicationStatus').as('applications.update_status')
 
+  // rwa-countries
+  router.get('/rwa-countries', '#controllers/rwa_countries_controller.index').as('rwa_countries.index')
+  router.get('/rwa-countries/create', '#controllers/rwa_countries_controller.create').as('rwa_countries.create')
+  router.get('/rwa-countries/:id', '#controllers/rwa_countries_controller.show').as('rwa_countries.show')
+  router.get('/rwa-countries/:id/edit', '#controllers/rwa_countries_controller.edit').as('rwa_countries.edit')
+  router.put('/rwa-countries/:id', '#controllers/rwa_countries_controller.update').as('rwa_countries.update')
+  router.delete('/rwa-countries/:id', '#controllers/rwa_countries_controller.destroy').as('rwa_countries.destroy')
+  router.post('/rwa-countries', '#controllers/rwa_countries_controller.store').as('rwa_countries.store')
+  router.post('/rwa-countries/:id/toggle-status', '#controllers/rwa_countries_controller.toggleStatus').as('rwa_countries.toggle_status')
 
 
   // Utilisateurs (Admin seulement)

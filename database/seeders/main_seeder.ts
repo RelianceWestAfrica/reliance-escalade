@@ -15,7 +15,8 @@ export default class extends BaseSeeder {
         email: 'dg@reliancewa.com',
         role: 'DG',
         password: 'password123',
-        actif: true
+        actif: true,
+        rwaCountryId : 1,
       },
       {
         nom: 'PANASSA',
@@ -23,7 +24,8 @@ export default class extends BaseSeeder {
         email: 'drh@reliancewa.com',
         role: 'DRH',
         password: 'password123',
-        actif: true
+        actif: true,
+        rwaCountryId : 1,
       },
       {
         nom: 'KODAH',
@@ -31,7 +33,8 @@ export default class extends BaseSeeder {
         email: 'admin@reliancewa.com',
         role: 'Admin',
         password: 'password123',
-        actif: true
+        actif: true,
+        rwaCountryId : 1,
       }
     ])
 
@@ -80,72 +83,100 @@ export default class extends BaseSeeder {
       {
         intitule: 'Directeur Général',
         departement: 'Direction',
-        description: 'Direction générale de l\'entreprise'
+        description: 'Direction générale de l\'entreprise',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Assistante de Direction',
         departement: 'Administration',
-        description: 'Assistance à la direction'
+        description: 'Assistance à la direction',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Directeur des ressources humaines',
         departement: 'Administration',
-        description: 'Direction ressources humaine et management employés'
+        description: 'Direction ressources humaine et management employés',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Designer graphique en chef',
         departement: 'Marketing et Communication',
-        description: 'Création graphique et communication visuelle'
+        description: 'Création graphique et communication visuelle',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Directeur artistique',
         departement: 'Marketing et Communication',
-        description: 'Direction production audio-visuelle'
+        description: 'Direction production audio-visuelle',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Metteur en scène',
         departement: 'Marketing et Communication',
-        description: 'Coordonnateur production audio-visuelle'
+        description: 'Coordonnateur production audio-visuelle',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Chargé production audio et voix-off',
         departement: 'Marketing et Communication',
-        description: 'Coordonnateur production audio'
+        description: 'Coordonnateur production audio',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Influenceur(se) réseaux sociaux',
         departement: 'Marketing et Communication',
-        description: 'Gestion identité médias et réseaux sociaux'
+        description: 'Gestion identité médias et réseaux sociaux',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Monteur et post-producteur',
         departement: 'Marketing et Communication',
-        description: 'Coordonnateur cadrage, montage et post-production audio-visuelle'
+        description: 'Coordonnateur cadrage, montage et post-production audio-visuelle',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Community Manager',
         departement: 'Marketing et Communication',
-        description: 'Gestion réseaux sociaux, communauté et publications'
+        description: 'Gestion réseaux sociaux, communauté et publications',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Directeur Commercial',
         departement: 'Commercial',
-        description: 'Direction de l\'équipe commerciale'
+        description: 'Direction de l\'équipe commerciale',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Commercial',
         departement: 'Commercial',
-        description: 'Prospection et relations clientes'
+        description: 'Prospection et relations clientes',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Analyste Programmeur',
         departement: 'Technique et développement',
-        description: 'Analyse, conception système, développement logiciel et pilotage de projet informatique'
+        description: 'Analyse, conception système, développement logiciel et pilotage de projet informatique',
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         intitule: 'Développeur Senior',
         departement: 'Technique et développement',
-        description: 'Développement d\'applications'
+        description: 'Développement d\'applications',
+        rwaCountryId : 1,
+        userId : 3,
       }
     ])
 
@@ -163,7 +194,9 @@ export default class extends BaseSeeder {
         salaire: 850000,
         typeContrat: 'CDI',
         dureeContrat: 0,
-        actif: true
+        actif: true,
+        rwaCountryId : 1,
+        userId : 3,
       },
       {
         nom: 'DIATA',
@@ -177,7 +210,9 @@ export default class extends BaseSeeder {
         salaire: 750000,
         typeContrat: 'CDI',
         dureeContrat: 0,
-        actif: true
+        actif: true,
+        rwaCountryId : 1,
+        userId : 3,
       }
     ])
   }

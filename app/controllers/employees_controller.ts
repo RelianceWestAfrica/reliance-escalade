@@ -3,38 +3,61 @@ import Employee from '#models/employee'
 import { DateTime } from 'luxon'
 
 export default class EmployeesController {
-  async index({ view, request }: HttpContext) {
+  async index({ view, request, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const page = request.input('page', 1)
     const limit = 10
 
     const employees = await Employee.query()
       .where('actif', true)
+      .where('rwa_country_id', rwaCountryId)
       .orderBy('created_at', 'desc')
       .paginate(page, limit)
 
-    const totalEmployees = await Employee.query().count('* as total')
+    const totalEmployees = await Employee.query()
+      .where('rwa_country_id', rwaCountryId)
+      .count('* as total')
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
     return view.render('employees/index', {
       nemployee: {
         totalEmployees: totalEmployees[0].$extras.total,
-
-      }, employees, currentDate})
+      },
+      employees,
+      currentDate,
+    })
   }
 
   async create({ view }: HttpContext) {
-
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
-
-    return view.render('employees/create', { currentDate})
+    return view.render('employees/create', { currentDate })
   }
 
-  async store({ request, response, session }: HttpContext) {
+  async store({ request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const data = request.only([
       'nom', 'prenom', 'date_naissance', 'contact', 'adresse',
       'poste', 'departement', 'date_prise_fonction', 'salaire',
-      'type_contrat', 'duree_contrat', 'date_fin_contrat'
+      'type_contrat', 'duree_contrat', 'date_fin_contrat',
     ])
 
     // Calculer la date de fin de contrat si nécessaire
@@ -43,33 +66,78 @@ export default class EmployeesController {
       data.date_fin_contrat = startDate.plus({ months: data.duree_contrat }).toISODate()
     }
 
-    await Employee.create(data)
+    await Employee.create({
+      ...data,
+      rwaCountryId,
+      userId: user.id,
+    })
 
     session.flash('success', 'Employé ajouté avec succès')
     return response.redirect('/employees')
   }
 
-  async show({ params, view }: HttpContext) {
-    const employee = await Employee.findOrFail(params.id)
-    await employee.load('promotions')
-    await employee.load('demotions')
-    await employee.load('ratings')
-    await employee.load('paySlips')
+  async show({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const employee = await Employee.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .preload('promotions')
+      .preload('demotions')
+      .preload('ratings')
+      .preload('paySlips')
+      .firstOrFail()
 
     return view.render('employees/show', { employee, DateTime })
   }
 
-  async edit({ params, view }: HttpContext) {
-    const employee = await Employee.findOrFail(params.id)
+  async edit({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const employee = await Employee.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     return view.render('employees/edit', { employee })
   }
 
-  async update({ params, request, response, session }: HttpContext) {
-    const employee = await Employee.findOrFail(params.id)
+  async update({ params, request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const employee = await Employee.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     const data = request.only([
       'nom', 'prenom', 'date_naissance', 'contact', 'adresse',
       'poste', 'departement', 'date_prise_fonction', 'salaire',
-      'type_contrat', 'duree_contrat', 'date_fin_contrat'
+      'type_contrat', 'duree_contrat', 'date_fin_contrat', 
     ])
 
     // Calculer la date de fin de contrat si nécessaire
@@ -80,16 +148,36 @@ export default class EmployeesController {
       data.date_fin_contrat = null
     }
 
-    employee.merge(data)
+    employee.merge({
+      ...data,
+      rwaCountryId,
+      userId: user.id,
+    })
     await employee.save()
 
     session.flash('success', 'Employé modifié avec succès')
     return response.redirect('/employees')
   }
 
-  async destroy({ params, response, session }: HttpContext) {
-    const employee = await Employee.findOrFail(params.id)
+  async destroy({ params, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const employee = await Employee.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     employee.actif = false
+    employee.userId = user.id
+    employee.rwaCountryId = rwaCountryId
     await employee.save()
 
     session.flash('success', 'Employé supprimé avec succès')

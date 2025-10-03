@@ -279,7 +279,7 @@
                         <ion-icon name="create-outline" class="text-blue-600 text-xl"></ion-icon>
                         {{-- <i class="fas fa-edit"></i> --}}
                       </a>
-                      <form action="{{ route('posts.destroy', [post.id]) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce poste ?')">
+                      <form action="{{ route('posts.destroy_post', [post.id]) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce poste ?')">
                         {{ csrfField() }}
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="action-btn delete">

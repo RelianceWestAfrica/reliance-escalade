@@ -4,11 +4,14 @@ import Employee from '#models/employee'
 import { DateTime } from 'luxon'
 
 export default class DemotionsController {
-  async index({ view, request }: HttpContext) {
+  async index({ view, request, session }: HttpContext) {
     const page = request.input('page', 1)
     const limit = 10
 
+    const rwaCountryId = session.get('rwa_country_id')
+
     const demotions = await Demotion.query()
+      .where('rwa_country_id', rwaCountryId)
       .preload('employee')
       .orderBy('created_at', 'desc')
       .paginate(page, limit)
@@ -16,8 +19,9 @@ export default class DemotionsController {
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
     const totalDemotions = await Demotion.query()
-      .count('* as total')
+      .where('rwa_country_id', rwaCountryId)
       .where('statut', true)
+      .count('* as total')
       .orderBy('created_at', 'desc')
 
     return view.render('demotions/index', {
@@ -27,54 +31,99 @@ export default class DemotionsController {
       }, demotions, currentDate })
   }
 
-  async create({ view }: HttpContext) {
-    const employees = await Employee.query().where('actif', true)
+  async create({ view, session }: HttpContext) {
+    const rwaCountryId = session.get('rwa_country_id')
+    const employees = await Employee.query().where('actif', true).where('rwa_country_id', rwaCountryId)
     return view.render('demotions/create', { employees })
   }
 
-  async store({ request, response, session }: HttpContext) {
-    const data = request.only([
-      'employee_id', 'ancien_poste', 'nouveau_poste',
-      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction'
-    ])
+  async store({ request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized({ message: 'Utilisateur non authentifié' })
+    }
 
-    data.montant_reduction = data.ancien_salaire - data.nouveau_salaire
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      throw new Error('Aucun RWA Country ID trouvé pour cet utilisateur.')
+    }
 
-    await Demotion.create(data)
-
-    session.flash('success', 'Démotion programmée avec succès')
-    return response.redirect('/demotions')
-  }
-
-  async edit({ params, view }: HttpContext) {
-    const demotion = await Demotion.findOrFail(params.id)
-    await demotion.load('employee')
-    const employees = await Employee.query().where('actif', true)
-
-    return view.render('demotions/edit', { demotion, employees })
-  }
-
-  async update({ params, request, response, session }: HttpContext) {
-    const demotion = await Demotion.findOrFail(params.id)
     const data = request.only([
       'employee_id', 'ancien_poste', 'nouveau_poste',
       'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction',
     ])
 
     data.montant_reduction = data.ancien_salaire - data.nouveau_salaire
-    demotion.merge(data)
+
+    await Demotion.create({
+      ...data,
+      rwaCountryId,
+      userId: user.id,
+    })
+
+    session.flash('success', 'Démotion programmée avec succès')
+    return response.redirect('/demotions')
+  }
+
+  async edit({ params, view, session }: HttpContext) {
+    const rwaCountryId = session.get('rwa_country_id')
+    const demotion = await Demotion.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .preload('employee')
+      .firstOrFail()
+
+    const employees = await Employee.query().where('actif', true).where('rwa_country_id', rwaCountryId)
+
+    return view.render('demotions/edit', { demotion, employees })
+  }
+
+  async update({ params, request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized({ message: 'Utilisateur non authentifié' })
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      throw new Error('Aucun RWA Country ID trouvé pour cet utilisateur.')
+    }
+
+    const demotion = await Demotion.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
+    const data = request.only([
+      'employee_id', 'ancien_poste', 'nouveau_poste',
+      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction', 
+    ])
+
+    data.montant_reduction = data.ancien_salaire - data.nouveau_salaire
+    demotion.merge({
+      ...data,
+      rwaCountryId,
+      userId: user.id,
+    })
     await demotion.save()
 
     session.flash('success', 'Démotion modifiée avec succès')
     return response.redirect('/demotions')
   }
 
-  async apply({ params, response, session }: HttpContext) {
-    const demotion = await Demotion.findOrFail(params.id)
-    await demotion.load('employee')
+  async apply({ params, response, session, auth }: HttpContext) {
+    const rwaCountryId = session.get('rwa_country_id')
+    const userId = auth.user?.id
+
+    const demotion = await Demotion.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .preload('employee')
+      .firstOrFail()
 
     // Appliquer la démotion
     demotion.statut = 'Appliquée'
+    demotion.userId = userId ?? null
     await demotion.save()
 
     // Mettre à jour l'employé
@@ -88,7 +137,13 @@ export default class DemotionsController {
   }
 
   async destroy({ params, response, session }: HttpContext) {
-    const demotion = await Demotion.findOrFail(params.id)
+    const rwaCountryId = session.get('rwa_country_id')
+
+    const demotion = await Demotion.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     await demotion.delete()
 
     session.flash('success', 'Démotion supprimée avec succès')

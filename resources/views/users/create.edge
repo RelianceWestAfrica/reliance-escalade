@@ -168,34 +168,36 @@
       <!-- Premium Page Header -->
       <div class="relative bg-gradient-to-br from-indigo-600/90 via-purple-700/90 to-pink-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
           style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-orange-950/95"></div>
+
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-300/5 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+          </div>
+
 
         <!-- Animated Background Elements -->
         <div class="absolute inset-0">
           <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-          <div class="absolute bottom-0 left-0 w-80 h-80 bg-indigo-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
-          <div class="absolute top-1/3 left-1/3 w-64 h-64 bg-purple-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
         </div>
 
-        <div class="relative z-10 p-10">
-          <div class="flex items-center gap-8">
-            <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
-              <i class="fas fa-user-plus text-white text-6xl drop-shadow-lg"></i>
-            </div>
+        <div class="relative z-10 p-8">
+          <div class="flex items-center gap-6">
             <div>
-              <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+              <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
                 Créer un Utilisateur
               </h1>
-              <p class="text-indigo-100 text-xl font-medium">
+              <p class="text-orange-50 text-lg font-normal">
                 Nouveau compte d'accès au système RH
               </p>
               <div class="flex items-center gap-6 mt-4">
                 <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 bg-indigo-300 rounded-full animate-pulse"></div>
-                  <span class="text-indigo-200 text-sm">Accès sécurisé</span>
+                  <span class="text-orange-50 text-lg">Accès sécurisé</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
-                  <span class="text-indigo-200 text-sm">Permissions configurables</span>
+                  <ion-icon name="analytics-outline" class="text-2xl text-green-300 animate-pulse" style="animation-delay: 0.5s;"></ion-icon>
+                  <span class="text-orange-50 text-lg ml-2">Permissions et autorisations configurables</span>
                 </div>
               </div>
             </div>
@@ -212,17 +214,7 @@
               <h2 class="text-2xl font-bold text-gray-800 mb-2">Informations du Compte</h2>
               <p class="text-gray-600">Créez un nouveau compte d'accès au système</p>
             </div>
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center">
-                  <i class="fas fa-shield-alt text-white"></i>
-                </div>
-                <div>
-                  <div class="text-sm font-semibold text-gray-800">Nouveau Compte</div>
-                  <div class="text-xs text-gray-500">Accès système</div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
 
@@ -231,14 +223,13 @@
             {{ csrfField() }}
 
             <!-- Personal Information Section -->
-            <div class="form-section">
+            <div class="form-section" style="margin-top: -5px;">
               <div class="flex items-center gap-4 mb-8">
-                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl shadow-lg">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-1 rounded-md shadow-lg">
                   <i class="fas fa-user text-white text-xl"></i>
                 </div>
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Informations Personnelles</h3>
-                  <p class="text-gray-600">Identité de l'utilisateur</p>
+                  <h3 class="text-xl font-semibold text-gray-800">Informations Personnelles</h3>
                 </div>
               </div>
 
@@ -248,8 +239,7 @@
                     <i class="fas fa-signature text-blue-500 mr-2"></i>
                     Nom de Famille
                   </label>
-                  <input type="text" id="nom" name="nom" class="form-input" placeholder="Entrez le nom de famille" required>
-                  <div class="form-hint">Nom tel qu'il apparaît sur les documents officiels</div>
+                  <input type="text" id="nom" name="nom" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Entrez le nom de famille" required>
                 </div>
 
                 <div class="form-group">
@@ -257,8 +247,7 @@
                     <i class="fas fa-user-tag text-blue-500 mr-2"></i>
                     Prénom(s)
                   </label>
-                  <input type="text" id="prenom" name="prenom" class="form-input" placeholder="Entrez le(s) prénom(s)" required>
-                  <div class="form-hint">Prénom(s) complet(s)</div>
+                  <input type="text" id="prenom" name="prenom" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Entrez le(s) prénom(s)" required>
                 </div>
               </div>
             </div>
@@ -266,12 +255,11 @@
             <!-- Account Information Section -->
             <div class="form-section">
               <div class="flex items-center gap-4 mb-8">
-                <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-3 rounded-2xl shadow-lg">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-1 rounded-md shadow-lg">
                   <i class="fas fa-key text-white text-xl"></i>
                 </div>
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Informations de Connexion</h3>
-                  <p class="text-gray-600">Identifiants et accès système</p>
+                  <h3 class="text-xl font-semibold text-gray-800">Informations de Connexion</h3>
                 </div>
               </div>
 
@@ -281,8 +269,7 @@
                     <i class="fas fa-envelope text-purple-500 mr-2"></i>
                     Adresse Email
                   </label>
-                  <input type="email" id="email" name="email" class="form-input" placeholder="utilisateur@reliancewa.com" required>
-                  <div class="form-hint">Adresse email unique pour la connexion</div>
+                  <input type="email" id="email" name="email" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="utilisateur@reliancewa.com" required>
                 </div>
 
                 <div class="form-group">
@@ -291,17 +278,16 @@
                     Mot de Passe
                   </label>
                   <div class="relative">
-                    <input type="password" id="password" name="password" class="form-input pr-12" placeholder="Mot de passe sécurisé" required minlength="8">
+                    <input type="password" id="password" name="password" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Mot de passe sécurisé" required minlength="8">
                     <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                       <i class="fas fa-eye text-gray-400 hover:text-gray-600" id="passwordToggle"></i>
                     </button>
                   </div>
-                  <div class="form-hint">Minimum 8 caractères avec lettres et chiffres</div>
                   <div class="mt-2">
                     <div class="password-strength-bar">
                       <div class="password-strength-fill" id="passwordStrength"></div>
                     </div>
-                    <div class="text-xs text-gray-500 mt-1" id="passwordStrengthText">Force du mot de passe</div>
+                    <div class="text-xs text-gray-500 mt-1 ml-2" id="passwordStrengthText">Force du mot de passe</div>
                   </div>
                 </div>
               </div>
@@ -310,12 +296,11 @@
             <!-- Role and Permissions Section -->
             <div class="form-section">
               <div class="flex items-center gap-4 mb-8">
-                <div class="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl shadow-lg">
+                <div class="bg-gradient-to-r from-orange-500 to-red-600 p-1 rounded-md shadow-lg">
                   <i class="fas fa-user-shield text-white text-xl"></i>
                 </div>
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Rôle et Permissions</h3>
-                  <p class="text-gray-600">Niveau d'accès et responsabilités</p>
+                  <h3 class="text-xl font-semibold text-gray-800">Rôle et Permissions</h3>
                 </div>
               </div>
 
@@ -401,7 +386,7 @@
                     <i class="fas fa-toggle-on text-green-500 mr-2"></i>
                     Statut du Compte
                   </label>
-                  <select id="actif" name="actif" class="form-select">
+                  <select id="actif" name="actif" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm">
                     <option value="1">✅ Actif - Accès autorisé</option>
                     <option value="0">⏸️ Inactif - Accès suspendu</option>
                   </select>
@@ -640,7 +625,7 @@
 
         strengthBar.style.width = strength + '%';
         strengthBar.className = `password-strength-fill ${strengthColor}`;
-        strengthText.textContent = `Force: ${strengthLabel}`;
+        strengthText.textContent = `Force : ${strengthLabel}`;
       });
 
       // Role selection

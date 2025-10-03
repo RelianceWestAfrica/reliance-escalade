@@ -1,517 +1,668 @@
-@layout('layouts/main')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nouvelle Offre d'emploi - RELIANCE ESCALADE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/all.min.css" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <link href="/public/css/app.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900 flex">
 
-@section('title')
-Nouvelle Offre d'Emploi
-@endsection
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white border-r min-h-screen shadow-sm flex flex-col py-5 px-4">
+    {{-- <div class="mb-8">
+      <h2 class="">
+        <center>
+          <img src="public/images/illus5.jpg" style="background-size: cover; background-position: center; background-blend-mode: overlay; width:70%; height:15vh; text-align:center;">
+        </center>
+        </h2>
 
-@section('content')
-<!-- Premium Page Header -->
-<div class="relative bg-gradient-to-br from-violet-600/90 via-purple-700/90 to-indigo-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
-     style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+       <!-- Logo -->
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div>
+    </div> --}}
 
-  <!-- Animated Background Elements -->
-  <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-violet-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
-    <div class="absolute top-1/3 left-1/3 w-64 h-64 bg-purple-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
-  </div>
+    <nav class="flex flex-col space-y-2 text-md font-medium">
+      <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url() === route('dashboard') ? 'bg-blue-700/90 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-th-large mr-3"></i> --}}
+        <ion-icon name="logo-tableau" class="mr-3 text-2xl"></ion-icon> Dashboard
+        <ion-icon name="chevron-down-outline" class="ml-auto text-xs"></ion-icon>
+        {{-- <i class="fas fa-chevron-down ml-auto text-xs"></i> --}}
+      </a>
+      <a href="{{ route('posts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/posts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="albums-outline" class="mr-3 text-2xl"></ion-icon>Postes
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('employees.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/employees') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-users mr-3"></i> --}}
+        <ion-icon name="people-outline" class="mr-3 text-2xl"></ion-icon>Personnel
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('promotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/promotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-up mr-3"></i> --}}
+        <ion-icon name="trending-up-outline" class="mr-3 text-2xl"></ion-icon>Promotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('demotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/demotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-down mr-3"></i> --}}
+        <ion-icon name="trending-down-outline" class="mr-3 text-2xl"></ion-icon>Démotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('tracking.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/tracking') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="pulse-outline" class="mr-3 text-2xl"></ion-icon> Suivi Employés
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('pay_slips.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/pay-slips') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a> --}}
+      <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('statistics.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/statistics') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @if(auth.user.role === 'Admin')
+      <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-user-cog mr-3"></i> --}}
+        <ion-icon name="finger-print-outline" class="mr-3 text-2xl"></ion-icon>Utilisateurs
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @endif
+    </nav>
+  </aside>
 
-  <div class="relative z-10 p-10">
-    <div class="flex items-center gap-8">
-      <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
-        <i class="fas fa-briefcase text-white text-6xl drop-shadow-lg"></i>
-      </div>
+  <!-- Main Panel -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="h-24 bg-white border-b px-6 flex items-center justify-between shadow-sm">
       <div>
-        <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
-          Créer une Offre d'Emploi
-        </h1>
-        <p class="text-violet-100 text-xl font-medium">
-          Publier une nouvelle opportunité de carrière
-        </p>
-        <div class="flex items-center gap-6 mt-4">
-          <div class="flex items-center gap-2">
-            <div class="w-3 h-3 bg-violet-300 rounded-full animate-pulse"></div>
-            <span class="text-violet-200 text-sm">Recrutement professionnel</span>
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <div class="w-3 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
-            <span class="text-violet-200 text-sm">Candidatures en ligne</span>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div>
+      </div> <!-- Espace vide pour futur breadcrumb -->
+
+      <div class="flex items-center space-x-6">
+        <!-- Notifications -->
+        {{-- <div class="relative">
+          <i class="fas fa-bell text-gray-600 text-lg"></i>
+          <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+        </div> --}}
+
+        <!-- User Menu -->
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm shadow">
+            {{-- <i class="fas fa-user"></i> --}}
+            <ion-icon name="logo-octocat" class="text-3xl"></ion-icon>
+          </div>
+          <div class="text-md">
+            <div class="font-semibold">{{ auth.user.fullName }}</div>
+            <div class="text-xs text-gray-500 capitalize">{{ auth.user.role }}</div>
+          </div>
+
+          <form action="{{ route('auth.logout') }}" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="ml-3 text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all">
+              <ion-icon name="log-out-outline" class="text-2xl"></ion-icon>
+              {{-- <i class="fas fa-share-square"></i> --}}
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 overflow-y-auto flex-1 bg-gray-50">
+      <!-- Flash Messages -->
+      @if(flashMessages.has('success'))
+        <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-check-circle mr-2"></i>
+          {{ flashMessages.get('success') }}
+        </div>
+      @endif
+
+      @if(flashMessages.has('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {{ flashMessages.get('error') }}
+        </div>
+      @endif
+
+      {{-- @section('title')
+      Postes
+      @endsection
+
+      @section('content') --}}
+
+      <!-- Premium Page Header -->
+      <div class="relative bg-gradient-to-br from-teal-600/90 via-cyan-700/90 to-blue-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+          style="background-image: url('https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-orange-900/75"></div>
+
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+          {{-- <div class="absolute bottom-0 left-0 w-80 h-80 bg-cyan-400/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 3s;"></div> --}}
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+
+        <div class="relative z-10 p-10">
+          <div class="flex items-center gap-8">
+            {{-- <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+              <i class="fas fa-briefcase text-white text-6xl drop-shadow-lg"></i>
+            </div> --}}
+            <div>
+              <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
+                Créer une Offre d'Emploi
+              </h1>
+              <p class="text-violet-100 text-lg font-normal">
+                Publier une nouvelle opportunité de carrière
+              </p>
+              <div class="flex items-center gap-6 mt-4">
+                <div class="flex items-center gap-2">
+                  {{-- <div class="w-3 h-3 bg-violet-300 rounded-full animate-pulse"></div> --}}
+                  <span class="text-violet-100 text-lg">Recrutement professionnel</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <ion-icon name="logo-slack" class="text-xl text-white rounded-full animate-pulse" style="animation-delay: 0.5s;"></ion-icon>
+                  <span class="text-violet-100 text-lg ml-2">Candidatures en ligne Reliance West Africa</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Premium Form Container -->
+      <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+        <!-- Form Header -->
+        <div class="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-gray-200/50">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-gray-800 mb-2">Détails de l'Offre d'Emploi</h2>
+              <p class="text-gray-600">Créez une offre attractive pour attirer les meilleurs talents</p>
+            </div>
+            {{-- <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-violet-500 to-purple-500 rounded-xl flex items-center justify-center">
+                  <i class="fas fa-plus text-white"></i>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-gray-800">Nouvelle Offre</div>
+                  <div class="text-xs text-gray-500">Recrutement actif</div>
+                </div>
+              </div>
+            </div> --}}
+          </div>
+        </div>
+
+        <div class="p-10">
+          <form action="{{ route('careers.store') }}" method="POST" class="space-y-10" id="jobOfferForm">
+            {{ csrfField() }}
+
+            <!-- Basic Information Section -->
+            <div class="form-section" style="margin-top: -5px;">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-1 rounded-md shadow-lg">
+                  <i class="fas fa-info-circle text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">Informations Générales</h3>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="form-group">
+                  <label for="intitule" class="form-label">
+                    <i class="fas fa-tag text-blue-500 mr-2"></i>
+                    Intitulé de l'Offre
+                  </label>
+                  <input type="text" id="intitule" name="intitule" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Ex: Recherche Développeur Full-Stack Senior" required autofocus>
+                </div>
+
+                <div class="form-group">
+                  <label for="poste" class="form-label">
+                    <i class="fas fa-briefcase text-blue-500 mr-2"></i>
+                    Poste à Pourvoir
+                  </label>
+                  <input type="text" id="poste" name="poste" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Ex: Développeur Full-Stack" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="departement" class="form-label">
+                    <i class="fas fa-building text-blue-500 mr-2"></i>
+                    Département
+                  </label>
+                  <select id="departement" name="departement" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
+                    <option value="">Sélectionner un département</option>
+                    <option value="Direction">Direction</option>
+                    <option value="Administration">Administration</option>
+                    <option value="Marketing et Communication">Marketing et Communication</option>
+                    <option value="Commercial">💼 Commercial</option>
+                    <option value="Technique et développement">Technique et développement</option>
+                    <option value="Comptabilité finances">Comptabilité finances</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="type_contrat" class="form-label">
+                    <i class="fas fa-file-contract text-blue-500 mr-2"></i>
+                    Type de Contrat
+                  </label>
+                  <select id="type_contrat" name="type_contrat" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
+                    <option value="">Sélectionner un type</option>
+                    <option value="CDI">CDI - Contrat à Durée Indéterminée</option>
+                    <option value="CDD">CDD - Contrat à Durée Déterminée</option>
+                    <option value="Stage">Stage - Formation Pratique</option>
+                    <option value="Consultant">Consultant - Prestation</option>
+                    <option value="Intérim">Intérim - Travail Temporaire</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Job Description Section -->
+            <div class="form-section">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-1 rounded-md shadow-lg">
+                  <i class="fas fa-file-alt text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">Description du Poste</h3>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="description" class="form-label">
+                  <i class="fas fa-align-left text-purple-500 mr-2"></i>
+                  Description Détaillée
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="7"
+                  class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm"
+                  placeholder="Décrivez le poste, les missions principales et l'environnement de travail...
+
+                  Exemple :
+                  • Missions: Développement d'applications web modernes
+                  • Responsabilités: Architecture technique, encadrement junior
+                  • Environnement: Équipe agile, technologies récentes
+                  • Évolution: Possibilités de formation et de progression"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Requirements Section -->
+            <div class="form-section">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-green-500 to-teal-600 p-1 rounded-md shadow-lg">
+                  <i class="fas fa-list-check text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">Compétences et Exigences</h3>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="form-group">
+                  <label for="competences_requises" class="form-label">
+                    <i class="fas fa-cogs text-green-500 mr-2"></i>
+                    Compétences Requises
+                  </label>
+                  <textarea
+                    id="competences_requises"
+                    name="competences_requises"
+                    rows="13"
+                    class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm"
+                    placeholder="Listez les compétences techniques et soft skills requises...
+
+                    Compétences Techniques :
+                    • Maîtrise de JavaScript/TypeScript
+                    • Expérience avec React/Vue.js
+                    • Connaissance des bases de données
+                    • Git et méthodologies agiles
+
+                    Compétences Comportementales:
+                    • Esprit d'équipe et communication
+                    • Autonomie et prise d'initiative
+                    • Capacité d'adaptation
+                    • Sens de l'organisation"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="experience" class="form-label">
+                    <i class="fas fa-graduation-cap text-green-500 mr-2"></i>
+                    Expérience et Formation
+                  </label>
+                  <textarea
+                    id="experience"
+                    name="experience"
+                    rows="13"
+                    class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm"
+                    placeholder="Précisez le niveau d'expérience et la formation requise...
+
+                    Formation :
+                    • Bac+3/5 en Informatique ou équivalent
+                    • Certifications professionnelles appréciées
+
+                    Expérience:
+                    • Minimum 3 ans d'expérience
+                    • Expérience en développement web
+                    • Connaissance du secteur un plus"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Compensation and Timeline Section -->
+            <div class="form-section">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-orange-500 to-red-600 p-1 rounded-md shadow-lg">
+                  <i class="fas fa-money-bill-wave text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">Rémunération et Délais</h3>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="form-group">
+                  <label for="salaire" class="form-label">
+                    <i class="fas fa-coins text-orange-500 mr-2"></i>
+                    Salaire Proposé (FCFA)
+                  </label>
+                  <input type="number" id="salaire" name="salaire" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" min="0" placeholder="750000">
+                </div>
+
+                <div class="form-group">
+                  <label for="date_cloture" class="form-label">
+                    <i class="fas fa-calendar-times text-orange-500 mr-2"></i>
+                    Date de Clôture
+                  </label>
+                  <input type="date" id="date_cloture" name="date_cloture" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="statut" class="form-label">
+                    <i class="fas fa-toggle-on text-orange-500 mr-2"></i>
+                    Statut de Publication
+                  </label>
+                  <select id="statut" name="statut" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm">
+                    <option value="Publiée">Publier immédiatement</option>
+                    <option value="Non publiée">Sauvegarder en brouillon</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="form-section">
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-1 rounded-md shadow-lg">
+                  <i class="fas fa-eye text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">Aperçu de l'Offre</h3>
+                </div>
+              </div>
+
+              <div id="offerPreview" class="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 border border-gray-200">
+                <div class="text-center text-gray-500 py-8">
+                  <i class="fas fa-briefcase text-4xl mb-4"></i>
+                  <p>Remplissez les champs pour voir l'aperçu de votre offre</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+              <a href="{{ route('careers.index') }}" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Retour aux Offres
+              </a>
+
+              <div class="flex gap-4">
+                <button type="button" class="btn-outline" onclick="resetForm()">
+                  <i class="fas fa-undo mr-2"></i>
+                  Réinitialiser
+                </button>
+                <button type="button" class="btn-preview" onclick="updatePreview()">
+                  <i class="fas fa-eye mr-2"></i>
+                  Actualiser Aperçu
+                </button>
+                <button type="submit" class="btn-primary-gradient">
+                  <i class="fas fa-briefcase mr-2"></i>
+                  Créer l'Offre
+                  <div class="btn-shine"></div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <style>
+      /* Enhanced Form Styles */
+      .form-group {
+        @apply relative;
+      }
+
+      .form-label {
+        @apply block text-sm font-semibold text-gray-700 mb-3 flex items-center;
+      }
+
+      .form-input, .form-select {
+        @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300;
+      }
+
+      .form-textarea {
+        @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300 resize-none;
+      }
+
+      .form-hint {
+        @apply text-xs text-gray-500 mt-2 italic;
+      }
+
+      .form-section {
+        @apply bg-gradient-to-br from-gray-50/80 to-white rounded-2xl p-8 border border-gray-100 shadow-sm;
+      }
+
+      .btn-secondary {
+        @apply px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center;
+      }
+
+      .btn-outline {
+        @apply px-6 py-3 border-2 border-blue-300 rounded-xl text-blue-600 font-semibold hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 flex items-center;
+      }
+
+      .btn-preview {
+        @apply px-6 py-3 border-2 border-purple-300 rounded-xl text-purple-600 font-semibold hover:bg-purple-50 hover:border-purple-400 transition-all duration-200 flex items-center;
+      }
+
+      .btn-primary-gradient {
+        @apply relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center overflow-hidden;
+      }
+
+      .btn-shine {
+        @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full transition-transform duration-1000;
+      }
+
+      .btn-primary-gradient:hover .btn-shine {
+        @apply translate-x-full;
+      }
+
+      /* Form Enhancement Effects */
+      .form-input:focus, .form-select:focus, .form-textarea:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
+      }
+
+      /* Section Animation */
+      .form-section {
+        animation: slideInUp 0.6s ease-out;
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      </style>
+
+      <script>
+      // Real-time preview update
+      function updatePreview() {
+        const intitule = document.getElementById('intitule').value;
+        const poste = document.getElementById('poste').value;
+        const departement = document.getElementById('departement').value;
+        const typeContrat = document.getElementById('type_contrat').value;
+        const description = document.getElementById('description').value;
+        const competences = document.getElementById('competences_requises').value;
+        const experience = document.getElementById('experience').value;
+        const salaire = document.getElementById('salaire').value;
+        const dateCloture = document.getElementById('date_cloture').value;
+
+        const preview = document.getElementById('offerPreview');
+
+        if (!intitule && !poste) {
+          preview.innerHTML = `
+            <div class="text-center text-gray-500 py-8">
+              <i class="fas fa-briefcase text-4xl mb-4"></i>
+              <p>Remplissez les champs pour voir l'aperçu de votre offre</p>
+            </div>
+          `;
+          return;
+        }
+
+        const previewContent = `
+          <div class="bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl p-6 mb-6">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-16 h-16 bg-violet-500 rounded-xl flex items-center justify-center">
+                <ion-icon name="logo-slack" class="text-2xl text-white rounded-full"></ion-icon>
+              </div>
+              <div>
+                <h4 class="text-2xl font-bold text-gray-800">${intitule || 'Titre de l\'offre'}</h4>
+                <p class="mt-1 text-green-700 font-semibold">${poste || 'Poste'} - ${departement || 'Département'}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <span class="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-sm font-medium">
+                <i class="fas fa-file-contract mr-1"></i>
+                ${typeContrat || 'Type contrat'}
+              </span>
+              ${salaire ? `
+                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                  <i class="fas fa-money-bill mr-1"></i>
+                  ${parseInt(salaire).toLocaleString()} FCFA
+                </span>
+              ` : ''}
+              ${dateCloture ? `
+                <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
+                  <i class="fas fa-calendar mr-1"></i>
+                  Jusqu'au ${new Date(dateCloture).toLocaleDateString('fr-FR')}
+                </span>
+              ` : ''}
+            </div>
+          </div>
+
+          ${description ? `
+            <div class="mb-6">
+              <h5 class="font-semibold text-gray-800 mb-3">Description du poste</h5>
+              <div class="bg-gray-50 rounded-xl p-4 text-gray-700 whitespace-pre-line">${description}</div>
+            </div>
+          ` : ''}
+
+          ${competences ? `
+            <div class="mb-6">
+              <h5 class="font-semibold text-gray-800 mb-3">Compétences requises</h5>
+              <div class="bg-blue-50 rounded-xl p-4 text-gray-700 whitespace-pre-line">${competences}</div>
+            </div>
+          ` : ''}
+
+          ${experience ? `
+            <div class="mb-6">
+              <h5 class="font-semibold text-gray-800 mb-3">Expérience et formation</h5>
+              <div class="bg-green-50 rounded-xl p-4 text-gray-700 whitespace-pre-line">${experience}</div>
+            </div>
+          ` : ''}
+
+          <div class="text-center pt-6 border-t border-gray-200">
+            <button class="bg-violet-600 text-white px-8 py-3 rounded-xl font-semibold">
+              <i class="fas fa-paper-plane mr-2"></i>
+              POSTULER
+            </button>
+          </div>
+        `;
+
+        preview.innerHTML = previewContent;
+      }
+
+      // Auto-update preview on input
+      document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('#intitule, #poste, #departement, #type_contrat, #description, #competences_requises, #experience, #salaire, #date_cloture');
+        inputs.forEach(input => {
+          input.addEventListener('input', updatePreview);
+          input.addEventListener('change', updatePreview);
+        });
+
+        // Set default closing date (30 days from now)
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 30);
+        document.getElementById('date_cloture').value = defaultDate.toISOString().split('T')[0];
+
+        updatePreview();
+      });
+
+      function resetForm() {
+        if (confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) {
+          document.getElementById('jobOfferForm').reset();
+          updatePreview();
+        }
+      }
+      </script>
+     {{-- @endsection --}}
+      </main>
   </div>
-</div>
-
-<!-- Premium Form Container -->
-<div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
-  <!-- Form Header -->
-  <div class="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-gray-200/50">
-    <div class="flex items-center justify-between">
-      <div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Détails de l'Offre d'Emploi</h2>
-        <p class="text-gray-600">Créez une offre attractive pour attirer les meilleurs talents</p>
-      </div>
-      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-r from-violet-500 to-purple-500 rounded-xl flex items-center justify-center">
-            <i class="fas fa-plus text-white"></i>
-          </div>
-          <div>
-            <div class="text-sm font-semibold text-gray-800">Nouvelle Offre</div>
-            <div class="text-xs text-gray-500">Recrutement actif</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="p-10">
-    <form action="{{ route('careers.store') }}" method="POST" class="space-y-10" id="jobOfferForm">
-      {{ csrfField() }}
-
-      <!-- Basic Information Section -->
-      <div class="form-section">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl shadow-lg">
-            <i class="fas fa-info-circle text-white text-xl"></i>
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-800">Informations Générales</h3>
-            <p class="text-gray-600">Titre et identification du poste</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div class="form-group">
-            <label for="intitule" class="form-label">
-              <i class="fas fa-tag text-blue-500 mr-2"></i>
-              Intitulé de l'Offre
-            </label>
-            <input type="text" id="intitule" name="intitule" class="form-input" placeholder="Ex: Recherche Développeur Full-Stack Senior" required>
-            <div class="form-hint">Titre accrocheur pour attirer les candidats</div>
-          </div>
-
-          <div class="form-group">
-            <label for="poste" class="form-label">
-              <i class="fas fa-briefcase text-blue-500 mr-2"></i>
-              Poste à Pourvoir
-            </label>
-            <input type="text" id="poste" name="poste" class="form-input" placeholder="Ex: Développeur Full-Stack" required>
-            <div class="form-hint">Titre exact du poste dans l'entreprise</div>
-          </div>
-
-          <div class="form-group">
-            <label for="departement" class="form-label">
-              <i class="fas fa-building text-blue-500 mr-2"></i>
-              Département
-            </label>
-            <select id="departement" name="departement" class="form-select" required>
-              <option value="">Sélectionner un département</option>
-              <option value="Direction">🏢 Direction</option>
-              <option value="Administration">📋 Administration</option>
-              <option value="Marketing et Communication">📢 Marketing et Communication</option>
-              <option value="Commercial">💼 Commercial</option>
-              <option value="Technique et développement">💻 Technique et développement</option>
-              <option value="Comptabilité finances">💰 Comptabilité finances</option>
-            </select>
-            <div class="form-hint">Département d'affectation du poste</div>
-          </div>
-
-          <div class="form-group">
-            <label for="type_contrat" class="form-label">
-              <i class="fas fa-file-contract text-blue-500 mr-2"></i>
-              Type de Contrat
-            </label>
-            <select id="type_contrat" name="type_contrat" class="form-select" required>
-              <option value="">Sélectionner un type</option>
-              <option value="CDI">📄 CDI - Contrat à Durée Indéterminée</option>
-              <option value="CDD">📅 CDD - Contrat à Durée Déterminée</option>
-              <option value="Stage">🎓 Stage - Formation Pratique</option>
-              <option value="Consultant">💡 Consultant - Prestation</option>
-              <option value="Intérim">⏰ Intérim - Travail Temporaire</option>
-            </select>
-            <div class="form-hint">Nature du contrat proposé</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Job Description Section -->
-      <div class="form-section">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-3 rounded-2xl shadow-lg">
-            <i class="fas fa-file-alt text-white text-xl"></i>
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-800">Description du Poste</h3>
-            <p class="text-gray-600">Missions et responsabilités</p>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="description" class="form-label">
-            <i class="fas fa-align-left text-purple-500 mr-2"></i>
-            Description Détaillée
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            rows="6"
-            class="form-textarea"
-            placeholder="Décrivez le poste, les missions principales et l'environnement de travail...
-
-Exemple:
-• Missions: Développement d'applications web modernes
-• Responsabilités: Architecture technique, encadrement junior
-• Environnement: Équipe agile, technologies récentes
-• Évolution: Possibilités de formation et de progression"
-          ></textarea>
-          <div class="form-hint">Description attractive du poste et de l'environnement</div>
-        </div>
-      </div>
-
-      <!-- Requirements Section -->
-      <div class="form-section">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="bg-gradient-to-r from-green-500 to-teal-600 p-3 rounded-2xl shadow-lg">
-            <i class="fas fa-list-check text-white text-xl"></i>
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-800">Compétences et Exigences</h3>
-            <p class="text-gray-600">Profil recherché et qualifications</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div class="form-group">
-            <label for="competences_requises" class="form-label">
-              <i class="fas fa-cogs text-green-500 mr-2"></i>
-              Compétences Requises
-            </label>
-            <textarea
-              id="competences_requises"
-              name="competences_requises"
-              rows="8"
-              class="form-textarea"
-              placeholder="Listez les compétences techniques et soft skills requises...
-
-Compétences Techniques:
-• Maîtrise de JavaScript/TypeScript
-• Expérience avec React/Vue.js
-• Connaissance des bases de données
-• Git et méthodologies agiles
-
-Compétences Comportementales:
-• Esprit d'équipe et communication
-• Autonomie et prise d'initiative
-• Capacité d'adaptation
-• Sens de l'organisation"
-              required
-            ></textarea>
-            <div class="form-hint">Compétences techniques et comportementales essentielles</div>
-          </div>
-
-          <div class="form-group">
-            <label for="experience" class="form-label">
-              <i class="fas fa-graduation-cap text-green-500 mr-2"></i>
-              Expérience et Formation
-            </label>
-            <textarea
-              id="experience"
-              name="experience"
-              rows="8"
-              class="form-textarea"
-              placeholder="Précisez le niveau d'expérience et la formation requise...
-
-Formation:
-• Bac+3/5 en Informatique ou équivalent
-• Certifications professionnelles appréciées
-
-Expérience:
-• Minimum 3 ans d'expérience
-• Expérience en développement web
-• Connaissance du secteur un plus"
-            ></textarea>
-            <div class="form-hint">Niveau d'expérience et formation souhaités</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Compensation and Timeline Section -->
-      <div class="form-section">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl shadow-lg">
-            <i class="fas fa-money-bill-wave text-white text-xl"></i>
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-800">Rémunération et Délais</h3>
-            <p class="text-gray-600">Salaire proposé et date limite</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div class="form-group">
-            <label for="salaire" class="form-label">
-              <i class="fas fa-coins text-orange-500 mr-2"></i>
-              Salaire Proposé (FCFA)
-            </label>
-            <input type="number" id="salaire" name="salaire" class="form-input" min="0" placeholder="750000">
-            <div class="form-hint">Salaire mensuel brut (optionnel)</div>
-          </div>
-
-          <div class="form-group">
-            <label for="date_cloture" class="form-label">
-              <i class="fas fa-calendar-times text-orange-500 mr-2"></i>
-              Date de Clôture
-            </label>
-            <input type="date" id="date_cloture" name="date_cloture" class="form-input" required>
-            <div class="form-hint">Date limite pour postuler</div>
-          </div>
-
-          <div class="form-group">
-            <label for="statut" class="form-label">
-              <i class="fas fa-toggle-on text-orange-500 mr-2"></i>
-              Statut de Publication
-            </label>
-            <select id="statut" name="statut" class="form-select">
-              <option value="Publiée">✅ Publier immédiatement</option>
-              <option value="Non publiée">📝 Sauvegarder en brouillon</option>
-            </select>
-            <div class="form-hint">Visibilité de l'offre sur la page publique</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Preview Section -->
-      <div class="form-section">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-3 rounded-2xl shadow-lg">
-            <i class="fas fa-eye text-white text-xl"></i>
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-800">Aperçu de l'Offre</h3>
-            <p class="text-gray-600">Prévisualisation pour les candidats</p>
-          </div>
-        </div>
-
-        <div id="offerPreview" class="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 border border-gray-200">
-          <div class="text-center text-gray-500 py-8">
-            <i class="fas fa-briefcase text-4xl mb-4"></i>
-            <p>Remplissez les champs pour voir l'aperçu de votre offre</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-        <a href="{{ route('careers.index') }}" class="btn-secondary">
-          <i class="fas fa-arrow-left mr-2"></i>
-          Retour aux Offres
-        </a>
-
-        <div class="flex gap-4">
-          <button type="button" class="btn-outline" onclick="resetForm()">
-            <i class="fas fa-undo mr-2"></i>
-            Réinitialiser
-          </button>
-          <button type="button" class="btn-preview" onclick="updatePreview()">
-            <i class="fas fa-eye mr-2"></i>
-            Actualiser Aperçu
-          </button>
-          <button type="submit" class="btn-primary-gradient">
-            <i class="fas fa-briefcase mr-2"></i>
-            Créer l'Offre
-            <div class="btn-shine"></div>
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<style>
-/* Enhanced Form Styles */
-.form-group {
-  @apply relative;
-}
-
-.form-label {
-  @apply block text-sm font-semibold text-gray-700 mb-3 flex items-center;
-}
-
-.form-input, .form-select {
-  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300;
-}
-
-.form-textarea {
-  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300 resize-none;
-}
-
-.form-hint {
-  @apply text-xs text-gray-500 mt-2 italic;
-}
-
-.form-section {
-  @apply bg-gradient-to-br from-gray-50/80 to-white rounded-2xl p-8 border border-gray-100 shadow-sm;
-}
-
-.btn-secondary {
-  @apply px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center;
-}
-
-.btn-outline {
-  @apply px-6 py-3 border-2 border-blue-300 rounded-xl text-blue-600 font-semibold hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 flex items-center;
-}
-
-.btn-preview {
-  @apply px-6 py-3 border-2 border-purple-300 rounded-xl text-purple-600 font-semibold hover:bg-purple-50 hover:border-purple-400 transition-all duration-200 flex items-center;
-}
-
-.btn-primary-gradient {
-  @apply relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center overflow-hidden;
-}
-
-.btn-shine {
-  @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full transition-transform duration-1000;
-}
-
-.btn-primary-gradient:hover .btn-shine {
-  @apply translate-x-full;
-}
-
-/* Form Enhancement Effects */
-.form-input:focus, .form-select:focus, .form-textarea:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
-}
-
-/* Section Animation */
-.form-section {
-  animation: slideInUp 0.6s ease-out;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
-
-<script>
-// Real-time preview update
-function updatePreview() {
-  const intitule = document.getElementById('intitule').value;
-  const poste = document.getElementById('poste').value;
-  const departement = document.getElementById('departement').value;
-  const typeContrat = document.getElementById('type_contrat').value;
-  const description = document.getElementById('description').value;
-  const competences = document.getElementById('competences_requises').value;
-  const experience = document.getElementById('experience').value;
-  const salaire = document.getElementById('salaire').value;
-  const dateCloture = document.getElementById('date_cloture').value;
-
-  const preview = document.getElementById('offerPreview');
-
-  if (!intitule && !poste) {
-    preview.innerHTML = `
-      <div class="text-center text-gray-500 py-8">
-        <i class="fas fa-briefcase text-4xl mb-4"></i>
-        <p>Remplissez les champs pour voir l'aperçu de votre offre</p>
-      </div>
-    `;
-    return;
-  }
-
-  const previewContent = `
-    <div class="bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl p-6 mb-6">
-      <div class="flex items-center gap-4 mb-4">
-        <div class="w-16 h-16 bg-violet-500 rounded-xl flex items-center justify-center">
-          <i class="fas fa-briefcase text-white text-2xl"></i>
-        </div>
-        <div>
-          <h4 class="text-2xl font-bold text-gray-800">${intitule || 'Titre de l\'offre'}</h4>
-          <p class="text-violet-700 font-medium">${poste || 'Poste'} - ${departement || 'Département'}</p>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-6">
-        <span class="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-sm font-medium">
-          <i class="fas fa-file-contract mr-1"></i>
-          ${typeContrat || 'Type contrat'}
-        </span>
-        ${salaire ? `
-          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-            <i class="fas fa-money-bill mr-1"></i>
-            ${parseInt(salaire).toLocaleString()} FCFA
-          </span>
-        ` : ''}
-        ${dateCloture ? `
-          <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
-            <i class="fas fa-calendar mr-1"></i>
-            Jusqu'au ${new Date(dateCloture).toLocaleDateString('fr-FR')}
-          </span>
-        ` : ''}
-      </div>
-    </div>
-
-    ${description ? `
-      <div class="mb-6">
-        <h5 class="font-semibold text-gray-800 mb-3">Description du poste</h5>
-        <div class="bg-gray-50 rounded-xl p-4 text-gray-700 whitespace-pre-line">${description}</div>
-      </div>
-    ` : ''}
-
-    ${competences ? `
-      <div class="mb-6">
-        <h5 class="font-semibold text-gray-800 mb-3">Compétences requises</h5>
-        <div class="bg-blue-50 rounded-xl p-4 text-gray-700 whitespace-pre-line">${competences}</div>
-      </div>
-    ` : ''}
-
-    ${experience ? `
-      <div class="mb-6">
-        <h5 class="font-semibold text-gray-800 mb-3">Expérience et formation</h5>
-        <div class="bg-green-50 rounded-xl p-4 text-gray-700 whitespace-pre-line">${experience}</div>
-      </div>
-    ` : ''}
-
-    <div class="text-center pt-6 border-t border-gray-200">
-      <button class="bg-violet-600 text-white px-8 py-3 rounded-xl font-semibold">
-        <i class="fas fa-paper-plane mr-2"></i>
-        POSTULER
-      </button>
-    </div>
-  `;
-
-  preview.innerHTML = previewContent;
-}
-
-// Auto-update preview on input
-document.addEventListener('DOMContentLoaded', function() {
-  const inputs = document.querySelectorAll('#intitule, #poste, #departement, #type_contrat, #description, #competences_requises, #experience, #salaire, #date_cloture');
-  inputs.forEach(input => {
-    input.addEventListener('input', updatePreview);
-    input.addEventListener('change', updatePreview);
-  });
-
-  // Set default closing date (30 days from now)
-  const defaultDate = new Date();
-  defaultDate.setDate(defaultDate.getDate() + 30);
-  document.getElementById('date_cloture').value = defaultDate.toISOString().split('T')[0];
-
-  updatePreview();
-});
-
-function resetForm() {
-  if (confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire ?')) {
-    document.getElementById('jobOfferForm').reset();
-    updatePreview();
-  }
-}
-</script>
-@endsection
+</body>
+</html>

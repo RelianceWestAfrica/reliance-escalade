@@ -1,0 +1,264 @@
+@layout('layouts/main')
+
+@section('title')
+Modifier {{ offer.intitule }}
+@endsection
+
+@section('content')
+<!-- Premium Page Header -->
+<div class="relative bg-gradient-to-br from-violet-600/90 via-purple-700/90 to-indigo-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+     style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+
+  <div class="relative z-10 p-10">
+    <div class="flex items-center gap-8">
+      <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+        <i class="fas fa-edit text-white text-6xl drop-shadow-lg"></i>
+      </div>
+      <div>
+        <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+          Modifier l'Offre d'Emploi
+        </h1>
+        <p class="text-violet-100 text-xl font-medium">
+          {{ offer.intitule }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form Container -->
+<div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+  <div class="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-gray-200/50">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Modification de l'Offre</h2>
+    <p class="text-gray-600">Mettez à jour les détails de l'offre d'emploi</p>
+  </div>
+
+  <div class="p-10">
+    <form action="{{ route('careers.update', [offer.id]) }}" method="POST" class="space-y-10">
+      {{ csrfField() }}
+      @method('PUT')
+
+      <!-- Basic Information -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-info-circle text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Informations Générales</h3>
+            <p class="text-gray-600">Titre et identification du poste</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="form-group">
+            <label for="intitule" class="form-label">
+              <i class="fas fa-tag text-blue-500 mr-2"></i>
+              Intitulé de l'Offre
+            </label>
+            <input type="text" id="intitule" name="intitule" value="{{ offer.intitule }}" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="poste" class="form-label">
+              <i class="fas fa-briefcase text-blue-500 mr-2"></i>
+              Poste à Pourvoir
+            </label>
+            <input type="text" id="poste" name="poste" value="{{ offer.poste }}" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="departement" class="form-label">
+              <i class="fas fa-building text-blue-500 mr-2"></i>
+              Département
+            </label>
+            <select id="departement" name="departement" class="form-select" required>
+              <option value="">Sélectionner un département</option>
+              <option value="Direction" {{ offer.departement === 'Direction' ? 'selected' : '' }}>🏢 Direction</option>
+              <option value="Administration" {{ offer.departement === 'Administration' ? 'selected' : '' }}>📋 Administration</option>
+              <option value="Marketing et Communication" {{ offer.departement === 'Marketing et Communication' ? 'selected' : '' }}>📢 Marketing et Communication</option>
+              <option value="Commercial" {{ offer.departement === 'Commercial' ? 'selected' : '' }}>💼 Commercial</option>
+              <option value="Technique et développement" {{ offer.departement === 'Technique et développement' ? 'selected' : '' }}>💻 Technique et développement</option>
+              <option value="Comptabilité finances" {{ offer.departement === 'Comptabilité finances' ? 'selected' : '' }}>💰 Comptabilité finances</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="type_contrat" class="form-label">
+              <i class="fas fa-file-contract text-blue-500 mr-2"></i>
+              Type de Contrat
+            </label>
+            <select id="type_contrat" name="type_contrat" class="form-select" required>
+              <option value="">Sélectionner un type</option>
+              <option value="CDI" {{ offer.typeContrat === 'CDI' ? 'selected' : '' }}>📄 CDI</option>
+              <option value="CDD" {{ offer.typeContrat === 'CDD' ? 'selected' : '' }}>📅 CDD</option>
+              <option value="Stage" {{ offer.typeContrat === 'Stage' ? 'selected' : '' }}>🎓 Stage</option>
+              <option value="Consultant" {{ offer.typeContrat === 'Consultant' ? 'selected' : '' }}>💡 Consultant</option>
+              <option value="Intérim" {{ offer.typeContrat === 'Intérim' ? 'selected' : '' }}>⏰ Intérim</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Description -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-file-alt text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Description du Poste</h3>
+            <p class="text-gray-600">Missions et responsabilités</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="form-label">
+            <i class="fas fa-align-left text-purple-500 mr-2"></i>
+            Description Détaillée
+          </label>
+          <textarea id="description" name="description" rows="6" class="form-textarea" placeholder="Décrivez le poste, les missions et l'environnement...">{{ offer.description }}</textarea>
+        </div>
+      </div>
+
+      <!-- Requirements -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-green-500 to-teal-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-list-check text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Compétences et Exigences</h3>
+            <p class="text-gray-600">Profil recherché</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="form-group">
+            <label for="competences_requises" class="form-label">
+              <i class="fas fa-cogs text-green-500 mr-2"></i>
+              Compétences Requises
+            </label>
+            <textarea id="competences_requises" name="competences_requises" rows="8" class="form-textarea" required>{{ offer.competencesRequises }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="experience" class="form-label">
+              <i class="fas fa-graduation-cap text-green-500 mr-2"></i>
+              Expérience et Formation
+            </label>
+            <textarea id="experience" name="experience" rows="8" class="form-textarea">{{ offer.experience }}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compensation and Status -->
+      <div class="form-section">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="bg-gradient-to-r from-orange-500 to-red-600 p-3 rounded-2xl shadow-lg">
+            <i class="fas fa-money-bill-wave text-white text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800">Rémunération et Statut</h3>
+            <p class="text-gray-600">Salaire et publication</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div class="form-group">
+            <label for="salaire" class="form-label">
+              <i class="fas fa-coins text-orange-500 mr-2"></i>
+              Salaire (FCFA)
+            </label>
+            <input type="number" id="salaire" name="salaire" value="{{ offer.salaire }}" class="form-input" min="0">
+          </div>
+
+          <div class="form-group">
+            <label for="date_cloture" class="form-label">
+              <i class="fas fa-calendar-times text-orange-500 mr-2"></i>
+              Date de Clôture
+            </label>
+            <input type="date" id="date_cloture" name="date_cloture" value="{{ offer.dateCloture.toISODate() }}" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="statut" class="form-label">
+              <i class="fas fa-toggle-on text-orange-500 mr-2"></i>
+              Statut
+            </label>
+            <select id="statut" name="statut" class="form-select">
+              <option value="Publiée" {{ offer.statut === 'Publiée' ? 'selected' : '' }}>✅ Publiée</option>
+              <option value="Non publiée" {{ offer.statut === 'Non publiée' ? 'selected' : '' }}>📝 Non publiée</option>
+              <option value="Expirée" {{ offer.statut === 'Expirée' ? 'selected' : '' }}>⏰ Expirée</option>
+              <option value="Pourvue" {{ offer.statut === 'Pourvue' ? 'selected' : '' }}>✔️ Pourvue</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-info-circle text-orange-500 mr-2"></i>
+              Candidatures
+            </label>
+            <div class="form-input bg-blue-50 border-blue-200 text-blue-700 font-semibold">
+              {{ offer.applications.length }} reçues
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-between items-center pt-8 border-t border-gray-200">
+        <a href="{{ route('careers.show', [offer.id]) }}" class="btn-secondary">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Retour à l'Offre
+        </a>
+
+        <div class="flex gap-4">
+          <a href="{{ route('careers.index') }}" class="btn-outline">
+            <i class="fas fa-list mr-2"></i>
+            Liste des Offres
+          </a>
+          <button type="submit" class="btn-primary-gradient">
+            <i class="fas fa-save mr-2"></i>
+            Enregistrer les Modifications
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.form-section {
+  @apply bg-gradient-to-br from-gray-50/80 to-white rounded-2xl p-8 border border-gray-100 shadow-sm;
+}
+
+.form-group {
+  @apply relative;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-3 flex items-center;
+}
+
+.form-input, .form-select {
+  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300;
+}
+
+.form-textarea {
+  @apply w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300 resize-none;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 flex items-center;
+}
+
+.btn-outline {
+  @apply px-6 py-3 border-2 border-blue-300 rounded-xl text-blue-600 font-semibold hover:bg-blue-50 hover:border-blue-400 transition-all duration-200 flex items-center;
+}
+
+.btn-primary-gradient {
+  @apply relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center overflow-hidden;
+}
+</style>
+@endsection

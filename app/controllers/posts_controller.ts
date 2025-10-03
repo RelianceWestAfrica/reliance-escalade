@@ -1,70 +1,186 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Post from '#models/post'
 import { DateTime } from 'luxon'
-import { defineConfig } from '@adonisjs/core/bodyparser'
-
 
 export default class PostsController {
-  async index({ view, request }: HttpContext) {
+  /**
+   * Liste paginée des postes
+   */
+  async index({ view, request, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const page = request.input('page', 1)
     const limit = 20
 
     const posts = await Post.query()
+      .where('rwa_country_id', rwaCountryId)
       .orderBy('created_at', 'desc')
       .paginate(page, limit)
 
-    const totalPosts = await Post.query().count('* as total')
+    const totalPosts = await Post.query()
+      .where('rwa_country_id', rwaCountryId)
+      .count('* as total')
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
     return view.render('posts/index', {
       nposts: {
         totalPosts: totalPosts[0].$extras.total,
-
       },
-      posts, currentDate})
+      posts,
+      currentDate,
+    })
   }
 
-  async create({ view }: HttpContext) {
+  /**
+   * Affiche la page de création
+   */
+  async create({ view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
     return view.render('posts/create', { currentDate })
   }
 
-  async store({ request, response, session }: HttpContext) {
-    const data = request.only(['intitule', 'departement', 'description'])
-    await Post.create(data)
+  /**
+   * Crée un nouveau poste
+   */
+  async store({ request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const data = request.only(['intitule', 'departement', 'description', 'montant_augmentation', ])
+
+    await Post.create({
+      ...data,
+      rwaCountryId,
+      userId: user.id,
+    })
 
     session.flash('success', 'Poste créé avec succès')
     return response.redirect('/posts')
   }
 
-  async edit({ params, view }: HttpContext) {
-    const post = await Post.findOrFail(params.id)
+  /**
+   * Affiche la page d’édition
+   */
+  async edit({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const post = await Post.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     return view.render('posts/edit', { post })
   }
 
-  async update({ params, request, response, session }: HttpContext) {
-    const post = await Post.findOrFail(params.id)
-    const data = request.only(['intitule', 'departement', 'description'])
+  /**
+   * Met à jour un poste
+   */
+  async update({ params, request, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
 
-    post.merge(data)
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const post = await Post.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
+    const data = request.only(['intitule', 'departement', 'description', 'montant_augmentation', ])
+
+    post.merge({
+      ...data,
+      rwaCountryId,
+      userId: user.id,
+    })
+
     await post.save()
 
     session.flash('success', 'Poste modifié avec succès')
     return response.redirect('/posts')
   }
 
-  async show({ params, view }: HttpContext) {
-    const post = await Post.findOrFail(params.id)
+  /**
+   * Affiche un poste
+   */
+  async show({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const post = await Post.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
 
     return view.render('posts/show', { post })
   }
 
+  /**
+   * Supprime un poste
+   */
+  async destroy({ params, response, session, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
 
-  async destroy({ params, response, session }: HttpContext) {
-    const post = await Post.findOrFail(params.id)
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const post = await Post.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+
     await post.delete()
 
     session.flash('success', 'Poste supprimé avec succès')

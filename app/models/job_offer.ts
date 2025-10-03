@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, hasMany, belongsTo } from '@adonisjs/lucid/orm'
+import type { HasMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import JobApplication from './job_application.js'
+import RwaCountry from './rwa_country.js'
+import User from './user.js'
 
 export default class JobOffer extends BaseModel {
   @column({ isPrimary: true })
@@ -37,6 +39,12 @@ export default class JobOffer extends BaseModel {
   @column()
   declare experience: string | null
 
+  @column()
+  declare rwaCountryId: number | null
+
+  @column()
+  declare userId: number | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -45,6 +53,16 @@ export default class JobOffer extends BaseModel {
 
   @hasMany(() => JobApplication)
   declare applications: HasMany<typeof JobApplication>
+
+  @belongsTo(() => RwaCountry, {
+    foreignKey: 'rwaCountryId',
+  })
+  declare rwaCountry: BelongsTo<typeof RwaCountry>
+
+  @belongsTo(() => User, {
+    foreignKey: 'userId',
+  })
+  declare user: BelongsTo<typeof User>
 
   // Computed property to check if offer is expired
   get isExpired() {
