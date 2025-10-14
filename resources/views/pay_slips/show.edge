@@ -180,16 +180,16 @@
                   Fiche de Paie
                 </h1>
                 <p class="text-purple-100 text-xl font-medium">
-                  {{ payslip.employee.fullName }} - {{ payslip.mois }} {{ payslip.annee }}
+                  {{ paySlip.employee.fullName }} - {{ paySlip.mois }} {{ paySlip.annee }}
                 </p>
                 <div class="flex items-center gap-6 mt-4">
                   <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-purple-300">
                     <i class="fas fa-calendar text-purple-300 mr-2"></i>
-                    {{ payslip.mois }} {{ payslip.annee }}
+                    {{ paySlip.mois }} {{ paySlip.annee }}
                   </span>
-                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ payslip.statut === 'Générée' ? 'border border-green-300' : 'border border-red-300' }}">
-                    <i class="fas {{ payslip.statut === 'Générée' ? 'fa-check-circle text-green-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
-                    {{ payslip.statut }}
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ paySlip.statut === 'Générée' ? 'border border-green-300' : 'border border-red-300' }}">
+                    <i class="fas {{ paySlip.statut === 'Générée' ? 'fa-check-circle text-green-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
+                    {{ paySlip.statut }}
                   </span>
                 </div>
               </div>
@@ -216,12 +216,12 @@
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-2xl font-bold text-gray-800 mb-2">BULLETIN DE PAIE</h2>
-              <p class="text-purple-700 font-medium">{{ payslip.mois }} {{ payslip.annee }}</p>
+              <p class="text-purple-700 font-medium">{{ paySlip.mois }} {{ paySlip.annee }}</p>
             </div>
             <div class="text-right">
               <div class="font-bold text-gray-800">RELIANCE ESCALADE</div>
               <div class="text-sm text-gray-600">Lomé, Togo</div>
-              <div class="text-sm text-gray-600">{{ payslip.createdAt.toFormat('dd/MM/yyyy') }}</div>
+              <div class="text-sm text-gray-600">{{ paySlip.createdAt.toFormat('dd/MM/yyyy') }}</div>
             </div>
           </div>
         </div>
@@ -237,19 +237,19 @@
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
                   <span class="text-gray-600">Nom complet:</span>
-                  <span class="font-medium">{{ payslip.employee.fullName }}</span>
+                  <span class="font-medium">{{ paySlip.employee.fullName }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Poste:</span>
-                  <span class="font-medium">{{ payslip.employee.poste }}</span>
+                  <span class="font-medium">{{ paySlip.employee.poste }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Département:</span>
-                  <span class="font-medium">{{ payslip.employee.departement }}</span>
+                  <span class="font-medium">{{ paySlip.employee.departement }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Type contrat:</span>
-                  <span class="font-medium">{{ payslip.employee.typeContrat }}</span>
+                  <span class="font-medium">{{ paySlip.employee.typeContrat }}</span>
                 </div>
               </div>
             </div>
@@ -270,11 +270,11 @@
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Période:</span>
-                  <span class="font-medium">{{ payslip.mois }} {{ payslip.annee }}</span>
+                  <span class="font-medium">{{ paySlip.mois }} {{ paySlip.annee }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Date génération:</span>
-                  <span class="font-medium">{{ payslip.createdAt.toFormat('dd/MM/yyyy') }}</span>
+                  <span class="font-medium">{{ paySlip.createdAt.toFormat('dd/MM/yyyy') }}</span>
                 </div>
               </div>
             </div>
@@ -301,21 +301,21 @@
               <tbody class="divide-y divide-gray-200">
                 <tr class="bg-green-50/50">
                   <td class="px-6 py-4 text-sm font-medium text-gray-900">Salaire de base</td>
-                  <td class="px-6 py-4 text-sm text-right">{{ payslip.salaireBrut.toLocaleString() }} FCFA</td>
+                  <td class="px-6 py-4 text-sm text-right">{{ paySlip.salaireBrut.toLocaleString() }} FCFA</td>
                   <td class="px-6 py-4 text-sm text-right">100%</td>
-                  <td class="px-6 py-4 text-sm text-right font-bold text-green-600">{{ payslip.salaireBrut.toLocaleString() }} FCFA</td>
+                  <td class="px-6 py-4 text-sm text-right font-bold text-green-600">{{ paySlip.salaireBrut.toLocaleString() }} FCFA</td>
                 </tr>
                 <tr class="bg-red-50/50">
                   <td class="px-6 py-4 text-sm font-medium text-gray-900">Cotisations sociales</td>
-                  <td class="px-6 py-4 text-sm text-right">{{ payslip.salaireBrut.toLocaleString() }} FCFA</td>
+                  <td class="px-6 py-4 text-sm text-right">{{ paySlip.salaireBrut.toLocaleString() }} FCFA</td>
                   <td class="px-6 py-4 text-sm text-right">15%</td>
-                  <td class="px-6 py-4 text-sm text-right font-bold text-red-600">-{{ payslip.cotisations.toLocaleString() }} FCFA</td>
+                  <td class="px-6 py-4 text-sm text-right font-bold text-red-600">-{{ paySlip.cotisations.toLocaleString() }} FCFA</td>
                 </tr>
               </tbody>
               <tfoot class="bg-gradient-to-r from-blue-50 to-indigo-50">
                 <tr>
                   <td class="px-6 py-4 text-sm font-bold text-gray-900" colspan="3">SALAIRE NET À PAYER</td>
-                  <td class="px-6 py-4 text-lg font-bold text-right text-blue-600">{{ payslip.salaireNet.toLocaleString() }} FCFA</td>
+                  <td class="px-6 py-4 text-lg font-bold text-right text-blue-600">{{ paySlip.salaireNet.toLocaleString() }} FCFA</td>
                 </tr>
               </tfoot>
             </table>
@@ -328,7 +328,7 @@
             Document généré automatiquement par le système RH RELIANCE ESCALADE
           </p>
           <p class="text-xs text-gray-400">
-            Ce document est confidentiel et destiné uniquement à {{ payslip.employee.fullName }}
+            Ce document est confidentiel et destiné uniquement à {{ paySlip.employee.fullName }}
           </p>
         </div>
       </div>
@@ -356,7 +356,7 @@
 
       <script>
       function downloadPayslip() {
-        window.location.href = `/payslips/{{ payslip.id }}/download`;
+        window.location.href = `/payslips/{{ paySlip.id }}/download`;
       }
 
       function printPayslip() {

@@ -174,6 +174,27 @@ export default class PaySlipsController {
     return response.redirect('/pay-slips')
   }
 
+  async show({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const paySlip = await PaySlip.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .preload('employee')
+      .firstOrFail()
+
+    return view.render('pay_slips/show', { paySlip })
+  }
+
+
   async destroy({ params, response, session, auth }: HttpContext) {
     const user = auth.user
     if (!user) {

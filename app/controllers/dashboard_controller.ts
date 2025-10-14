@@ -7,6 +7,7 @@ import PaySlip from '#models/pay_slip'
 import Database from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 import User from '#models/user'
+import RwaCountry from '#models/rwa_country'
 
 export default class DashboardController {
   async index({ auth, view }: HttpContext) {
@@ -33,6 +34,11 @@ export default class DashboardController {
     const totalPosts = await Post.query()
       .where('rwa_country_id', rwaCountryId)
       .count('* as total')
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+
 
     const promotionsScheduled = await Promotion.query()
       .where('statut', 'En attente')
@@ -122,6 +128,7 @@ export default class DashboardController {
       currentYear,
       userId, // utile si tu veux l'afficher dans le dashboard
       rwaCountryId,
+      instanceCountry
     })
   }
 }
