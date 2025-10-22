@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800" style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -186,19 +192,19 @@
                 <h1 class="text-3xl font-bold text-white mb-2 text-shadow">
                   Gestion des Promotions
                 </h1>
-                <p class="text-green-100 text-lg">
+                <p class="text-green-50 text-lg">
                   Évolution de carrière et augmentations salariales
                 </p>
                 <div class="flex items-center gap-4 mt-4">
                   <div class="flex items-center gap-2">
                     {{-- <i class="fas fa-users text-blue-200"></i> --}}
                     {{-- <ion-icon name="people-outline" class="text-blue-200"></ion-icon> --}}
-                    <span class="text-md text-green-50">Total promotions : {{ npromotion.totalPromotions }}</span>
+                    <span class="text-md text-green-50">Promotions à venir : {{ npromotion.totalPromotions }}</span>
                   </div>
                   <div class="flex items-center gap-4">
                     {{-- <i class="fas fa-chart-line text-green-300"></i> --}}
-                    <ion-icon name="analytics-outline" class="text-2xl text-orange-300"></ion-icon>
-                    <span class="text-md text-green-50">Croissance interne : <span class="text-md text-white font-semibold">{{currentDate}}</span></span>
+                    <ion-icon name="analytics-outline" class="text-2xl text-orange-200"></ion-icon>
+                    <span class="text-md text-green-50">Croissance interne : <span class="text-md text-green-50 font-semibold">{{currentDate}}</span></span>
                   </div>
                 </div>
               </div>
@@ -300,9 +306,8 @@
                       <a href="{{ route('promotions.edit', [promotion.id]) }}" class="action-btn edit">
                         <ion-icon name="create-outline" class="text-blue-700 text-xl"></ion-icon>
                       </a>
-                      <form action="{{ route('promotions.destroy', [promotion.id]) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette promotion ?')">
+                      <form action="{{ route('promotions.destroy_promotion', [promotion.id]) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette promotion ?')">
                         {{ csrfField() }}
-                        {{-- @method('DELETE') --}}
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="action-btn delete">
                           <ion-icon name="trash-outline" class="text-orange-700 text-xl"></ion-icon>

@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800" style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -167,7 +173,7 @@
       <!-- Banner -->
       <div class="relative bg-gradient-to-r from-orange-600/80 via-orange-700/80 to-orange-800/80 rounded-2xl overflow-hidden mb-8"
           style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
-        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-yellow-800/65"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-yellow-800/90"></div>
 
         <!-- Animated Background Elements -->
           <div class="absolute inset-0">
@@ -197,12 +203,12 @@
                   <div class="flex items-center gap-2">
                     {{-- <i class="fas fa-users text-blue-200"></i> --}}
                     {{-- <ion-icon name="people-outline" class="text-blue-200"></ion-icon> --}}
-                    <span class="text-sm text-blue-100">Ensemble de : {{ nposts.totalPosts }} actifs</span>
+                    <span class="text-md text-orange-50">Ensemble de : {{ nposts.totalPosts }} actifs</span>
                   </div>
                   <div class="flex items-center gap-4">
                     {{-- <i class="fas fa-chart-line text-green-300"></i> --}}
-                    <ion-icon name="analytics-outline" class="text-2xl text-green-300"></ion-icon>
-                    <span class="text-sm text-green-100">Croissance interne : <span class="text-md text-blue-100 font-semibold">{{currentDate}}</span></span>
+                    <ion-icon name="analytics-outline" class="text-2xl text-teal-200"></ion-icon>
+                    <span class="text-md text-orange-50">Croissance interne : <span class="text-md text-orange-50 font-normal" style="text-transform: capitalize;">{{currentDate}}</span></span>
                   </div>
                 </div>
               </div>
@@ -248,7 +254,7 @@
                 <tr class="table-row">
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
-                      <div class="bg-green-100 p-2 rounded-full mr-3 h-9 w-9 text-center item-center">
+                      <div class="bg-gray-50 p-2 rounded-full mr-3 h-9 w-9 text-center border border-gray-200 item-center">
                         <ion-icon name="git-commit-outline" class="text-orange-800 text-xl"></ion-icon>
                         {{-- <i class="fas fa-briefcase text-orange-600"></i> --}}
                       </div>
@@ -263,7 +269,7 @@
                     </span>
                   </td>
                   <td class="px-6 py-4">
-                    <div class="text-sm text-gray-900 max-w-xs truncate">
+                    <div class="text-md text-gray-900 max-w-xs truncate">
                       {{ post.description || 'Aucune description' }}
                     </div>
                   </td>

@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import EmployeeTracking from '#models/employee_tracking'
 import Employee from '#models/employee'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class EmployeeTrackingController {
   async index({ view, request, auth }: HttpContext) {
@@ -46,6 +47,9 @@ export default class EmployeeTrackingController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('tracking/index', {
       nemployee: {
         totalEmployees: totalEmployees[0].$extras.total,
@@ -55,6 +59,7 @@ export default class EmployeeTrackingController {
       dateFilter,
       employeeFilter,
       currentDate,
+      instanceCountry
     })
   }
 
@@ -75,7 +80,10 @@ export default class EmployeeTrackingController {
       .andWhere('rwa_country_id', rwaCountryId)
       .orderBy('nom')
 
-    return view.render('tracking/create', { employees, currentDate })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('tracking/create', { employees, currentDate,instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -123,7 +131,10 @@ export default class EmployeeTrackingController {
       .andWhere('rwa_country_id', rwaCountryId)
       .orderBy('nom')
 
-    return view.render('tracking/edit', { tracking, employees })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('tracking/edit', { tracking, employees, instanceCountry })
   }
 
   async update({ params, request, response, session, auth }: HttpContext) {
@@ -218,12 +229,16 @@ export default class EmployeeTrackingController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('tracking/dashboard', {
       todayPresence,
       todayAbsences,
       weekStats,
       today,
       currentDate,
+      instanceCountry
     })
   }
 }

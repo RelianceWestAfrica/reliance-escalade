@@ -1,232 +1,408 @@
-@layout('layouts/main')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ offer.intitule }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/all.min.css" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <link href="/public/css/app.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900 flex">
 
-@section('title')
-{{ offer.intitule }}
-@endsection
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white border-r min-h-screen shadow-sm flex flex-col py-5 px-4">
+    {{-- <div class="mb-8">
+      <h2 class="">
+        <center>
+          <img src="public/images/illus5.jpg" style="background-size: cover; background-position: center; background-blend-mode: overlay; width:70%; height:15vh; text-align:center;">
+        </center>
+        </h2>
 
-@section('content')
-<!-- Premium Job Offer Header -->
-<div class="relative bg-gradient-to-br from-violet-600/90 via-purple-700/90 to-indigo-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
-     style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
-
-  <!-- Animated Background Elements -->
-  <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-violet-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
-    <div class="absolute top-1/3 left-1/3 w-64 h-64 bg-purple-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
-  </div>
-
-  <div class="relative z-10 p-10">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-8">
-        <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
-          <i class="fas fa-briefcase text-white text-6xl drop-shadow-lg"></i>
-        </div>
-        <div>
-          <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
-            {{ offer.intitule }}
-          </h1>
-          <p class="text-violet-100 text-xl font-medium">
-            {{ offer.poste }} - {{ offer.departement }}
-          </p>
-          <div class="flex items-center gap-6 mt-4">
-            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-violet-300">
-              <i class="fas fa-file-contract text-violet-300 mr-2"></i>
-              {{ offer.typeContrat }}
-            </span>
-            @if(offer.salaire)
-              <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-green-300">
-                <i class="fas fa-money-bill text-green-300 mr-2"></i>
-                {{ offer.salaire.toLocaleString() }} FCFA
-              </span>
-            @endif
-            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ offer.statut === 'Publiée' ? 'border border-green-300' : 'border border-red-300' }}">
-              <i class="fas {{ offer.statut === 'Publiée' ? 'fa-eye text-green-300' : 'fa-eye-slash text-red-300' }} mr-2"></i>
-              {{ offer.statut }}
-            </span>
+       <!-- Logo -->
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
-      </div>
+    </div> --}}
 
-      <div class="flex gap-3">
-        <a href="{{ route('careers.edit', [offer.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
-          <i class="fas fa-edit"></i>
-          Modifier
+    <nav class="flex flex-col space-y-2 text-md font-medium">
+      <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url() === route('dashboard') ? 'bg-blue-700/90 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-th-large mr-3"></i> --}}
+        <ion-icon name="logo-tableau" class="mr-3 text-2xl"></ion-icon> Dashboard
+        <ion-icon name="chevron-down-outline" class="ml-auto text-xs"></ion-icon>
+        {{-- <i class="fas fa-chevron-down ml-auto text-xs"></i> --}}
+      </a>
+      <a href="{{ route('posts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/posts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="albums-outline" class="mr-3 text-2xl"></ion-icon>Postes
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('employees.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/employees') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-users mr-3"></i> --}}
+        <ion-icon name="people-outline" class="mr-3 text-2xl"></ion-icon>Personnel
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('promotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/promotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-up mr-3"></i> --}}
+        <ion-icon name="trending-up-outline" class="mr-3 text-2xl"></ion-icon>Promotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('demotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/demotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-down mr-3"></i> --}}
+        <ion-icon name="trending-down-outline" class="mr-3 text-2xl"></ion-icon>Démotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('tracking.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/tracking') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="pulse-outline" class="mr-3 text-2xl"></ion-icon> Suivi Employés
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('pay_slips.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/pay-slips') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a> --}}
+      <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('statistics.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/statistics') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
         </a>
-        <a href="/jobs/{{ offer.id }}/apply" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
-          <i class="fas fa-external-link-alt"></i>
-          Voir Public
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
+      @endif
+      @if(auth.user.role === 'Admin')
+      <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-user-cog mr-3"></i> --}}
+        <ion-icon name="finger-print-outline" class="mr-3 text-2xl"></ion-icon>Utilisateurs
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @endif
+    </nav>
+  </aside>
 
-<!-- Offer Details Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-  <!-- Main Information -->
-  <div class="lg:col-span-2 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
-    <div class="flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-info-circle text-white text-xl"></i>
-      </div>
-      <h3 class="text-2xl font-bold text-gray-800">Description du Poste</h3>
-    </div>
+  <!-- Main Panel -->
+  <div class="flex-1 flex flex-col">
 
-    @if(offer.description)
-      <div class="prose max-w-none mb-6">
-        <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200">
-          <div class="text-gray-700 whitespace-pre-line leading-relaxed">{{ offer.description }}</div>
+    <!-- Header -->
+    <header class="h-24 bg-white border-b px-6 flex items-center justify-between shadow-sm">
+      <div>
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div>
+      </div> <!-- Espace vide pour futur breadcrumb -->
+
+      <div class="flex items-center space-x-6">
+        <!-- Notifications -->
+        {{-- <div class="relative">
+          <i class="fas fa-bell text-gray-600 text-lg"></i>
+          <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+        </div> --}}
+
+        <!-- User Menu -->
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm shadow">
+            {{-- <i class="fas fa-user"></i> --}}
+            <ion-icon name="logo-octocat" class="text-3xl"></ion-icon>
+          </div>
+          <div class="text-md">
+            <div class="font-semibold">{{ auth.user.fullName }}</div>
+            <div class="text-xs text-gray-500 capitalize">{{ auth.user.role }}</div>
+          </div>
+
+          <form action="{{ route('auth.logout') }}" method="POST">
+            {{ csrfField() }}
+            <button type="submit" class="ml-3 text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all">
+              <ion-icon name="log-out-outline" class="text-2xl"></ion-icon>
+              {{-- <i class="fas fa-share-square"></i> --}}
+            </button>
+          </form>
         </div>
       </div>
-    @endif
+    </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
-        <h4 class="font-semibold text-blue-800 mb-3 flex items-center">
-          <i class="fas fa-cogs text-blue-600 mr-2"></i>
-          Compétences Requises
-        </h4>
-        <div class="text-blue-700 whitespace-pre-line text-sm">{{ offer.competencesRequises }}</div>
-      </div>
-
-      @if(offer.experience)
-        <div class="bg-green-50 rounded-xl p-6 border border-green-200">
-          <h4 class="font-semibold text-green-800 mb-3 flex items-center">
-            <i class="fas fa-graduation-cap text-green-600 mr-2"></i>
-            Expérience Requise
-          </h4>
-          <div class="text-green-700 whitespace-pre-line text-sm">{{ offer.experience }}</div>
+    <!-- Content Area -->
+    <main class="p-6 overflow-y-auto flex-1 bg-gray-50">
+      <!-- Flash Messages -->
+      @if(flashMessages.has('success'))
+        <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-check-circle mr-2"></i>
+          {{ flashMessages.get('success') }}
         </div>
       @endif
-    </div>
-  </div>
 
-  <!-- Offer Statistics -->
-  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-    <div class="flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-chart-bar text-white text-xl"></i>
-      </div>
-      <h3 class="text-xl font-bold text-gray-800">Statistiques</h3>
-    </div>
-
-    <div class="space-y-6">
-      <div class="stat-item">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-sm font-medium text-gray-600">Candidatures</span>
-          <span class="text-2xl font-bold text-blue-600">{{ offer.applications.length }}</span>
+      @if(flashMessages.has('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {{ flashMessages.get('error') }}
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2">
-          <div class="bg-blue-500 h-2 rounded-full" style="width: {{ Math.min(offer.applications.length * 10, 100) }}%"></div>
-        </div>
-        <span class="text-xs text-gray-500 mt-1">Candidatures reçues</span>
-      </div>
+      @endif
 
-      <div class="stat-item">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-sm font-medium text-gray-600">Jours Restants</span>
-          <span class="text-2xl font-bold text-orange-600">{{ Math.max(0, Math.ceil((offer.dateCloture.toMillis() - Date.now()) / (24 * 60 * 60 * 1000))) }}</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-2">
-          <div class="bg-orange-500 h-2 rounded-full" style="width: {{ Math.max(0, Math.min(100, (offer.dateCloture.toMillis() - Date.now()) / (30 * 24 * 60 * 60 * 1000) * 100)) }}%"></div>
-        </div>
-        <span class="text-xs text-gray-500 mt-1">Jusqu'à la clôture</span>
-      </div>
+      {{-- @section('title')
+      Postes
+      @endsection
 
-      <div class="stat-item">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-sm font-medium text-gray-600">Vues</span>
-          <span class="text-2xl font-bold text-purple-600">{{ Math.floor(Math.random() * 100) + 50 }}</span>
+      @section('content') --}}
+      <!-- Premium Job Offer Header -->
+      <div class="relative bg-gradient-to-br from-violet-600/90 via-purple-700/90 to-indigo-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+          style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-orange-900/90"></div>
+
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
+            {{-- <div class="absolute bottom-0 left-0 w-80 h-80 bg-cyan-400/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 3s;"></div> --}}
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-200/5 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
+          </div>
+
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute bottom-0 left-0 w-80 h-80 bg-violet-300/5 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
+          <div class="absolute top-1/3 left-1/3 w-64 h-64 bg-purple-200/5 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2">
-          <div class="bg-purple-500 h-2 rounded-full" style="width: 75%"></div>
-        </div>
-        <span class="text-xs text-gray-500 mt-1">Consultations</span>
-      </div>
-    </div>
 
-    @if(offer.applications.length > 0)
-      <div class="mt-6">
-        <a href="{{ route('careers.applications', [offer.id]) }}" class="btn-primary w-full">
-          <i class="fas fa-users mr-2"></i>
-          Voir les Candidatures
-        </a>
-      </div>
-    @endif
-  </div>
-</div>
-
-<!-- Applications List -->
-@if(offer.applications.length > 0)
-  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
-    <div class="p-6 border-b border-gray-200/50">
-      <h3 class="text-xl font-bold text-gray-800 flex items-center">
-        <i class="fas fa-users text-violet-600 mr-3"></i>
-        Candidatures Reçues ({{ offer.applications.length }})
-      </h3>
-    </div>
-
-    <div class="p-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @each(application in offer.applications)
-          <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200 hover:shadow-lg transition-all">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-white"></i>
-              </div>
+        <div class="relative z-10 p-8">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-8">
+              {{-- <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+                <i class="fas fa-briefcase text-white text-6xl drop-shadow-lg"></i>
+              </div> --}}
               <div>
-                <h4 class="font-bold text-gray-800">{{ application.nomComplet }}</h4>
-                <p class="text-sm text-gray-600">{{ application.emailProfessionnel }}</p>
+                <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
+                  {{ offer.intitule }}
+                </h1>
+                <p class="text-violet-100 text-lg font-normal">
+                  {{ offer.poste }} - {{ offer.departement }}
+                </p>
+                <div class="flex items-center gap-6 mt-4">
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white font-medium border border-violet-100/50">
+                    {{ offer.typeContrat }}
+                  </span>
+                  @if(offer.salaire)
+                    <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white font-medium border border-violet-100/50">
+                      {{ offer.salaire.toLocaleString() }} FCFA
+                    </span>
+                  @endif
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white font-medium {{ offer.statut === 'Publiée' ? 'border border-violet-100/50' : 'border border-red-100/50' }}">
+                    {{ offer.statut }}
+                  </span>
+                </div>
               </div>
             </div>
 
-            @if(application.telephone)
-              <div class="mb-3">
-                <span class="text-xs text-gray-500">Téléphone:</span>
-                <div class="font-medium text-gray-700">{{ application.telephone }}</div>
-              </div>
-            @endif
-
-            @if(application.motivation)
-              <div class="mb-4">
-                <span class="text-xs text-gray-500">Motivation:</span>
-                <div class="text-sm text-gray-700 line-clamp-3">{{ application.motivation }}</div>
-              </div>
-            @endif
-
-            <div class="flex items-center justify-between">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{
-                application.statut === 'En attente' ? 'bg-yellow-100 text-yellow-800' :
-                application.statut === 'Acceptée' ? 'bg-green-100 text-green-800' :
-                application.statut === 'En cours' ? 'bg-blue-100 text-blue-800' :
-                'bg-red-100 text-red-800'
-              }}">
-                {{ application.statut }}
-              </span>
-              <div class="text-xs text-gray-500">{{ application.createdAt.toRelative() }}</div>
+            <div class="flex gap-3">
+              <a href="{{ route('careers.edit', [offer.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+                <ion-icon name="create-outline" class="text-2xl mr-2"></ion-icon>
+                Modifier
+              </a>
+              <a href="{{ route('jobs.show', [offer.id]) }}" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+                <ion-icon name="eye-outline" class="text-2xl mr-2"></ion-icon>
+                Voir la publication
+              </a>
             </div>
           </div>
-        @endeach
+        </div>
       </div>
-    </div>
+
+      <!-- Offer Details Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <!-- Main Information -->
+        <div class="lg:col-span-2 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
+          <div class="flex items-center gap-4 mb-6">
+            {{-- <div class="w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <i class="fas fa-info-circle text-white text-xl"></i>
+            </div> --}}
+            <h3 class="text-xl font-bold text-gray-800">Description du Poste</h3>
+          </div>
+
+          @if(offer.description)
+            <div class="prose max-w-none mb-6">
+              <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200">
+                <div class="text-gray-700 whitespace-pre-line leading-relaxed">{{ offer.description }}</div>
+              </div>
+            </div>
+          @endif
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+              <h4 class="font-semibold text-blue-800 mb-3 flex items-center">
+                {{-- <i class="fas fa-cogs text-blue-600 mr-2"></i> --}}
+                Compétences Requises
+              </h4>
+              <div class="text-blue-800 whitespace-pre-line text-md">{{ offer.competencesRequises }}</div>
+            </div>
+
+            @if(offer.experience)
+              <div class="bg-gray-50/50 rounded-xl p-6 border border-gray-200">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                  {{-- <i class="fas fa-graduation-cap text-green-600 mr-2"></i> --}}
+                  Expérience Requise
+                </h4>
+                <div class="text-gray-700 whitespace-pre-line text-md">{{ offer.experience }}</div>
+              </div>
+            @endif
+          </div>
+        </div>
+
+        <!-- Offer Statistics -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+              <ion-icon name="bar-chart-outline" class="text-xl text-white"></ion-icon>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">Statistiques</h3>
+          </div>
+
+          <div class="space-y-6">
+            <div class="stat-item">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-600">Candidatures</span>
+                <span class="text-2xl font-bold text-gray-800">{{ offer.applications.length }}</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-500 h-2 rounded-full" style="width: {{ Math.min(offer.applications.length * 10, 100) }}%"></div>
+              </div>
+              <span class="text-xs text-gray-500 mt-1">Candidatures reçues</span>
+            </div>
+
+            <div class="stat-item">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-600">Jours Restants</span>
+                <span class="text-2xl font-bold text-gray-800">{{ Math.max(0, Math.ceil((offer.dateCloture.toMillis() - Date.now()) / (24 * 60 * 60 * 1000))) }}</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-orange-500 h-2 rounded-full" style="width: {{ Math.max(0, Math.min(100, (offer.dateCloture.toMillis() - Date.now()) / (30 * 24 * 60 * 60 * 1000) * 100)) }}%"></div>
+              </div>
+              <span class="text-xs text-gray-500 mt-1">Jusqu'à la clôture</span>
+            </div>
+
+            {{-- <div class="stat-item">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-600">Vues</span>
+                <span class="text-2xl font-bold text-gray-800">{{ Math.floor(Math.random() * 100) + 50 }}</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-gray-500 h-2 rounded-full" style="width: 75%"></div>
+              </div>
+              <span class="text-xs text-gray-500 mt-1">Consultations</span>
+            </div> --}}
+          </div>
+
+          @if(offer.applications.length > 0)
+            <div class="mt-12">
+              <a href="{{ route('careers.applications', [offer.id]) }}" class="bg-gray-700 hover:bg-blue-700 text-white hover:text-white border border-blue-200 rounded-lg p-3 text-center transition-colors card-hover flex items-center gap-2 shadow-lg">
+                <ion-icon name="apps-outline" class="text-xl text-white mr-3 "></ion-icon>
+                Voir les Candidatures
+              </a>
+            </div>
+          @endif
+        </div>
+      </div>
+
+      <!-- Applications List -->
+      @if(offer.applications.length > 0)
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
+          <div class="p-6 border-b border-gray-200/50">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+              {{-- <i class="fas fa-users text-violet-600 mr-3"></i> --}}
+              Candidatures Reçues ({{ offer.applications.length }})
+            </h3>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              @each(application in offer.applications)
+                <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-6 border border-violet-200 hover:shadow-lg transition-all">
+                  <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-violet-500 rounded-full flex items-center justify-center">
+                      <ion-icon name="body-outline" class="text-2xl text-white"></ion-icon>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-800">{{ application.nomComplet }}</h4>
+                      <p class="text-sm text-gray-600">{{ application.emailProfessionnel }}</p>
+                    </div>
+                  </div>
+
+                  @if(application.telephone)
+                    <div class="mb-3">
+                      <span class="text-xs text-gray-500">Téléphone :</span>
+                      <div class="font-medium text-gray-700">{{ application.telephone }}</div>
+                    </div>
+                  @endif
+
+                  @if(application.motivation)
+                    <div class="mb-4">
+                      <span class="text-xs text-gray-500">Motivation :</span>
+                      <div class="text-sm text-gray-700 line-clamp-3">{{ application.motivation }}</div>
+                    </div>
+                  @endif
+
+                  <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{
+                      application.statut === 'En attente' ? 'bg-yellow-100 text-yellow-800' :
+                      application.statut === 'Acceptée' ? 'bg-green-100 text-green-800' :
+                      application.statut === 'En cours' ? 'bg-blue-100 text-blue-800' :
+                      'bg-red-100 text-red-800'
+                    }}">
+                      {{ application.statut }}
+                    </span>
+                    <div class="text-xs text-gray-500">{{ application.createdAt.toRelative() }}</div>
+                  </div>
+                </div>
+              @endeach
+            </div>
+          </div>
+        </div>
+      @endif
+
+      <style>
+      .btn-primary {
+        @apply bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center;
+      }
+
+      .stat-item {
+        @apply p-4 bg-gray-50/50 rounded-xl border border-gray-100;
+      }
+
+      .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      </style>
+      {{-- @endsection --}}
+      </main>
   </div>
-@endif
-
-<style>
-.btn-primary {
-  @apply bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center;
-}
-
-.stat-item {
-  @apply p-4 bg-gray-50/50 rounded-xl border border-gray-100;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>
-@endsection
+</body>
+</html>

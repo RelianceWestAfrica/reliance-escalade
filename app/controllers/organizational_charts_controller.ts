@@ -3,6 +3,7 @@ import OrganizationalChart from '#models/organizational_chart'
 import Employee from '#models/employee'
 import Database from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class OrganizationalChartsController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -26,12 +27,16 @@ export default class OrganizationalChartsController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('orgcharts/index', {
       nemployee: {
         totalEmployees: totalEmployees[0].$extras.total,
       },
       charts,
       currentDate,
+      instanceCountry
     })
   }
 
@@ -54,7 +59,10 @@ export default class OrganizationalChartsController {
       .where('actif', true)
       .andWhere('rwa_country_id', rwaCountryId)
 
-    return view.render('orgcharts/create', { employees, departments })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('orgcharts/create', { employees, departments, instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -106,7 +114,10 @@ export default class OrganizationalChartsController {
       return acc
     }, {} as Record<number, Employee>)
 
-    return view.render('orgcharts/show', { chart, employeesById })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('orgcharts/show', { chart, employeesById, instanceCountry })
   }
 
   async edit({ params, view, auth, response }: HttpContext) {
@@ -133,7 +144,10 @@ export default class OrganizationalChartsController {
       .where('actif', true)
       .andWhere('rwa_country_id', rwaCountryId)
 
-    return view.render('orgcharts/edit', { chart, employees, departments })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('orgcharts/edit', { chart, employees, departments, instanceCountry })
   }
 
   async update({ params, request, response, session, auth }: HttpContext) {

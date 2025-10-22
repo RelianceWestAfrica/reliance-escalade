@@ -36,7 +36,7 @@ Modifier {{ chart.nom }}
   <div class="p-10">
     <form action="{{ route('orgcharts.update', [chart.id]) }}" method="POST" class="space-y-10">
       {{ csrfField() }}
-      @method('PUT')
+      <input type="hidden" name="_method" value="PUT">
 
       <!-- Basic Information -->
       <div class="form-section">

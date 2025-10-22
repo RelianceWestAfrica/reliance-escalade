@@ -28,6 +28,15 @@ export default class JobApplication extends BaseModel {
   declare statut: 'En attente' | 'Acceptée' | 'Refusée' | 'En cours'
 
   @column()
+  declare cvFilePath: string | null
+
+  @column()
+  declare lettreMotivationFilePath: string | null
+
+  @column()
+  declare diplomeFilePath: string | null
+
+  @column()
   declare rwaCountryId: number | null
 
   @column()

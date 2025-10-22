@@ -1,249 +1,432 @@
-@layout('layouts/main')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promotion - {{ promotion.employee.fullName }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/all.min.css" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <link href="/public/css/app.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-900 flex">
 
-@section('title')
-Promotion - {{ promotion.employee.fullName }}
-@endsection
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white border-r min-h-screen shadow-sm flex flex-col py-5 px-4">
+    {{-- <div class="mb-8"> --}}
+      {{-- <h2 class="flex items-center px-5 py-4 rounded-lg bg-blue-600 text-white font-semibold">
+        Copyright RWA 2025
+      </h2> --}}
 
-@section('content')
-<!-- Premium Promotion Header -->
-<div class="relative bg-gradient-to-br from-emerald-600/90 via-green-700/90 to-teal-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
-     style="background-image: url('https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+       <!-- Logo -->
+        {{-- <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
+          </div>
+        </div> --}}
+    {{-- </div> --}}
 
-  <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-emerald-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
-  </div>
+    <nav class="flex flex-col space-y-2 text-md font-medium">
+      <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url() === route('dashboard') ? 'bg-blue-700/90 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-th-large mr-3"></i> --}}
+        <ion-icon name="logo-tableau" class="mr-3 text-2xl"></ion-icon> Dashboard
+        <ion-icon name="chevron-down-outline" class="ml-auto text-xs"></ion-icon>
+        {{-- <i class="fas fa-chevron-down ml-auto text-xs"></i> --}}
+      </a>
+      <a href="{{ route('posts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/posts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="albums-outline" class="mr-3 text-2xl"></ion-icon>Postes
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('employees.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/employees') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-users mr-3"></i> --}}
+        <ion-icon name="people-outline" class="mr-3 text-2xl"></ion-icon>Personnel
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('promotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/promotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-up mr-3"></i> --}}
+        <ion-icon name="trending-up-outline" class="mr-3 text-2xl"></ion-icon>Promotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('demotions.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/demotions') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-arrow-down mr-3"></i> --}}
+        <ion-icon name="trending-down-outline" class="mr-3 text-2xl"></ion-icon>Démotions
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('tracking.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/tracking') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="pulse-outline" class="mr-3 text-2xl"></ion-icon> Suivi Employés
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('pay_slips.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/pay-slips') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a> --}}
+      <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-briefcase mr-3"></i> --}}
+        <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      <a href="{{ route('statistics.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/statistics') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
+        <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
+      @if(auth.user.role === 'Admin')
+      <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-user-cog mr-3"></i> --}}
+        <ion-icon name="finger-print-outline" class="mr-3 text-2xl"></ion-icon>Utilisateurs
+        <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+      </a>
+      @endif
+    </nav>
+  </aside>
 
-  <div class="relative z-10 p-10">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-8">
-        <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
-          <i class="fas fa-arrow-up text-white text-6xl drop-shadow-lg"></i>
-        </div>
-        <div>
-          <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
-            Promotion de {{ promotion.employee.fullName }}
-          </h1>
-          <p class="text-emerald-100 text-xl font-medium">
-            {{ promotion.ancienPoste }} → {{ promotion.nouveauPoste }}
-          </p>
-          <div class="flex items-center gap-6 mt-4">
-            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-green-300">
-              <i class="fas fa-calendar text-green-300 mr-2"></i>
-              {{ promotion.dateVigueur.toFormat('dd/MM/yyyy') }}
-            </span>
-            <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ promotion.statut === 'Appliquée' ? 'border border-green-300' : promotion.statut === 'En attente' ? 'border border-yellow-300' : 'border border-red-300' }}">
-              <i class="fas {{ promotion.statut === 'Appliquée' ? 'fa-check-circle text-green-300' : promotion.statut === 'En attente' ? 'fa-clock text-yellow-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
-              {{ promotion.statut }}
-            </span>
+  <!-- Main Panel -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="h-24 bg-white border-b px-6 flex items-center justify-between shadow-sm">
+      <div>
+        <div class="flex items-center">
+          <div class="gradient-primary p-2 rounded-lg shadow-md">
+            <div class="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
+              <span class="text-blue-600 font-bold text-sm">RE</span>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-xl font-bold text-gray-800" style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
+            <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
-      </div>
+      </div> <!-- Espace vide pour futur breadcrumb -->
 
-      <div class="flex gap-3">
-        @if(promotion.statut === 'En attente')
-          <form action="{{ route('promotions.apply', [promotion.id]) }}" method="POST" class="inline">
+      <div class="flex items-center space-x-6">
+        <!-- Notifications -->
+        {{-- <div class="relative">
+          <i class="fas fa-bell text-gray-600 text-lg"></i>
+          <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+        </div> --}}
+
+        <!-- User Menu -->
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm shadow">
+            {{-- <i class="fas fa-user"></i> --}}
+            <ion-icon name="logo-octocat" class="text-3xl"></ion-icon>
+          </div>
+          <div class="text-md">
+            <div class="font-semibold">{{ auth.user.fullName }}</div>
+            <div class="text-xs text-gray-500 capitalize">{{ auth.user.role }}</div>
+          </div>
+
+          <form action="{{ route('auth.logout') }}" method="POST">
             {{ csrfField() }}
-            <button type="submit" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg" onclick="return confirm('Appliquer cette promotion ?')">
-              <i class="fas fa-check"></i>
-              Appliquer
+            <button type="submit" class="ml-3 text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all">
+              <ion-icon name="log-out-outline" class="text-2xl"></ion-icon>
+              {{-- <i class="fas fa-share-square"></i> --}}
             </button>
           </form>
-        @endif
-        <a href="{{ route('promotions.edit', [promotion.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
-          <i class="fas fa-edit"></i>
-          Modifier
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Promotion Details Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-  <!-- Employee Information -->
-  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-    <div class="flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-user text-white text-xl"></i>
-      </div>
-      <h3 class="text-xl font-bold text-gray-800">Employé</h3>
-    </div>
-
-    <div class="text-center mb-6">
-      <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-user text-white text-2xl"></i>
-      </div>
-      <h4 class="text-lg font-bold text-gray-800">{{ promotion.employee.fullName }}</h4>
-      <p class="text-gray-600">{{ promotion.employee.departement }}</p>
-    </div>
-
-    <div class="space-y-3">
-      <div class="flex justify-between">
-        <span class="text-gray-600">Contact:</span>
-        <span class="font-medium">{{ promotion.employee.contact }}</span>
-      </div>
-      <div class="flex justify-between">
-        <span class="text-gray-600">Ancienneté:</span>
-        <span class="font-medium">{{ Math.floor((Date.now() - promotion.employee.datePriseFunction.toMillis()) / (365.25 * 24 * 60 * 60 * 1000)) }} ans</span>
-      </div>
-    </div>
-
-    <a href="{{ route('employees.show', [promotion.employee.id]) }}" class="btn-outline w-full mt-6">
-      <i class="fas fa-eye mr-2"></i>
-      Voir Profil Complet
-    </a>
-  </div>
-
-  <!-- Position Evolution -->
-  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-    <div class="flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-briefcase text-white text-xl"></i>
-      </div>
-      <h3 class="text-xl font-bold text-gray-800">Évolution du Poste</h3>
-    </div>
-
-    <div class="space-y-6">
-      <div class="text-center">
-        <div class="bg-gray-100 rounded-xl p-4 mb-4">
-          <div class="text-sm text-gray-600 mb-1">Poste Actuel</div>
-          <div class="font-bold text-gray-800">{{ promotion.ancienPoste }}</div>
-        </div>
-
-        <div class="flex justify-center mb-4">
-          <div class="bg-green-500 p-3 rounded-full">
-            <i class="fas fa-arrow-down text-white text-xl"></i>
-          </div>
-        </div>
-
-        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
-          <div class="text-sm text-gray-600 mb-1">Nouveau Poste</div>
-          <div class="font-bold text-green-700">{{ promotion.nouveauPoste }}</div>
         </div>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- Salary Evolution -->
-  <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
-    <div class="flex items-center gap-4 mb-6">
-      <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-        <i class="fas fa-money-bill-wave text-white text-xl"></i>
-      </div>
-      <h3 class="text-xl font-bold text-gray-800">Évolution Salariale</h3>
-    </div>
+    <!-- Content Area -->
+    <main class="p-6 overflow-y-auto flex-1 bg-gray-50">
+      <!-- Flash Messages -->
+      @if(flashMessages.has('success'))
+        <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-check-circle mr-2"></i>
+          {{ flashMessages.get('success') }}
+        </div>
+      @endif
 
-    <div class="space-y-4">
-      <div class="bg-gray-50 rounded-xl p-4">
-        <div class="text-sm text-gray-600 mb-1">Salaire Actuel</div>
-        <div class="text-xl font-bold text-gray-800">{{ promotion.ancienSalaire.toLocaleString() }} FCFA</div>
-      </div>
+      @if(flashMessages.has('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg fade-in">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          {{ flashMessages.get('error') }}
+        </div>
+      @endif
 
-      <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
-        <div class="text-sm text-gray-600 mb-1">Nouveau Salaire</div>
-        <div class="text-xl font-bold text-green-700">{{ promotion.nouveauSalaire.toLocaleString() }} FCFA</div>
-      </div>
+      {{-- @section('title')
+      Dashboard
+      @endsection
 
-      <div class="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl p-4 border border-yellow-200">
-        <div class="text-sm text-gray-600 mb-1">Augmentation</div>
-        <div class="text-lg font-bold text-yellow-700">+{{ promotion.montantAugmentation.toLocaleString() }} FCFA</div>
-        <div class="text-sm text-yellow-600">+{{ ((promotion.montantAugmentation / promotion.ancienSalaire) * 100).toFixed(1) }}%</div>
-      </div>
-    </div>
-  </div>
-</div>
+      @section('content') --}}
+      <!-- Premium Promotion Header -->
+      <div class="relative bg-gradient-to-br from-emerald-600/90 via-green-700/90 to-teal-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
+          style="background-image: url('https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-900/95 to-gray-800/95"></div>
 
-<!-- Timeline and Impact -->
-<div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
-  <div class="flex items-center gap-4 mb-8">
-    <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
-      <i class="fas fa-timeline text-white text-xl"></i>
-    </div>
-    <h3 class="text-2xl font-bold text-gray-800">Impact et Chronologie</h3>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- Timeline -->
-    <div>
-      <h4 class="font-semibold text-gray-800 mb-4">Chronologie de la Promotion</h4>
-      <div class="space-y-4">
-        <div class="flex items-start gap-4">
-          <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-plus text-white"></i>
-          </div>
-          <div class="flex-1">
-            <h5 class="font-medium text-gray-800">Promotion Créée</h5>
-            <p class="text-sm text-gray-600">{{ promotion.createdAt.toFormat('dd/MM/yyyy à HH:mm') }}</p>
-          </div>
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+          {{-- <div class="absolute bottom-0 left-0 w-80 h-80 bg-emerald-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div> --}}
+          <div class="absolute top-1/3 left-1/3 w-64 h-64 bg-green-200/5 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
         </div>
 
-        @if(promotion.statut === 'Appliquée')
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-check text-white"></i>
+        <div class="relative z-10 p-8">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-8">
+              {{-- <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
+                <i class="fas fa-arrow-up text-white text-6xl drop-shadow-lg"></i>
+              </div> --}}
+              <div>
+                <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
+                  Promotion de {{ promotion.employee.fullName }}
+                </h1>
+                <p class="text-emerald-50 text-lg font-medium">
+                  {{ promotion.ancienPoste }} → {{ promotion.nouveauPoste }}
+                </p>
+                <div class="flex items-center gap-6 mt-4">
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-2xl text-white font-medium border border-green-50/50">
+                    {{ promotion.dateVigueur.toFormat('dd/MM/yyyy') }}
+                  </span>
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-2xl text-white font-medium {{ promotion.statut === 'Appliquée' ? 'border border-green-50/50' : promotion.statut === 'En attente' ? 'border border-yellow-50/50' : 'border border-red-50/50' }}">
+                    {{ promotion.statut }}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div class="flex-1">
-              <h5 class="font-medium text-gray-800">Promotion Appliquée</h5>
-              <p class="text-sm text-gray-600">{{ promotion.updatedAt.toFormat('dd/MM/yyyy à HH:mm') }}</p>
+
+            <div class="flex gap-3">
+              @if(promotion.statut === 'En attente')
+                <form action="{{ route('promotions.apply', [promotion.id]) }}" method="POST" class="inline">
+                  {{ csrfField() }}
+                  <button type="submit" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg" onclick="return confirm('Appliquer cette promotion ?')">
+                    <ion-icon name="checkmark-done-outline" class="text-2xl mr-1"></ion-icon>
+                    Appliquer
+                  </button>
+                </form>
+              @endif
+              <a href="{{ route('promotions.edit', [promotion.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+                <ion-icon name="create-outline" class="text-2xl mr-1"></ion-icon>
+                Modifier
+              </a>
             </div>
           </div>
-        @endif
+        </div>
+      </div>
 
-        <div class="flex items-start gap-4">
-          <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-calendar text-white"></i>
+      <!-- Promotion Details Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <!-- Employee Information -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+          <div class="flex items-center gap-4 mb-6">
+            {{-- <div class="w-3 h-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+              {{-- <i class="fas fa-user text-white text-xl"></i> --}}
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">Employé</h3> --}}
           </div>
-          <div class="flex-1">
-            <h5 class="font-medium text-gray-800">Date d'Effet</h5>
-            <p class="text-sm text-gray-600">{{ promotion.dateVigueur.toFormat('dd/MM/yyyy') }}</p>
+
+          <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ion-icon name="body-outline" class="text-4xl mr-1 text-white"></ion-icon>
+            </div>
+            <h4 class="text-xl font-bold text-gray-800">{{ promotion.employee.fullName }}</h4>
+            <p class="text-gray-600 mt-1">{{ promotion.employee.departement }}</p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Date de naissance :</span>
+              <span class="font-medium">{{ promotion.employee.dateNaissance.toFormat('dd/MM/yyyy') }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Contact :</span>
+              <span class="font-medium">{{ promotion.employee.contact }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Prise de fonction :</span>
+              <span class="font-medium">{{ promotion.employee.datePriseFonction.toFormat('dd/MM/yyyy') }}</span>
+            </div>
+            {{-- <div class="flex justify-between">
+              <span class="text-gray-600">Ancienneté:</span>
+              <span class="font-medium">{{ Math.floor((Date.now() - promotion.employee.datePriseFunction.toMillis()) / (365.25 * 24 * 60 * 60 * 1000)) }} ans</span>
+            </div> --}}
+          </div>
+
+          {{-- <a href="{{ route('employees.show', [promotion.employee.id]) }}" class="btn-outline w-full mt-6" style="text-align: center;">
+            <ion-icon name="eye-outline" class="text-2xl mr-1"></ion-icon>
+            Voir Profil Complet
+          </a> --}}
+        </div>
+
+        <!-- Position Evolution -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-3 h-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+              {{-- <i class="fas fa-briefcase text-white text-xl"></i> --}}
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">Évolution du Poste</h3>
+          </div>
+
+          <div class="space-y-6">
+            <div class="text-center">
+              <div class="bg-gray-100 rounded-xl p-4 mb-4">
+                <div class="text-sm text-gray-600 mb-1">Poste Actuel</div>
+                <div class="font-bold text-gray-800 text-lg">{{ promotion.ancienPoste }}</div>
+              </div>
+
+              <div class="flex justify-center mb-4">
+                <div class="bg-green-500 p-2 rounded-full">
+                  <ion-icon name="arrow-down-outline" class="text-2xl mr-1 ml-1"></ion-icon>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-green-50/50 to-emerald-50/50 rounded-xl p-4 border border-green-200">
+                <div class="text-sm text-gray-600 mb-1">Nouveau Poste</div>
+                <div class="font-bold text-green-700 text-lg">{{ promotion.nouveauPoste }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Salary Evolution -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-3 h-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+              {{-- <i class="fas fa-money-bill-wave text-white text-xl"></i> --}}
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">Évolution Salariale</h3>
+          </div>
+
+          <div class="space-y-4">
+            <div class="bg-gray-50 rounded-xl p-4">
+              <div class="text-sm text-gray-600 mb-1">Salaire Actuel</div>
+              <div class="text-xl font-bold text-gray-800">{{ promotion.ancienSalaire.toLocaleString() }} FCFA</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50/50 to-emerald-50/50 rounded-xl p-4 border border-green-200">
+              <div class="text-sm text-gray-600 mb-1">Nouveau Salaire</div>
+              <div class="text-xl font-bold text-green-700">{{ promotion.nouveauSalaire.toLocaleString() }} FCFA</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 rounded-xl p-4 border border-blue-200">
+              <div class="text-sm text-gray-600 mb-1">Augmentation</div>
+              <div class="text-lg font-bold text-gray-800">+{{ promotion.montantAugmentation.toLocaleString() }} FCFA</div>
+              {{-- <div class="text-md text-cyan-600">+{{ ((promotion.montantAugmentation / promotion.ancienSalaire) * 100).toFixed(1) }} %</div> --}}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Impact Analysis -->
-    <div>
-      <h4 class="font-semibold text-gray-800 mb-4">Analyse d'Impact</h4>
-      <div class="space-y-4">
-        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-chart-line text-green-600"></i>
-            <span class="font-medium text-green-800">Impact Salarial</span>
-          </div>
-          <p class="text-sm text-green-700">
-            Augmentation de {{ ((promotion.montantAugmentation / promotion.ancienSalaire) * 100).toFixed(1) }}%
-            représentant {{ (promotion.montantAugmentation * 12).toLocaleString() }} FCFA par an
-          </p>
+      <!-- Timeline and Impact -->
+      <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8">
+        <div class="flex items-center gap-4 mb-8">
+          {{-- <div class="w-3 h-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <i class="fas fa-timeline text-white text-xl"></i>
+          </div> --}}
+          <h3 class="text-2xl font-bold text-gray-800">Impact de la promotion</h3>
         </div>
 
-        <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-users text-blue-600"></i>
-            <span class="font-medium text-blue-800">Impact Organisationnel</span>
-          </div>
-          <p class="text-sm text-blue-700">
-            Évolution vers un poste de niveau supérieur avec nouvelles responsabilités
-          </p>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Timeline -->
+          {{-- <div>
+            <h4 class="font-semibold text-gray-800 mb-4">Chronologie de la Promotion</h4>
+            <div class="space-y-4">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-plus text-white"></i>
+                </div>
+                <div class="flex-1">
+                  <h5 class="font-medium text-gray-800">Promotion Créée</h5>
+                  <p class="text-sm text-gray-600">{{ promotion.createdAt.toFormat('dd/MM/yyyy à HH:mm') }}</p>
+                </div>
+              </div>
 
-        <div class="bg-purple-50 rounded-xl p-4 border border-purple-200">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-star text-purple-600"></i>
-            <span class="font-medium text-purple-800">Reconnaissance</span>
+              @if(promotion.statut === 'Appliquée')
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-check text-white"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h5 class="font-medium text-gray-800">Promotion Appliquée</h5>
+                    <p class="text-sm text-gray-600">{{ promotion.updatedAt.toFormat('dd/MM/yyyy à HH:mm') }}</p>
+                  </div>
+                </div>
+              @endif
+
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-calendar text-white"></i>
+                </div>
+                <div class="flex-1">
+                  <h5 class="font-medium text-gray-800">Date d'Effet</h5>
+                  <p class="text-sm text-gray-600">{{ promotion.dateVigueur.toFormat('dd/MM/yyyy') }}</p>
+                </div>
+              </div>
+            </div>
+          </div> --}}
+
+          <!-- Impact Analysis -->
+          <div>
+            <div class="space-y-4">
+              <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="font-medium text-cyan-800 text-lg">Impact Salarial</span>
+                </div>
+                <p class="text-md text-gray-700">
+                  Augmentation de {{ ((promotion.montantAugmentation / promotion.ancienSalaire) * 100).toFixed(1) }}%
+                  représentant {{ (promotion.montantAugmentation * 12).toLocaleString() }} FCFA par an
+                </p>
+              </div>
+            </div>
           </div>
-          <p class="text-sm text-purple-700">
-            Valorisation des compétences et de la performance de l'employé
-          </p>
+
+          <div>
+            <div class="space-y-4">
+              <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="font-medium text-cyan-800 text-lg">Impact Organisationnel</span>
+                </div>
+                <p class="text-md text-gray-700">
+                  Évolution vers un poste de niveau supérieur avec nouvelles responsabilités
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="space-y-4">
+              <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="font-medium text-cyan-800 text-lg">Reconnaissance</span>
+                </div>
+                <p class="text-md text-gray-700">
+                  Valorisation des compétences et de la performance de l'employé
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <style>
+      .btn-outline {
+        @apply px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center;
+      }
+      </style>
+      {{-- @endsection --}}
+
+      </main>
   </div>
-</div>
-
-<style>
-.btn-outline {
-  @apply px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center;
-}
-</style>
-@endsection
+</body>
+</html>

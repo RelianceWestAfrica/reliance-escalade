@@ -72,6 +72,7 @@
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
       {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+        {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a> --}}
@@ -85,6 +86,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -108,7 +115,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -208,7 +215,7 @@
       <!-- Premium Form Container -->
       <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
         <!-- Form Header -->
-        <div class="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-gray-200/50">
+        {{-- <div class="bg-gradient-to-r from-violet-50 to-purple-50 p-8 border-b border-gray-200/50">
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-2xl font-bold text-gray-800 mb-2">Détails de l'Offre d'Emploi</h2>
@@ -226,9 +233,9 @@
               </div>
             </div> --}}
           </div>
-        </div>
+        </div> --}}
 
-        <div class="p-10">
+        <div class="mt-4 p-10">
           <form action="{{ route('careers.store') }}" method="POST" class="space-y-10" id="jobOfferForm">
             {{ csrfField() }}
 
@@ -249,7 +256,7 @@
                     <i class="fas fa-tag text-blue-500 mr-2"></i>
                     Intitulé de l'Offre
                   </label>
-                  <input type="text" id="intitule" name="intitule" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Ex: Recherche Développeur Full-Stack Senior" required autofocus>
+                  <input type="text" id="intitule" name="intitule" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Ex : Recherche Développeur Full-Stack Senior" required autofocus>
                 </div>
 
                 <div class="form-group">
@@ -257,7 +264,7 @@
                     <i class="fas fa-briefcase text-blue-500 mr-2"></i>
                     Poste à Pourvoir
                   </label>
-                  <input type="text" id="poste" name="poste" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Ex: Développeur Full-Stack" required>
+                  <input type="text" id="poste" name="poste" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Ex : Développeur Full-Stack" required>
                 </div>
 
                 <div class="form-group">
@@ -270,7 +277,7 @@
                     <option value="Direction">Direction</option>
                     <option value="Administration">Administration</option>
                     <option value="Marketing et Communication">Marketing et Communication</option>
-                    <option value="Commercial">💼 Commercial</option>
+                    <option value="Commercial">Commercial</option>
                     <option value="Technique et développement">Technique et développement</option>
                     <option value="Comptabilité finances">Comptabilité finances</option>
                   </select>
@@ -451,22 +458,22 @@
 
             <!-- Action Buttons -->
             <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-              <a href="{{ route('careers.index') }}" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i>
+              <a href="{{ route('careers.index') }}" class="bg-gray-700 hover:bg-cyan-50 text-white hover:text-black border border-gray-200 rounded-lg p-3 text-center transition-colors card-hover">
+                {{-- <i class="fas fa-arrow-left mr-2"></i> --}}
                 Retour aux Offres
               </a>
 
               <div class="flex gap-4">
-                <button type="button" class="btn-outline" onclick="resetForm()">
-                  <i class="fas fa-undo mr-2"></i>
+                <button type="button" class="bg-blue-50 hover:bg-cyan-50 border border-blue-100 rounded-lg p-3 text-center transition-colors card-hover" onclick="resetForm()">
+                  {{-- <i class="fas fa-undo mr-2"></i> --}}
                   Réinitialiser
                 </button>
-                <button type="button" class="btn-preview" onclick="updatePreview()">
-                  <i class="fas fa-eye mr-2"></i>
+                <button type="button" class="bg-blue-50 hover:bg-cyan-50 border border-blue-100 rounded-lg p-3 text-center transition-colors card-hover" onclick="updatePreview()">
+                  {{-- <i class="fas fa-eye mr-2"></i> --}}
                   Actualiser Aperçu
                 </button>
-                <button type="submit" class="btn-primary-gradient">
-                  <i class="fas fa-briefcase mr-2"></i>
+                <button type="submit" class="bg-blue-700/85 hover:bg-blue-50 text-white hover:text-black border border-blue-200 rounded-lg p-3 text-center transition-colors card-hover">
+                  {{-- <i class="fas fa-briefcase mr-2"></i> --}}
                   Créer l'Offre
                   <div class="btn-shine"></div>
                 </button>

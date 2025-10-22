@@ -2,9 +2,20 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Demotion from '#models/demotion'
 import Employee from '#models/employee'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class DemotionsController {
-  async index({ view, request, session }: HttpContext) {
+  async index({ view, request, session, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId2 = user.rwaCountryId
+
+    if (!rwaCountryId2) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
     const page = request.input('page', 1)
     const limit = 10
 
@@ -24,17 +35,34 @@ export default class DemotionsController {
       .count('* as total')
       .orderBy('created_at', 'desc')
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId2)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('demotions/index', {
       ndemotion: {
         totalDemotions: totalDemotions[0].$extras.total,
 
-      }, demotions, currentDate })
+      }, demotions, currentDate, instanceCountry })
   }
 
-  async create({ view, session }: HttpContext) {
+  async create({ view, session, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId2 = user.rwaCountryId
+
+    if (!rwaCountryId2) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
     const rwaCountryId = session.get('rwa_country_id')
     const employees = await Employee.query().where('actif', true).where('rwa_country_id', rwaCountryId)
-    return view.render('demotions/create', { employees })
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId2)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('demotions/create', { employees, instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -65,7 +93,17 @@ export default class DemotionsController {
     return response.redirect('/demotions')
   }
 
-  async edit({ params, view, session }: HttpContext) {
+  async edit({ params, view, session, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId2 = user.rwaCountryId
+
+    if (!rwaCountryId2) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
     const rwaCountryId = session.get('rwa_country_id')
     const demotion = await Demotion.query()
       .where('id', params.id)
@@ -75,7 +113,10 @@ export default class DemotionsController {
 
     const employees = await Employee.query().where('actif', true).where('rwa_country_id', rwaCountryId)
 
-    return view.render('demotions/edit', { demotion, employees })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId2)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('demotions/edit', { demotion, employees, instanceCountry })
   }
 
   async update({ params, request, response, session, auth }: HttpContext) {
@@ -96,7 +137,7 @@ export default class DemotionsController {
 
     const data = request.only([
       'employee_id', 'ancien_poste', 'nouveau_poste',
-      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction', 
+      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction',
     ])
 
     data.montant_reduction = data.ancien_salaire - data.nouveau_salaire
@@ -148,5 +189,25 @@ export default class DemotionsController {
 
     session.flash('success', 'Démotion supprimée avec succès')
     return response.redirect('/demotions')
+  }
+
+  async show({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized({ message: 'Utilisateur non authentifié' })
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      throw new Error('Aucun RWA Country ID trouvé pour cet utilisateur.')
+    }
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    const demotion = await Demotion.findOrFail(params.id)
+    await demotion.load('employee')
+
+    return view.render('demotions/show', { demotion, instanceCountry })
   }
 }

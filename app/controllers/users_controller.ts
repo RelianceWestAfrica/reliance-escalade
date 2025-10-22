@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class UsersController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -21,7 +22,10 @@ export default class UsersController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
-    return view.render('users/index', { users, currentDate })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('users/index', { users, currentDate, instanceCountry })
   }
 
   async show({ params, view, auth, response }: HttpContext) {
@@ -36,11 +40,23 @@ export default class UsersController {
       .where('rwa_country_id', rwaCountryId)
       .firstOrFail()
 
-    return view.render('users/show', { user })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('users/show', { user, instanceCountry })
   }
 
-  async create({ view }: HttpContext) {
-    return view.render('users/create')
+  async create({ view, auth, response }: HttpContext) {
+    const currentUser = auth.user
+    if (!currentUser) return response.unauthorized('Utilisateur non authentifié')
+
+    const rwaCountryId = currentUser.rwaCountryId
+    if (!rwaCountryId) return response.badRequest('Code pays non défini pour cet utilisateur')
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('users/create', { instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -84,7 +100,10 @@ export default class UsersController {
       .where('rwa_country_id', rwaCountryId)
       .firstOrFail()
 
-    return view.render('users/edit', { user })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('users/edit', { user, instanceCountry })
   }
 
   async update({ params, request, response, session, auth }: HttpContext) {

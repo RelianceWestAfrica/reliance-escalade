@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -260,7 +266,7 @@
                   </a>
                   <form action="{{ route('orgcharts.destroy', [chart.id]) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet organigramme ?')">
                     {{ csrfField() }}
-                    @method('DELETE')
+                    <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" class="action-btn delete">
                       <i class="fas fa-trash"></i>
                     </button>

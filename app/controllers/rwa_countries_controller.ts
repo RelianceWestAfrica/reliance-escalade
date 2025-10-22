@@ -2,7 +2,17 @@ import type { HttpContext } from '@adonisjs/core/http'
 import RwaCountry from '#models/rwa_country'
 
 export default class RwaCountriesController {
-  async index({ view, request }: HttpContext) {
+  async index({ view, request, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const page = request.input('page', 1)
     const limit = 10
 
@@ -12,11 +22,27 @@ export default class RwaCountriesController {
       .orderBy('created_at', 'desc')
       .paginate(page, limit)
 
-    return view.render('rwa_countries/index', { countries })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('rwa_countries/index', { countries, instanceCountry })
   }
 
-  async create({ view }: HttpContext) {
-    return view.render('rwa_countries/create')
+  async create({ view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('rwa_countries/create', { instanceCountry })
   }
 
   async store({ request, response, session }: HttpContext) {
@@ -37,17 +63,42 @@ export default class RwaCountriesController {
     return response.redirect('/rwa-countries')
   }
 
-  async show({ params, view }: HttpContext) {
+  async show({ params, view , auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
     const country = await RwaCountry.findOrFail(params.id)
     await country.load('users')
     await country.load('employees')
 
-    return view.render('rwa_countries/show', { country })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('rwa_countries/show', { country, instanceCountry })
   }
 
-  async edit({ params, view }: HttpContext) {
+  async edit({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
     const country = await RwaCountry.findOrFail(params.id)
-    return view.render('rwa_countries/edit', { country })
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('rwa_countries/edit', { country, instanceCountry })
   }
 
   async update({ params, request, response, session }: HttpContext) {

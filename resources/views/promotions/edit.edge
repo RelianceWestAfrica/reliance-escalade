@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -169,7 +175,7 @@
           style="background-image: url('https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
           <div class="absolute inset-0 bg-gradient-to-r from-gray-900/95 to-gray-800/95"></div>
 
-        <div class="relative z-10 p-10">
+        <div class="relative z-10 p-8">
           <div class="flex items-center gap-6">
             {{-- <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
               <i class="fas fa-edit text-white text-6xl drop-shadow-lg"></i>
@@ -178,18 +184,18 @@
               <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
                 Modifier la Promotion
               </h1>
-              <p class="text-orange-50 text-md font-normal">
+              <p class="text-green-50 text-lg font-normal">
                 {{ promotion.employee.fullName }} - {{ promotion.ancienPoste }}
               </p>
               <div class="flex items-center gap-4 mt-4">
                 <div class="flex items-center gap-2">
                   {{-- <div class="w-3 h-3 bg-emerald-300 rounded-full animate-pulse"></div> --}}
-                  <span class="text-orange-50 text-md">Évolution professionnelle</span>
+                  <span class="text-green-50 text-lg">Évolution professionnelle</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <ion-icon name="analytics-outline" class="text-2xl text-green-300 animate-pulse" style="animation-delay: 0.5s;"></ion-icon>
                   {{-- <div class="w-3 h-3 bg-green-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div> --}}
-                  <span class="text-orange-50 text-md ml-2">Augmentation salariale</span>
+                  <span class="text-green-50 text-lg ml-2">Augmentation salariale</span>
                 </div>
               </div>
             </div>
@@ -199,13 +205,13 @@
 
       <!-- Form Container -->
       <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
-        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-8 border-b border-gray-200/50">
+        {{-- <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-8 border-b border-gray-200/50">
           <h2 class="text-2xl font-bold text-gray-800 mb-2">Modification de la Promotion</h2>
           <p class="text-gray-600">Ajustez les détails de l'évolution de carrière</p>
-        </div>
+        </div> --}}
 
         <div class="p-10" style="margin-top: -3%;">
-          <form action="{{ route('promotions.update', [promotion.id]) }}" method="POST" class="space-y-10">
+          <form action="{{ route('promotions.update_promotion', [promotion.id]) }}" method="POST" class="space-y-10">
             {{ csrfField() }}
             <input type="hidden" name="_method" value="PUT">
 
@@ -216,7 +222,7 @@
                   {{-- <i class="fas fa-user text-white text-xl"></i> --}}
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-gray-800">Employé Concerné</h3>
+                  <h3 class="text-xl font-semibold text-gray-800">Employé Concerné</h3>
                   {{-- <p class="mt-1 text-gray-600">{{ promotion.employee.fullName }}</p> --}}
                 </div>
               </div>
@@ -239,10 +245,10 @@
             <div class="form-section">
               <div class="flex items-center gap-4 mb-6">
                 <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-1 rounded-2xl shadow-lg">
-                  <i class="fas fa-briefcase text-white text-xl"></i>
+                  {{-- <i class="fas fa-briefcase text-white text-xl"></i> --}}
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-gray-800">Évolution du Poste</h3>
+                  <h3 class="text-xl font-semibold text-gray-800">Évolution du Poste</h3>
                   {{-- <p class="mt-1 text-gray-600">Ancien et nouveau poste</p> --}}
                 </div>
               </div>
@@ -250,7 +256,7 @@
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="form-group">
                   <label for="ancien_poste" class="form-label">
-                    <i class="fas fa-briefcase text-purple-500 mr-2"></i>
+                    {{-- <i class="fas fa-briefcase text-purple-500 mr-2"></i> --}}
                     Poste Actuel
                   </label>
                   <input type="text" id="ancien_poste" name="ancien_poste" value="{{ promotion.ancienPoste }}" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required readonly>
@@ -258,7 +264,7 @@
 
                 <div class="form-group">
                   <label for="nouveau_poste" class="form-label">
-                    <i class="fas fa-star text-purple-500 mr-2"></i>
+                    {{-- <i class="fas fa-star text-purple-500 mr-2"></i> --}}
                     Nouveau Poste
                   </label>
                   <input type="text" id="nouveau_poste" name="nouveau_poste" value="{{ promotion.nouveauPoste }}" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
@@ -270,10 +276,10 @@
             <div class="form-section">
               <div class="flex items-center gap-4 mb-6">
                 <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-1 rounded-2xl shadow-lg">
-                  <i class="fas fa-money-bill-wave text-white text-xl"></i>
+                  {{-- <i class="fas fa-money-bill-wave text-white text-xl"></i> --}}
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-gray-800">Ajustement Salarial</h3>
+                  <h3 class="text-xl font-semibold text-gray-800">Ajustement Salarial</h3>
                   {{-- <p class="mt-1 text-gray-600">Évolution de la rémunération</p> --}}
                 </div>
               </div>
@@ -281,7 +287,7 @@
               <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="form-group">
                   <label for="ancien_salaire" class="form-label">
-                    <i class="fas fa-money-bill text-green-500 mr-2"></i>
+                    {{-- <i class="fas fa-money-bill text-green-500 mr-2"></i> --}}
                     Salaire Actuel (FCFA)
                   </label>
                   <input type="number" id="ancien_salaire" name="ancien_salaire" value="{{ promotion.ancienSalaire }}" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" min="0" readonly required>
@@ -289,7 +295,7 @@
 
                 <div class="form-group">
                   <label for="nouveau_salaire" class="form-label">
-                    <i class="fas fa-coins text-green-500 mr-2"></i>
+                    {{-- <i class="fas fa-coins text-green-500 mr-2"></i> --}}
                     Nouveau Salaire (FCFA)
                   </label>
                   <input type="number" id="nouveau_salaire" name="nouveau_salaire" value="{{ promotion.nouveauSalaire }}" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" min="0" required>
@@ -297,7 +303,7 @@
 
                 <div class="form-group">
                   <label class="form-label">
-                    <i class="fas fa-chart-line text-green-500 mr-2"></i>
+                    {{-- <i class="fas fa-chart-line text-green-500 mr-2"></i> --}}
                     Augmentation
                   </label>
                   <div class="mt-2 form-input bg-green-50 border-green-200 text-green-700 font-semibold p-2" id="salaryIncrease">
@@ -311,10 +317,10 @@
             <div class="form-section">
               <div class="flex items-center gap-4 mb-6">
                 <div class="bg-gradient-to-r from-orange-500 to-red-600 p-1 rounded-2xl shadow-lg">
-                  <i class="fas fa-calendar-alt text-white text-xl"></i>
+                  {{-- <i class="fas fa-calendar-alt text-white text-xl"></i> --}}
                 </div>
                 <div>
-                  <h3 class="text-xl font-bold text-gray-800">Planification</h3>
+                  <h3 class="text-xl font-semibold text-gray-800">Planification</h3>
                   {{-- <p class="mt-1 text-gray-600">Date et statut de la promotion</p> --}}
                 </div>
               </div>
@@ -322,7 +328,7 @@
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="form-group">
                   <label for="date_vigueur" class="form-label">
-                    <i class="fas fa-calendar-check text-orange-500 mr-2"></i>
+                    {{-- <i class="fas fa-calendar-check text-orange-500 mr-2"></i> --}}
                     Date de Prise d'Effet
                   </label>
                   <input type="date" id="date_vigueur" name="date_vigueur" value="{{ promotion.dateVigueur.toISODate() }}" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
@@ -330,7 +336,7 @@
 
                 <div class="form-group">
                   <label for="statut" class="form-label">
-                    <i class="fas fa-toggle-on text-orange-500 mr-2"></i>
+                    {{-- <i class="fas fa-toggle-on text-orange-500 mr-2"></i> --}}
                     Statut
                   </label>
                   <select id="statut" name="statut" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm">
@@ -345,17 +351,17 @@
             <!-- Action Buttons -->
             <div class="flex justify-between items-center pt-8 border-t border-gray-200">
               <a href="{{ route('promotions.show', [promotion.id]) }}" class="bg-gray-700 hover:bg-cyan-50 text-white hover:text-black border border-gray-200 rounded-lg p-3 text-center transition-colors card-hover">
-                <i class="fas fa-arrow-left mr-2"></i>
+                {{-- <i class="fas fa-arrow-left mr-2"></i> --}}
                 Retour à la Promotion
               </a>
 
               <div class="flex gap-4">
                 <a href="{{ route('promotions.index') }}" class="bg-blue-50 hover:bg-cyan-50 border border-blue-100 rounded-lg p-3 text-center transition-colors card-hover">
-                  <i class="fas fa-list mr-2"></i>
+                  {{-- <i class="fas fa-list mr-2"></i> --}}
                   Liste des Promotions
                 </a>
                 <button type="submit" class="bg-blue-700/85 hover:bg-blue-50 text-white hover:text-black border border-blue-200 rounded-lg p-3 text-center transition-colors card-hover">
-                  <i class="fas fa-save mr-2"></i>
+                  {{-- <i class="fas fa-save mr-2"></i> --}}
                   Enregistrer les Modifications
                 </button>
               </div>

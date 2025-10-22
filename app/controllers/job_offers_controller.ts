@@ -3,6 +3,7 @@ import JobOffer from '#models/job_offer'
 import JobApplication from '#models/job_application'
 import { DateTime } from 'luxon'
 import Department from '#models/department'
+import RwaCountry from '#models/rwa_country'
 
 export default class JobOffersController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -26,7 +27,10 @@ export default class JobOffersController {
       await offer.updateStatus()
     }
 
-    return view.render('careers/index', { offers })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('careers/index', { offers, instanceCountry })
   }
 
   async create({ view }: HttpContext) {
@@ -71,7 +75,10 @@ export default class JobOffersController {
     await offer.load('applications')
     await offer.updateStatus()
 
-    return view.render('careers/show', { offer })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('careers/show', { offer, instanceCountry })
   }
 
   async edit({ params, view, auth, response }: HttpContext) {
@@ -86,7 +93,19 @@ export default class JobOffersController {
       .where('rwa_country_id', rwaCountryId)
       .firstOrFail()
 
-    return view.render('careers/edit', { offer })
+    const applications = JobApplication.query()
+      .where('job_offer_id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .orderBy('created_at', 'desc')
+      .count('* as total')
+
+    await offer.load('applications')
+    await offer.updateStatus()
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('careers/edit', { offer, instanceCountry, applications })
   }
 
   async update({ params, request, response, session, auth }: HttpContext) {
@@ -104,7 +123,7 @@ export default class JobOffersController {
     const data = request.only([
       'intitule', 'poste', 'departement', 'type_contrat',
       'competences_requises', 'date_cloture', 'description',
-      'salaire', 'experience', 'statut', 
+      'salaire', 'experience', 'statut',
     ])
 
     offer.merge({
@@ -136,11 +155,30 @@ export default class JobOffersController {
     return response.redirect('/careers')
   }
 
-  // 🔓 Partie publique (inchangée)
-  async publicIndex({ view }: HttpContext) {
-    const offers = await JobOffer.query()
+  // Public landing page for job offers
+  async publicIndex({ view, request }: HttpContext) {
+    const search = request.input('search', '')
+    const departement = request.input('departement', '')
+
+    const query = JobOffer.query()
       .where('statut', 'Publiée')
       .where('date_cloture', '>=', DateTime.now().toISODate())
+
+    if (search) {
+      query.where((subQuery) => {
+        subQuery
+          .where('intitule', 'like', `%${search}%`)
+          .orWhere('poste', 'like', `%${search}%`)
+          .orWhere('competences_requises', 'like', `%${search}%`)
+          .orWhere('description', 'like', `%${search}%`)
+      })
+    }
+
+    if (departement) {
+      query.where('departement', departement)
+    }
+
+    const offers = await query
       .withCount('applications')
       .orderBy('created_at', 'desc')
 
@@ -161,6 +199,7 @@ export default class JobOffersController {
 
   async apply({ params, request, response, session }: HttpContext) {
     const offer = await JobOffer.findOrFail(params.id)
+    const offerInstance = offer?.rwaCountryId
     const data = request.only(['nom_complet', 'email_professionnel', 'telephone', 'motivation'])
 
     if (offer.statut !== 'Publiée' || offer.isExpired) {
@@ -168,13 +207,61 @@ export default class JobOffersController {
       return response.redirect('/jobs')
     }
 
-    const existingApplication = await JobApplication.query()
+    const existingApplicationQuery = JobApplication.query()
       .where('job_offer_id', offer.id)
       .where('email_professionnel', data.email_professionnel)
-      .first()
+
+    if (offerInstance !== null) {
+      existingApplicationQuery.where('rwa_country_id', offerInstance)
+    }
+
+    const existingApplication = await existingApplicationQuery.first()
 
     if (existingApplication) {
       session.flash('error', 'Vous avez déjà postulé pour cette offre')
+      return response.redirect().back()
+    }
+
+
+    // Handle file uploads
+    const cvFile = request.file('cv_file', {
+      size: '3mb',
+      extnames: ['pdf', 'doc', 'docx']
+    })
+
+    const lettreMotivationFile = request.file('lettre_motivation_file', {
+      size: '3mb',
+      extnames: ['pdf', 'doc', 'docx']
+    })
+
+    const diplomeFile = request.file('diplome_file', {
+      size: '3mb',
+      extnames: ['pdf', 'jpg', 'jpeg', 'png']
+    })
+
+    if (!cvFile || !lettreMotivationFile || !diplomeFile) {
+      session.flash('error', 'Tous les fichiers sont requis')
+      return response.redirect().back()
+    }
+
+    // Save files
+    const uploadsPath = 'uploads/applications'
+    const timestamp = Date.now()
+
+    await cvFile.move(`public/${uploadsPath}`, {
+      name: `${timestamp}_cv_${cvFile.clientName}`
+    })
+
+    await lettreMotivationFile.move(`public/${uploadsPath}`, {
+      name: `${timestamp}_lettre_${lettreMotivationFile.clientName}`
+    })
+
+    await diplomeFile.move(`public/${uploadsPath}`, {
+      name: `${timestamp}_diplome_${diplomeFile.clientName}`
+    })
+
+    if (cvFile.hasErrors || lettreMotivationFile.hasErrors || diplomeFile.hasErrors) {
+      session.flash('error', 'Erreur lors du téléchargement des fichiers')
       return response.redirect().back()
     }
 
@@ -184,7 +271,11 @@ export default class JobOffersController {
       emailProfessionnel: data.email_professionnel,
       telephone: data.telephone,
       motivation: data.motivation,
-      statut: 'En attente'
+      cvFilePath: `/${uploadsPath}/${cvFile.fileName}`,
+      lettreMotivationFilePath: `/${uploadsPath}/${lettreMotivationFile.fileName}`,
+      diplomeFilePath: `/${uploadsPath}/${diplomeFile.fileName}`,
+      statut: 'En attente',
+      rwaCountryId: offerInstance,
     })
 
     session.flash('success', 'Votre candidature a été soumise avec succès')
@@ -204,7 +295,10 @@ export default class JobOffersController {
       .preload('applications')
       .firstOrFail()
 
-    return view.render('careers/applications', { offer })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('careers/applications', { offer, instanceCountry })
   }
 
   async updateApplicationStatus({ params, request, response, session, auth }: HttpContext) {

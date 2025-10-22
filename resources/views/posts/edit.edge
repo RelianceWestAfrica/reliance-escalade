@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800" style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -168,13 +174,13 @@
       <!-- Premium Page Header -->
       <div class="relative bg-gradient-to-br from-amber-600/90 via-orange-700/90 to-red-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
           style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
-          <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-yellow-800/65"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-yellow-800/90"></div>
 
           <!-- Animated Background Elements -->
           <div class="absolute inset-0">
             <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-200/10 rounded-full blur-3xl animate-pulse"></div>
             {{-- <div class="absolute bottom-0 left-0 w-80 h-80 bg-blue-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div> --}}
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-300/5 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
           </div>
 
           {{-- <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div> --}}
@@ -182,10 +188,10 @@
 
           <div class="absolute inset-0">
             <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute bottom-0 left-0 w-80 h-80 bg-amber-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-orange-100/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
           </div>
 
-        <div class="relative z-10 p-10">
+        <div class="relative z-10 p-8">
           <div class="flex items-center gap-8">
             {{-- <div class="bg-white/20 backdrop-blur-lg p-6 rounded-3xl shadow-xl border border-white/30">
               <i class="fas fa-edit text-white text-6xl drop-shadow-lg"></i>
@@ -194,7 +200,7 @@
               <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
                 Modifier le Poste
               </h1>
-              <p class="text-amber-100 text-lg font-normal">
+              <p class="text-orange-50 text-lg font-normal">
                 {{ post.intitule }} - {{ post.departement }}
               </p>
             </div>
@@ -204,19 +210,19 @@
 
       <!-- Premium Form Container -->
       <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-8 border-b border-gray-200/50">
+        {{-- <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-8 border-b border-gray-200/50">
           <h2 class="text-2xl font-bold text-gray-800 mb-2">Modification du Poste</h2>
           <p class="text-gray-600">Mettez à jour les informations du poste</p>
-        </div>
+        </div> --}}
 
-        <div class="p-10">
+        <div class="p-10" style="margin-top: -2%;">
           <form action="{{ route('posts.update_post', [post.id]) }}" method="POST" class="space-y-10">
             {{ csrfField() }}
             <input type="hidden" name="_method" value="PUT">
 
             <!-- Main Information Section -->
             <div class="form-section">
-              <div class="flex items-center gap-4 mb-12">
+              {{-- <div class="flex items-center gap-4 mb-12">
                 <div class="">
                   <ion-icon name="filter-outline" class="mr-2 text-2xl text-pink-700"></ion-icon>
                 </div>
@@ -224,15 +230,24 @@
                   <h3 class="text-2xl font-bold text-gray-800">Informations Générales</h3>
                   <p class="text-gray-600">Identification et classification du poste</p>
                 </div>
-              </div>
+              </div> --}}
 
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-blue-700 to-cyan-700 p-1 rounded-2xl shadow-lg">
+                  <i class="fas fa-user text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">Information du poste</h3>
+                  <p class="text-gray-600 text-sm"><u>Titre du poste</u></p>
+                </div>
+              </div>
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="form-group">
                   <label for="intitule" class="block text-md font-medium text-gray-700 mb-2">
                     <i class="fas fa-tag text-blue-500 mr-2"></i>
                     Intitulé du Poste
                   </label>
-                  <input type="text" id="intitule" name="intitule" value="{{ post.intitule }}" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required autofocus>
+                  <input type="text" id="intitule" name="intitule" value="{{ post.intitule }}" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required autofocus>
                 </div>
 
                 <div class="form-group">
@@ -240,7 +255,7 @@
                     <i class="fas fa-building text-blue-500 mr-2 mb-4"></i>
                     Département
                   </label>
-                  <select id="departement" name="departement" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
+                  <select id="departement" name="departement" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" required>
                     <option value="">Sélectionner un département</option>
                     <option value="Direction" {{ post.departement === 'Direction' ? 'selected' : '' }}>Direction</option>
                     <option value="Administration" {{ post.departement === 'Administration' ? 'selected' : '' }}>Administration</option>
@@ -255,13 +270,13 @@
 
             <!-- Description Section -->
             <div class="form-section">
-              <div class="flex items-center gap-4 mb-12">
-                <div class="">
-                  <ion-icon name="reorder-four-outline" class="mr-2 text-3xl text-pink-700"></ion-icon>
+              <div class="flex items-center gap-4 mb-8">
+                <div class="bg-gradient-to-r from-blue-700 to-cyan-700 p-1 rounded-2xl shadow-lg">
+                  <i class="fas fa-user text-white text-xl"></i>
                 </div>
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Description du Poste</h3>
-                  <p class="text-gray-600">Missions et responsabilités</p>
+                  <h3 class="text-xl font-semibold text-gray-800">Description du Poste</h3>
+                  <p class="text-gray-600 text-sm"><u>Missions et responsabilités</u></p>
                 </div>
               </div>
 
@@ -270,23 +285,23 @@
                   <i class="fas fa-align-left text-purple-500 mr-2"></i>
                   Description Détaillée
                 </label>
-                <textarea id="description" name="description" rows="4" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Décrivez les missions, responsabilités et compétences requises...">{{ post.description }}</textarea>
+                <textarea id="description" name="description" rows="4" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Décrivez les missions, responsabilités et compétences requises...">{{ post.description }}</textarea>
               </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-              <a href="{{ route('posts.show', [post.id]) }}" class="btn-secondary">
+              <a href="{{ route('posts.show', [post.id]) }}" class="bg-gray-700 hover:bg-cyan-50 text-white hover:text-black border border-gray-200 rounded-lg p-3 text-center transition-colors card-hover">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Retour au Poste
               </a>
 
               <div class="flex gap-4">
-                <a href="{{ route('posts.index') }}" class="btn-outline">
+                <a href="{{ route('posts.index') }}" class="bg-blue-50 hover:bg-cyan-50 border border-blue-100 rounded-lg p-3 text-center transition-colors card-hover">
                   <i class="fas fa-list mr-2"></i>
                   Liste des Postes
                 </a>
-                <button type="submit" class="btn-primary-gradient">
+                <button type="submit" class="bg-blue-700/85 hover:bg-blue-50 text-white hover:text-black border border-blue-200 rounded-lg p-3 text-center transition-colors card-hover">
                   <i class="fas fa-save mr-2"></i>
                   Enregistrer les Modifications
                 </button>

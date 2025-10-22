@@ -39,7 +39,6 @@ export default class DashboardController {
     const instanceCountry = rwaCountry?.instanceCountry
 
 
-
     const promotionsScheduled = await Promotion.query()
       .where('statut', 'En attente')
       .andWhere('rwa_country_id', rwaCountryId)

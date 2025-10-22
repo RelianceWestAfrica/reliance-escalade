@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Promotion from '#models/promotion'
 import Employee from '#models/employee'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class PromotionsController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -31,12 +32,17 @@ export default class PromotionsController {
       .where('statut', true)
       .count('* as total')
 
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('promotions/index', {
       npromotion: {
         totalPromotions: totalPromotions[0].$extras.total,
       },
       promotions,
       currentDate,
+      instanceCountry
     })
   }
 
@@ -55,7 +61,55 @@ export default class PromotionsController {
       .where('rwa_country_id', rwaCountryId)
       .where('actif', true)
 
-    return view.render('promotions/create', { employees })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('promotions/create', { employees, instanceCountry })
+  }
+
+  async edit({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+    const promotion = await Promotion.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+    await promotion.load('employee')
+    const employees = await Employee.query().where('actif', true)
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('promotions/edit', { promotion, employees, instanceCountry })
+  }
+
+  async show({ params, view, auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+    const promotion = await Promotion.query()
+      .where('id', params.id)
+      .where('rwa_country_id', rwaCountryId)
+      .firstOrFail()
+    await promotion.load('employee')
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('promotions/show', { promotion, instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -77,7 +131,7 @@ export default class PromotionsController {
       'nouveau_salaire',
       'date_vigueur',
       'montant_augmentation',
-      
+
     ])
 
     // recalculer proprement avant création

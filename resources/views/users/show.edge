@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -167,41 +173,41 @@
       <!-- Premium User Header -->
       <div class="relative bg-gradient-to-br from-indigo-600/90 via-purple-700/90 to-pink-800/90 rounded-3xl overflow-hidden mb-8 shadow-2xl"
           style="background-image: url('https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+          <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-orange-950/95"></div>
 
-        <!-- Animated Background Elements -->
-        <div class="absolute inset-0">
-          <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-          <div class="absolute bottom-0 left-0 w-80 h-80 bg-indigo-300/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
-          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
-        </div>
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+          </div>
 
-        <div class="relative z-10 p-10">
+        <div class="relative z-10 p-8">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-8">
               <!-- User Avatar -->
               <div class="relative">
-                <div class="w-32 h-32 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center shadow-2xl border-4 border-white/30">
-                  <i class="fas fa-user text-white text-5xl drop-shadow-lg"></i>
+                <div class="w-24 h-24 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center shadow-2xl border-4 border-white/30">
+                  <ion-icon name="finger-print-outline" class="text-white text-5xl drop-shadow-lg"></ion-icon>
                 </div>
-                <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-{{ user.actif ? 'green' : 'red' }}-500 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                {{-- <div class="absolute -bottom-0 -right-0 w-6 h-6 bg-{{ user.actif ? 'green' : 'red' }}-500 rounded-full flex items-center justify-center border-1 border-green-500 shadow-lg">
                   <i class="fas fa-{{ user.actif ? 'check' : 'times' }} text-white text-sm"></i>
-                </div>
+                </div> --}}
                 <!-- Role Badge -->
-                <div class="absolute -top-2 -left-2 px-3 py-1 bg-{{
+                {{-- <div class="absolute -top-2 -left-2 px-3 py-1 bg-{{
                   user.role === 'Admin' ? 'red' :
                   user.role === 'DG' ? 'yellow' :
                   'blue'
-                }}-500 rounded-full text-white text-xs font-bold shadow-lg">
+                }}-500 rounded-full text-white text-xs font-semibold shadow-lg">
                   {{ user.role }}
-                </div>
+                </div> --}}
               </div>
 
               <div>
-                <h1 class="text-4xl font-bold text-white mb-3 text-shadow-lg">
+                <h1 class="text-3xl font-bold text-white mb-3 text-shadow-lg">
                   {{ user.fullName }}
                 </h1>
-                <p class="text-indigo-100 text-xl font-medium mb-2">{{ user.role }} - RELIANCE ESCALADE</p>
-                <div class="flex items-center gap-6 mb-4">
+                <p class="text-indigo-50 text-md font-medium mb-2">{{ user.role }} - RELIANCE ESCALADE</p>
+                {{-- <div class="flex items-center gap-6 mb-4">
                   <div class="flex items-center gap-2">
                     <i class="fas fa-envelope text-indigo-200"></i>
                     <span class="text-indigo-200">{{ user.email }}</span>
@@ -210,14 +216,12 @@
                     <i class="fas fa-calendar text-indigo-200"></i>
                     <span class="text-indigo-200">Depuis {{ user.createdAt.toFormat('MMM yyyy') }}</span>
                   </div>
-                </div>
+                </div> --}}
                 <div class="flex items-center gap-4">
-                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium {{ user.actif ? 'border border-green-300' : 'border border-red-300' }}">
-                    <i class="fas {{ user.actif ? 'fa-check-circle text-green-300' : 'fa-times-circle text-red-300' }} mr-2"></i>
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white font-medium {{ user.actif ? 'border border-indigo-100/50' : 'border border-red-300' }}">
                     {{ user.actif ? 'Compte Actif' : 'Compte Suspendu' }}
                   </span>
-                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium border border-indigo-300">
-                    <i class="fas fa-shield-alt text-indigo-300 mr-2"></i>
+                  <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white font-medium border border-indigo-100/50">
                     Accès Sécurisé
                   </span>
                 </div>
@@ -226,23 +230,23 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col gap-3">
-              <a href="{{ route('users.edit', [user.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
-                <i class="fas fa-edit"></i>
+              <a href="{{ route('users.edit', [user.id]) }}" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg">
+                <ion-icon name="create-outline" class="text-2xl mr-2"></ion-icon>
                 Modifier
               </a>
               @if(user.actif)
-                <form action="{{ route('users.toggleStatus', [user.id]) }}" method="POST" class="inline">
+                <form action="{{ route('users.toggle_status', [user.id]) }}" method="POST" class="inline">
                   {{ csrfField() }}
-                  <button type="submit" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg w-full" onclick="return confirm('Suspendre ce compte ?')">
-                    <i class="fas fa-pause"></i>
+                  <button type="submit" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg w-full" onclick="return confirm('Suspendre ce compte ?')">
+                    <ion-icon name="power-outline" class="text-2xl mr-2"></ion-icon>
                     Suspendre
                   </button>
                 </form>
               @else
-                <form action="{{ route('users.toggleStatus', [user.id]) }}" method="POST" class="inline">
+                <form action="{{ route('users.toggle_status', [user.id]) }}" method="POST" class="inline">
                   {{ csrfField() }}
                   <button type="submit" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg w-full" onclick="return confirm('Activer ce compte ?')">
-                    <i class="fas fa-play"></i>
+                    <ion-icon name="power-outline" class="text-2xl mr-2"></ion-icon>
                     Activer
                   </button>
                 </form>
@@ -253,39 +257,39 @@
       </div>
 
       <!-- User Details Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         <!-- Account Information -->
         <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 card-hover">
           <div class="flex items-center gap-4 mb-6">
-            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-              <i class="fas fa-id-card text-white text-xl"></i>
+            <div class="w-2 h-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+              {{-- <i class="fas fa-id-card text-white text-xl"></i> --}}
             </div>
-            <h3 class="text-xl font-bold text-gray-800">Informations Compte</h3>
+            <h3 class="text-xl font-semibold text-gray-800">Informations Compte</h3>
           </div>
           <div class="space-y-4">
             <div class="info-item">
-              <label class="info-label">
-                <i class="fas fa-envelope text-blue-500 mr-2"></i>
+              <label class="info-label font-semibold">
+                {{-- <i class="fas fa-envelope text-blue-500 mr-2"></i> --}}
                 Adresse Email
               </label>
-              <p class="info-value">{{ user.email }}</p>
-              <a href="mailto:{{ user.email }}" class="info-hint text-blue-600 hover:text-blue-700">Envoyer un email</a>
+              <p class="info-value permission-badge bg-blue-50 text-gray-700 border-gray-200 text-lg p-1 rounded-md mb-1">{{ user.email }}</p>
+              <a href="mailto:{{ user.email }}" class="info-hint p-1 text-blue-900">Envoyer un email</a>
             </div>
             <div class="info-item">
-              <label class="info-label">
-                <i class="fas fa-calendar-plus text-blue-500 mr-2"></i>
+              <label class="info-label font-semibold">
+                {{-- <i class="fas fa-calendar-plus text-blue-500 mr-2"></i> --}}
                 Date de Création
               </label>
-              <p class="info-value">{{ user.createdAt.toFormat('dd/MM/yyyy') }}</p>
-              <p class="info-hint">{{ user.createdAt.toRelative() }}</p>
+              <p class="info-value permission-badge bg-blue-50 text-gray-700 border-gray-200 text-lg p-1 rounded-md mb-1">{{ user.createdAt.toFormat('dd/MM/yyyy') }}</p>
+              <p class="info-hint permission-badge bg-blue-50 text-gray-700 border-gray-200 text-md p-1 rounded-md">{{ user.createdAt.toRelative() }}</p>
             </div>
             <div class="info-item">
-              <label class="info-label">
-                <i class="fas fa-clock text-blue-500 mr-2"></i>
+              <label class="info-label font-semibold">
+                {{-- <i class="fas fa-clock text-blue-500 mr-2"></i> --}}
                 Dernière Modification
               </label>
-              <p class="info-value">{{ user.updatedAt ? user.updatedAt.toFormat('dd/MM/yyyy') : 'Jamais' }}</p>
-              <p class="info-hint">{{ user.updatedAt ? user.updatedAt.toRelative() : 'Compte non modifié' }}</p>
+              <p class="info-value permission-badge bg-blue-50 text-gray-700 border-gray-200 text-lg p-1 rounded-md mb-1">{{ user.updatedAt ? user.updatedAt.toFormat('dd/MM/yyyy') : 'Jamais' }}</p>
+              <p class="info-hint permission-badge bg-blue-50 text-gray-700 border-gray-200 text-md p-1 rounded-md">{{ user.updatedAt ? user.updatedAt.toRelative() : 'Compte non modifié' }}</p>
             </div>
           </div>
         </div>
@@ -293,31 +297,27 @@
         <!-- Role and Permissions -->
         <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 card-hover">
           <div class="flex items-center gap-4 mb-6">
-            <div class="w-12 h-12 bg-gradient-to-r from-{{
+            <div class="w-2 h-2 bg-gradient-to-r from-{{
               user.role === 'Admin' ? 'red-500 to-red-600' :
-              user.role === 'DG' ? 'yellow-500 to-yellow-600' :
+              user.role === 'DG' ? 'yellow-700 to-yellow-600' :
               'blue-500 to-blue-600'
             }} rounded-xl flex items-center justify-center shadow-lg">
-              <i class="fas fa-{{
+              {{-- <i class="fas fa-{{
                 user.role === 'Admin' ? 'crown' :
                 user.role === 'DG' ? 'star' :
                 'user-tie'
-              }} text-white text-xl"></i>
+              }} text-white text-xl"></i> --}}
             </div>
-            <h3 class="text-xl font-bold text-gray-800">Rôle et Permissions</h3>
+            <h3 class="text-xl font-semibold text-gray-800">Rôle et Permissions</h3>
           </div>
 
           <div class="text-center mb-6">
             <div class="w-20 h-20 bg-{{
-              user.role === 'Admin' ? 'red' :
-              user.role === 'DG' ? 'yellow' :
-              'blue'
-            }}-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <i class="fas fa-{{
-                user.role === 'Admin' ? 'crown' :
-                user.role === 'DG' ? 'star' :
-                'user-tie'
-              }} text-white text-2xl"></i>
+              user.role === 'Admin' ? 'red-500' :
+              user.role === 'DG' ? 'yellow-900/80' :
+              'blue-500'
+            }} rounded-full flex items-center justify-center mx-auto mb-4">
+              <ion-icon name="person" class="text-3xl text-white"></ion-icon>
             </div>
             <h4 class="text-lg font-bold text-gray-800">{{ user.role }}</h4>
             <p class="text-gray-600">{{
@@ -329,42 +329,42 @@
 
           <div class="space-y-3">
             @if(user.role === 'Admin')
-              <div class="permission-badge bg-red-50 text-red-700 border-red-200">
-                <i class="fas fa-users-cog mr-2"></i>
+              <div class="permission-badge bg-red-50 text-red-700 border-red-200 text-lg p-1 rounded-lg">
+                {{-- <i class="fas fa-users-cog mr-2"></i> --}}
                 Gestion utilisateurs
               </div>
-              <div class="permission-badge bg-red-50 text-red-700 border-red-200">
-                <i class="fas fa-cogs mr-2"></i>
+              <div class="permission-badge bg-red-50 text-red-700 border-red-200 text-lg p-1 rounded-lg">
+                {{-- <i class="fas fa-cogs mr-2"></i> --}}
                 Configuration système
               </div>
-              <div class="permission-badge bg-red-50 text-red-700 border-red-200">
-                <i class="fas fa-database mr-2"></i>
+              <div class="permission-badge bg-red-50 text-red-700 border-red-200 text-lg p-1 rounded-lg">
+                {{-- <i class="fas fa-database mr-2"></i> --}}
                 Accès base de données
               </div>
             @elseif(user.role === 'DG')
-              <div class="permission-badge bg-yellow-50 text-yellow-700 border-yellow-200">
-                <i class="fas fa-chart-line mr-2"></i>
+              <div class="permission-badge bg-yellow-900/5 text-yellow-800 border-yellow-200 p-1 rounded-lg">
+                {{-- <i class="fas fa-chart-line mr-2"></i> --}}
                 Statistiques globales
               </div>
-              <div class="permission-badge bg-yellow-50 text-yellow-700 border-yellow-200">
-                <i class="fas fa-eye mr-2"></i>
+              <div class="permission-badge bg-yellow-900/5 text-yellow-800 border-yellow-200 p-1 rounded-lg">
+                {{-- <i class="fas fa-eye mr-2"></i> --}}
                 Vue d'ensemble
               </div>
-              <div class="permission-badge bg-yellow-50 text-yellow-700 border-yellow-200">
-                <i class="fas fa-check-circle mr-2"></i>
+              <div class="permission-badge bg-yellow-900/5 text-yellow-800 border-yellow-200 p-1 rounded-lg">
+                {{-- <i class="fas fa-check-circle mr-2"></i> --}}
                 Validation promotions
               </div>
             @else
-              <div class="permission-badge bg-blue-50 text-blue-700 border-blue-200">
-                <i class="fas fa-users mr-2"></i>
+              <div class="permission-badge bg-blue-50 text-blue-700 border-blue-200 p-1 rounded-lg">
+                {{-- <i class="fas fa-users mr-2"></i> --}}
                 Gestion employés
               </div>
-              <div class="permission-badge bg-blue-50 text-blue-700 border-blue-200">
-                <i class="fas fa-arrow-up mr-2"></i>
+              <div class="permission-badge bg-blue-50 text-blue-700 border-blue-200 p-1 rounded-lg">
+                {{-- <i class="fas fa-arrow-up mr-2"></i> --}}
                 Promotions/Démotions
               </div>
-              <div class="permission-badge bg-blue-50 text-blue-700 border-blue-200">
-                <i class="fas fa-file-invoice mr-2"></i>
+              <div class="permission-badge bg-blue-50 text-blue-700 border-blue-200 p-1 rounded-lg">
+                {{-- <i class="fas fa-file-invoice mr-2"></i> --}}
                 Fiches de paie
               </div>
             @endif
@@ -374,77 +374,77 @@
         <!-- Security Information -->
         <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 card-hover">
           <div class="flex items-center gap-4 mb-6">
-            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-              <i class="fas fa-shield-alt text-white text-xl"></i>
+            <div class="w-2 h-2 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+              {{-- <i class="fas fa-shield-alt text-white text-xl"></i> --}}
             </div>
-            <h3 class="text-xl font-bold text-gray-800">Sécurité</h3>
+            <h3 class="text-xl font-semibold text-gray-800">Sécurité</h3>
           </div>
 
           <div class="space-y-4">
             <div class="security-item">
               <div class="flex justify-between items-center mb-2">
                 <span class="text-sm font-medium text-gray-600">Statut du Compte</span>
-                <span class="text-lg font-bold {{ user.actif ? 'text-green-600' : 'text-red-600' }}">
+                <span class="text-lg font-semibold {{ user.actif ? 'text-gray-800' : 'text-red-600' }}">
                   {{ user.actif ? 'Actif' : 'Suspendu' }}
                 </span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-{{ user.actif ? 'green' : 'red' }}-500 h-2 rounded-full" style="width: {{ user.actif ? '100' : '0' }}%"></div>
+                <div class="bg-{{ user.actif ? 'teal' : 'red' }}-500 h-2 rounded-full" style="width: {{ user.actif ? '100' : '0' }}%"></div>
               </div>
             </div>
 
             <div class="security-item">
               <div class="flex justify-between items-center mb-2">
                 <span class="text-sm font-medium text-gray-600">Niveau de Sécurité</span>
-                <span class="text-lg font-bold text-green-600">Élevé</span>
+                <span class="text-lg font-semibold text-gray-800">Élevé</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+                <div class="bg-teal-500 h-2 rounded-full" style="width: 90%"></div>
               </div>
             </div>
 
-            <div class="security-item">
+            {{-- <div class="security-item" style="margin-top: 10%;">
               <div class="flex justify-between items-center mb-2">
                 <span class="text-sm font-medium text-gray-600">Dernière Connexion</span>
                 <span class="text-sm font-medium text-gray-800">Aujourd'hui</span>
               </div>
-              <div class="text-xs text-gray-500">IP: 192.168.1.100</div>
-            </div>
+              <div class="text-sm text-gray-500">IP: 192.168.1.100</div>
+            </div> --}}
           </div>
         </div>
 
         <!-- Activity Summary -->
-        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 card-hover">
+        {{-- <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 card-hover">
           <div class="flex items-center gap-4 mb-6">
-            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div class="w-2 h-2 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
               <i class="fas fa-chart-bar text-white text-xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-800">Activité</h3>
+            <h3 class="text-xl font-semibold text-gray-800">Activité</h3>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div class="stat-item">
-              <div class="stat-number text-blue-600">24</div>
+              <div class="stat-number text-black text-4xl">24</div>
               <div class="stat-label">Connexions</div>
             </div>
             <div class="stat-item">
-              <div class="stat-number text-green-600">156</div>
+              <div class="stat-number text-black text-4xl">156</div>
               <div class="stat-label">Actions</div>
             </div>
             <div class="stat-item">
-              <div class="stat-number text-purple-600">12</div>
+              <div class="stat-number text-black text-4xl">12</div>
               <div class="stat-label">Modifications</div>
             </div>
             <div class="stat-item">
-              <div class="stat-number text-orange-600">3</div>
+              <div class="stat-number text-black text-4xl">3</div>
               <div class="stat-label">Rapports</div>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
 
       <!-- User Activity Tabs -->
-      <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+      {{-- <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
         <!-- Tab Navigation -->
         <div class="border-b border-gray-200/50 bg-gradient-to-r from-gray-50 to-white">
           <nav class="flex space-x-0" aria-label="Tabs">
@@ -656,7 +656,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
 
       <style>
       /* Premium User Show Page Styles */

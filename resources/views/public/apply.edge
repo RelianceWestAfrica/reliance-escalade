@@ -7,11 +7,187 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="/css/app.css" rel="stylesheet">
+  {{-- <script>
+    (function(){
+      const drop = document.getElementById('dropzone');
+      const input = document.getElementById('fileInput');
+      const list = document.getElementById('files');
+      const msg = document.getElementById('msg');
+      const clearBtn = document.getElementById('clearBtn');
+
+      const MAX_FILE_MB = 8;
+      const ACCEPTED_TYPES = ['image/', 'application/pdf'];
+
+      // Util : human readable
+      function humanSize(bytes){
+        if(bytes < 1024) return bytes + ' B';
+        if(bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+        return (bytes/(1024*1024)).toFixed(2) + ' MB';
+      }
+
+      function setMessage(text, type='info'){
+        msg.textContent = text;
+        msg.style.color = type === 'error' ? getComputedStyle(document.documentElement).getPropertyValue('--danger') : getComputedStyle(document.documentElement).getPropertyValue('--muted');
+        msg.setAttribute('aria-hidden', 'false');
+      }
+
+      function clearMessage(){
+        msg.textContent = '';
+        msg.setAttribute('aria-hidden', 'true');
+      }
+
+      // validate type
+      function isAccepted(file){
+        return ACCEPTED_TYPES.some(prefix => file.type.startsWith(prefix));
+      }
+
+      // render file card
+      function addFileCard(file){
+        const card = document.createElement('div');
+        card.className = 'file-card';
+
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb';
+
+        if(file.type.startsWith('image/')){
+          const img = document.createElement('img');
+          img.alt = file.name;
+          img.src = URL.createObjectURL(file);
+          // revoke when loaded
+          img.onload = () => URL.revokeObjectURL(img.src);
+          thumb.appendChild(img);
+        } else {
+          thumb.textContent = 'PDF';
+        }
+
+        const meta = document.createElement('div');
+        meta.className = 'file-meta';
+        const name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = file.name;
+        const info = document.createElement('div');
+        info.className = 'meta';
+        info.textContent = `${humanSize(file.size)} • ${file.type || 'inconnu'}`;
+
+        meta.appendChild(name);
+        meta.appendChild(info);
+
+        const actions = document.createElement('div');
+        actions.className = 'file-actions';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'small';
+        removeBtn.type = 'button';
+        removeBtn.textContent = 'Supprimer';
+        removeBtn.addEventListener('click', () => {
+          list.removeChild(card);
+          // update input.files - rebuild a new DataTransfer
+          const dt = new DataTransfer();
+          Array.from(input.files).forEach(f => { if(f !== file) dt.items.add(f); });
+          input.files = dt.files;
+          if(!input.files.length) clearMessage();
+        });
+
+        actions.appendChild(removeBtn);
+
+        card.appendChild(thumb);
+        card.appendChild(meta);
+        card.appendChild(actions);
+
+        list.appendChild(card);
+      }
+
+      // handle files array
+      function handleFiles(files){
+        clearMessage();
+        const validFiles = [];
+        const errors = [];
+
+        Array.from(files).forEach(file => {
+          if(!isAccepted(file)){
+            errors.push(`${file.name} : type non pris en charge`);
+            return;
+          }
+          if(file.size > MAX_FILE_MB * 1024 * 1024){
+            errors.push(`${file.name} : dépasse ${MAX_FILE_MB} MB`);
+            return;
+          }
+          validFiles.push(file);
+        });
+
+        if(errors.length){
+          setMessage(errors.join(' — '), 'error');
+        }
+
+        if(validFiles.length){
+          // merge with existing selection
+          const dt = new DataTransfer();
+          Array.from(input.files).forEach(f => dt.items.add(f));
+          validFiles.forEach(f => dt.items.add(f));
+          input.files = dt.files;
+
+          // render each newly added file (only the new ones)
+          validFiles.forEach(addFileCard);
+          setMessage(`${input.files.length} fichier(s) prêt(s) à l'envoi.`);
+        }
+      }
+
+      // drag & drop events
+      ;['dragenter','dragover'].forEach(ev => {
+        drop.addEventListener(ev, e => {
+          e.preventDefault(); e.stopPropagation();
+          drop.classList.add('dragover');
+        });
+      });
+
+      ;['dragleave','drop'].forEach(ev => {
+        drop.addEventListener(ev, e => {
+          e.preventDefault(); e.stopPropagation();
+          drop.classList.remove('dragover');
+        });
+      });
+
+      drop.addEventListener('drop', e => {
+        const dt = e.dataTransfer;
+        if(!dt) return;
+        handleFiles(dt.files);
+      });
+
+      // keyboard accessibility : press Enter/Space on dropzone to open file dialog
+      drop.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          input.click();
+        }
+      });
+
+      // input change
+      input.addEventListener('change', e => {
+        handleFiles(e.target.files);
+      });
+
+      // clear button
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        list.innerHTML = '';
+        clearMessage();
+      });
+
+      // prevent accidental navigation when files selected
+      window.addEventListener('beforeunload', (e) => {
+        if(input.files && input.files.length){
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+    })();
+
+  </script> --}}
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-white to-blue-50 min-h-screen">
   <!-- Header -->
   <header class="bg-white/95 backdrop-blur-sm shadow-xl border-b border-gray-200/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-20">
         <div class="flex items-center">
           <div class="gradient-bg p-3 rounded-xl shadow-lg">
@@ -20,7 +196,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-2xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-2xl font-bold text-gray-800" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">RWA GLOBAL</h1>
             <p class="text-sm text-gray-600">Candidature en Ligne</p>
           </div>
         </div>
@@ -33,7 +209,7 @@
     </div>
   </header>
 
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Offer Header -->
     <div class="bg-gradient-to-r from-blue-600/90 to-purple-600/90 rounded-3xl p-8 mb-8 text-white shadow-2xl">
       <div class="flex items-center gap-6">
@@ -44,11 +220,11 @@
           <h1 class="text-3xl font-bold mb-2">{{ offer.intitule }}</h1>
           <p class="text-blue-100 text-lg">{{ offer.poste }} - {{ offer.departement }}</p>
           <div class="flex items-center gap-4 mt-3">
-            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm">
+            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-md">
               {{ offer.typeContrat }}
             </span>
             @if(offer.salaire)
-              <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm">
+              <span class="px-3 py-1 bg-orange-400/95 backdrop-blur-sm rounded-full text-md">
                 {{ offer.salaire.toLocaleString() }} FCFA
               </span>
             @endif
@@ -80,42 +256,119 @@
           <p class="text-gray-600">Remplissez le formulaire ci-dessous pour soumettre votre candidature</p>
         </div>
 
-        <form action="{{ route('jobs.apply.submit', [offer.id]) }}" method="POST" class="space-y-6">
+        <form action="{{ route('jobs.apply', [offer.id]) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
           {{ csrfField() }}
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="form-group">
-              <label for="nom_complet" class="form-label">
-                <i class="fas fa-user text-blue-500 mr-2"></i>
-                Nom Complet
+              <label for="nom_complet" class="form-label font-semibold ml-1">
+                {{-- <i class="fas fa-user text-blue-500 mr-2"></i> --}}
+                Nom Complet <span style="color: red;">*</span>
               </label>
-              <input type="text" id="nom_complet" name="nom_complet" class="form-input" placeholder="Votre nom et prénom" required>
+              <input type="text" id="nom_complet" name="nom_complet" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Votre nom et prénom" required>
             </div>
 
             <div class="form-group">
-              <label for="email_professionnel" class="form-label">
-                <i class="fas fa-envelope text-blue-500 mr-2"></i>
-                Email Professionnel
+              <label for="email_professionnel" class="form-label font-semibold ml-1">
+                {{-- <i class="fas fa-envelope text-blue-500 mr-2"></i> --}}
+                Email Professionnel <span style="color: red;">*</span>
               </label>
-              <input type="email" id="email_professionnel" name="email_professionnel" class="form-input" placeholder="votre.email@exemple.com" required>
+              <input type="email" id="email_professionnel" name="email_professionnel" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="votre.email@exemple.com" required>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="telephone" class="form-label">
-              <i class="fas fa-phone text-blue-500 mr-2"></i>
-              Numéro de Téléphone
+            <label for="telephone" class="form-label font-semibold ml-1">
+              {{-- <i class="fas fa-phone text-blue-500 mr-2"></i> --}}
+              Numéro de Téléphone <span style="color: red;">*</span>
             </label>
-            <input type="tel" id="telephone" name="telephone" class="form-input" placeholder="+228 XX XX XX XX">
+            <input type="tel" id="telephone" name="telephone" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="+228 XX XX XX XX">
           </div>
 
           <div class="form-group">
-            <label for="motivation" class="form-label">
-              <i class="fas fa-heart text-blue-500 mr-2"></i>
-              Lettre de Motivation
+            <label for="motivation" class="form-label font-semibold ml-1">
+              {{-- <i class="fas fa-heart text-blue-500 mr-2"></i> --}}
+              Exprimez vos motivations <span style="color: red;">*</span>
             </label>
-            <textarea id="motivation" name="motivation" rows="6" class="form-textarea" placeholder="Expliquez pourquoi vous souhaitez rejoindre notre équipe et ce que vous pouvez apporter à ce poste..."></textarea>
+            <textarea id="motivation" name="motivation" rows="6" class="mt-3 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Exprimez très brièvement pourquoi vous souhaitez rejoindre notre équipe et ce que vous pouvez apporter à ce poste..."></textarea>
           </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
+            <div class="form-group">
+              <label for="cv_file" class="form-label font-semibold ml-1">
+                {{-- <i class="fas fa-file-alt text-blue-500 mr-2"></i> --}}
+                Curriculum Vitae (CV) <span style="color: red;">*</span>
+              </label>
+              <input
+                type="file"
+                id="cv_file"
+                name="cv_file"
+                accept=".pdf,.doc,.docx"
+                class="mt-3 w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-300 shadow-sm hover:border-gray-300"
+                required
+              >
+              <p class="text-xs text-gray-500 mt-2" style="text-align: right;">Formats acceptés: PDF, DOC, DOCX (max 3MB)</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-6" style="margin-top: -0.5%;">
+            <div class="form-group">
+              <label for="lettre_motivation_file" class="form-label font-semibold ml-1">
+                {{-- <i class="fas fa-file-text text-blue-500 mr-2"></i> --}}
+                Lettre de Motivation <span style="color: red;">*</span>
+              </label>
+              <input
+                type="file"
+                id="lettre_motivation_file"
+                name="lettre_motivation_file"
+                accept=".pdf,.doc,.docx"
+                class="mt-3 w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300"
+                required
+              >
+              <p class="text-xs text-gray-500 mt-2" style="text-align: right;">Formats acceptés: PDF, DOC, DOCX (max 3MB)</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-6" style="margin-top: -0.5%;">
+            <div class="form-group">
+              <label for="diplome_file" class="form-label font-semibold ml-1">
+                {{-- <i class="fas fa-graduation-cap text-orange-500 mr-2"></i> --}}
+                Dernier Diplôme <span style="color: red;">*</span>
+              </label>
+              <input
+                type="file"
+                id="diplome_file"
+                name="diplome_file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                class="mt-3 w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 shadow-sm hover:border-gray-300"
+                required
+              >
+              <p class="text-xs text-gray-500 mt-1" style="text-align: right;">Formats acceptés: PDF, JPG, PNG (max 3MB)</p>
+            </div>
+          </div>
+
+
+          {{-- <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Zone de dépôt de fichiers">
+            <div class="dz-icon" aria-hidden>CV</div>
+
+            <div class="dz-body">
+              <div class="title">Charger votre Curriculum Vitae</div>
+              <div class="hint">Déposez vos fichiers ou utilisez le bouton « Parcourir » pour sélectionner.</div>
+            </div>
+
+            <div class="dz-actions">
+              <label class="btn" for="fileInput" title="Parcourir les fichiers">
+                Parcourir
+              </label>
+              <button class="btn ghost" id="clearBtn" type="button" title="Effacer la sélection">Effacer</button>
+            </div>
+
+            <input id="fileInput" type="file" multiple accept="image/*,application/pdf" aria-label="Sélectionner des fichiers" />
+          </div>
+
+          <div id="files" class="files" aria-live="polite"></div>
+
+          <div id="msg" class="msg" aria-hidden="true"></div> --}}
 
           <div class="flex flex-col sm:flex-row gap-4">
             <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
@@ -123,7 +376,7 @@
               Soumettre ma Candidature
             </button>
 
-            <a href="https://wa.me/22890000000?text=Bonjour, je souhaite postuler pour le poste de {{ offer.poste }} ({{ offer.intitule }})"
+            <a href="https://wa.me/22898742626?text=Bonjour, je souhaite postuler pour le poste de {{ offer.poste }} ({{ offer.intitule }})"
                target="_blank"
                class="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
               <i class="fab fa-whatsapp mr-2"></i>
@@ -182,6 +435,142 @@
   </div>
 
   <style>
+
+      /* :root{
+        --bg:#f6f8fb;
+        --card:#ffffff;
+        --accent:#0d2c6b;
+        --accent-2:#2f6be6;
+        --muted:#7a8290;
+        --success:#16a34a;
+        --danger:#e11d48;
+        --radius:12px;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      }
+
+      body{
+        background: linear-gradient(180deg,#f8fafc 0%,var(--bg) 100%);
+        padding:40px;
+        display:flex;
+        align-items:flex-start;
+        justify-content:center;
+        min-height:100vh;
+        color:#102027;
+      }
+
+      .uploader {
+        width:100%;
+        max-width:720px;
+        background:var(--card);
+        border-radius:var(--radius);
+        box-shadow:0 8px 30px rgba(16,32,48,0.06);
+        padding:22px;
+        box-sizing:border-box;
+      }
+
+      .uploader h2{
+        margin:0 0 8px;
+        font-size:18px;
+        color:var(--accent);
+        letter-spacing:0.2px;
+      }
+      .uploader p.lead{
+        margin:0 0 18px;
+        color:var(--muted);
+        font-size:14px;
+      }
+
+      .dropzone{
+        border:2px dashed rgba(13,44,107,0.12);
+        border-radius:10px;
+        padding:18px;
+        display:flex;
+        gap:16px;
+        align-items:center;
+        transition:all .18s ease;
+        background:linear-gradient(180deg, rgba(15,43,68,0.02), transparent);
+      }
+      .dropzone.dragover{
+        border-color:var(--accent-2);
+        background:linear-gradient(180deg, rgba(47,107,230,0.06), rgba(15,43,68,0.01));
+        box-shadow:0 6px 20px rgba(47,107,230,0.06) inset;
+      }
+
+      .dz-icon{
+        width:64px;height:64px;
+        border-radius:8px;
+        display:flex;align-items:center;justify-content:center;
+        background:linear-gradient(180deg,var(--accent-2),var(--accent));
+        color:white;font-weight:700;font-size:22px;
+        flex:0 0 64px;
+      }
+
+      .dz-body{
+        flex:1;
+        min-width:0;
+      }
+      .dz-body .title{
+        font-weight:600;font-size:15px;margin-bottom:6px;
+      }
+      .dz-body .hint{
+        font-size:13px;color:var(--muted);
+      }
+
+      .dz-actions{
+        display:flex;gap:8px;align-items:center;margin-left:auto;
+      }
+      .btn{
+        background:var(--accent);
+        color:white;border:none;padding:10px 14px;border-radius:8px;
+        font-weight:600;cursor:pointer;font-size:14px;
+        display:inline-flex;gap:10px;align-items:center;
+      }
+      .btn.ghost{
+        background:transparent;color:var(--accent);border:1px solid rgba(13,44,107,0.08);
+      }
+
+      input[type="file"]{ display:none; }
+
+
+      .files {
+        margin-top:14px;
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+        gap:12px;
+      }
+
+      .file-card{
+        background: #fbfdff;
+        border-radius:10px;padding:10px;border:1px solid rgba(13,44,107,0.04);
+        display:flex;gap:10px;align-items:center;
+      }
+      .thumb{
+        width:56px;height:56px;border-radius:8px;background:#e9f1ff;display:flex;align-items:center;justify-content:center;
+        overflow:hidden;flex:0 0 56px;
+      }
+      .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+      .file-meta{flex:1;min-width:0;}
+      .file-meta .name{font-size:13px;font-weight:600;color:#102027;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      .file-meta .meta{font-size:12px;color:var(--muted);margin-top:4px;}
+
+      .file-actions{display:flex;gap:6px;align-items:center;}
+      .small{
+        font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid rgba(13,44,107,0.06);background:transparent;color:var(--accent);
+        cursor:pointer;
+      }
+
+      .msg{
+        margin-top:12px;font-size:13px;color:var(--muted);
+      }
+
+
+      @media (max-width:520px){
+        .dropzone{flex-direction:column;align-items:stretch}
+        .dz-actions{margin-left:0;justify-content:space-between}
+      } --}} */
+
+
+
     .form-group {
       @apply relative;
     }

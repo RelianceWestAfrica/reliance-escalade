@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import PaySlip from '#models/pay_slip'
 import Employee from '#models/employee'
+import RwaCountry from '#models/rwa_country'
 
 export default class PaySlipsController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -27,7 +28,10 @@ export default class PaySlipsController {
       .orderBy('created_at', 'desc')
       .paginate(page, limit)
 
-    return view.render('pay_slips/index', { paySlips, employees })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('pay_slips/index', { paySlips, employees, instanceCountry })
   }
 
   async create({ view, auth, response }: HttpContext) {
@@ -45,7 +49,10 @@ export default class PaySlipsController {
       .where('actif', true)
       .where('rwa_country_id', rwaCountryId)
 
-    return view.render('pay_slips/create', { employees })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('pay_slips/create', { employees, instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -191,7 +198,10 @@ export default class PaySlipsController {
       .preload('employee')
       .firstOrFail()
 
-    return view.render('pay_slips/show', { paySlip })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('pay_slips/show', { paySlip, instanceCountry })
   }
 
 

@@ -40,6 +40,9 @@ export default class JobOffer extends BaseModel {
   declare experience: string | null
 
   @column()
+  declare pays: string | null
+
+  @column()
   declare rwaCountryId: number | null
 
   @column()

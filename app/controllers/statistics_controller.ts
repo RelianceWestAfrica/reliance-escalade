@@ -6,6 +6,7 @@ import PaySlip from '#models/pay_slip'
 import EmployeeTracking from '#models/employee_tracking'
 import Database from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class StatisticsController {
   async index({ view, auth, response }: HttpContext) {
@@ -86,6 +87,9 @@ export default class StatisticsController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('statistics/index', {
       stats: {
         totalEmployees: totalEmployees[0].$extras.total,
@@ -99,6 +103,7 @@ export default class StatisticsController {
       topDepartments,
       attendanceStats,
       currentDate,
+      instanceCountry,
     })
   }
 

@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Post from '#models/post'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class PostsController {
   /**
@@ -31,12 +32,16 @@ export default class PostsController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('posts/index', {
       nposts: {
         totalPosts: totalPosts[0].$extras.total,
       },
       posts,
       currentDate,
+      instanceCountry,
     })
   }
 
@@ -56,7 +61,10 @@ export default class PostsController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
-    return view.render('posts/create', { currentDate })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('posts/create', { currentDate, instanceCountry })
   }
 
   /**
@@ -104,7 +112,10 @@ export default class PostsController {
       .where('rwa_country_id', rwaCountryId)
       .firstOrFail()
 
-    return view.render('posts/edit', { post })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('posts/edit', { post, instanceCountry })
   }
 
   /**
@@ -159,7 +170,10 @@ export default class PostsController {
       .where('rwa_country_id', rwaCountryId)
       .firstOrFail()
 
-    return view.render('posts/show', { post })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('posts/show', { post, instanceCountry })
   }
 
   /**

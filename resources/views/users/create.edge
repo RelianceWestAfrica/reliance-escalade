@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -239,7 +245,7 @@
                     <i class="fas fa-signature text-blue-500 mr-2"></i>
                     Nom de Famille
                   </label>
-                  <input type="text" id="nom" name="nom" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Entrez le nom de famille" required>
+                  <input type="text" id="nom" name="nom" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm" placeholder="Entrez le nom de famille" autofocus required>
                 </div>
 
                 <div class="form-group">
@@ -309,7 +315,7 @@
                   <i class="fas fa-user-tag text-orange-500 mr-2"></i>
                   Rôle Système
                 </label>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {{-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div class="role-option" data-role="Admin">
                     <input type="radio" id="role_admin" name="role" value="Admin" class="hidden">
                     <label for="role_admin" class="role-card">
@@ -364,19 +370,24 @@
                     </label>
                   </div>
                 </div>
-                <div class="form-hint">Sélectionnez le niveau d'accès approprié</div>
+                <div class="form-hint">Sélectionnez le niveau d'accès approprié</div> --}}
+                <select id="role" name="role" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm">
+                  <option value="Admin">Admin - Administrateur système</option>
+                  <option value="DG">DG - Directeur Général</option>
+                  <option value="DRH">DRH - Directeur des Ressources Humaines</option>
+                </select>
               </div>
             </div>
 
             <!-- Security Settings Section -->
             <div class="form-section">
               <div class="flex items-center gap-4 mb-8">
-                <div class="bg-gradient-to-r from-green-500 to-teal-600 p-3 rounded-2xl shadow-lg">
+                <div class="bg-gradient-to-r from-green-500 to-teal-600 p-1 rounded-2xl shadow-lg">
                   <i class="fas fa-shield-alt text-white text-xl"></i>
                 </div>
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Paramètres de Sécurité</h3>
-                  <p class="text-gray-600">Configuration de sécurité du compte</p>
+                  <h3 class="text-xl font-semibold text-gray-800">Paramètres de Sécurité</h3>
+                  {{-- <p class="text-gray-600">Configuration de sécurité du compte</p> --}}
                 </div>
               </div>
 
@@ -386,11 +397,11 @@
                     <i class="fas fa-toggle-on text-green-500 mr-2"></i>
                     Statut du Compte
                   </label>
-                  <select id="actif" name="actif" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm">
-                    <option value="1">✅ Actif - Accès autorisé</option>
-                    <option value="0">⏸️ Inactif - Accès suspendu</option>
+                  <select id="actif" name="actif" class="mt-2 w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-4 text-black-800 placeholder-black-700 focus:outline-none text-black-800 text-md focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all backdrop-blur-sm">
+                    <option value="1">Actif - Accès autorisé</option>
+                    <option value="0">Inactif - Accès suspendu</option>
                   </select>
-                  <div class="form-hint">État initial du compte utilisateur</div>
+                  {{-- <div class="form-hint">État initial du compte utilisateur</div> --}}
                 </div>
 
                 <div class="form-group">
@@ -398,7 +409,7 @@
                     <i class="fas fa-info-circle text-green-500 mr-2"></i>
                     Informations de Sécurité
                   </label>
-                  <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+                  <div class="bg-green-50 rounded-xl p-4 border border-green-200 mt-2">
                     <div class="space-y-2 text-sm">
                       <div class="flex items-center gap-2">
                         <i class="fas fa-check text-green-600"></i>
@@ -420,21 +431,21 @@
 
             <!-- Action Buttons -->
             <div class="flex justify-between items-center pt-8 border-t border-gray-200">
-              <a href="{{ route('users.index') }}" class="btn-secondary">
+              <a href="{{ route('users.index') }}" class="bg-gray-700 hover:bg-cyan-50 text-white hover:text-black border border-gray-200 rounded-lg p-3 text-center transition-colors card-hover">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Retour aux Utilisateurs
               </a>
 
               <div class="flex gap-4">
-                <button type="button" class="btn-outline" onclick="resetForm()">
+                <button type="button" class="bg-blue-50 hover:bg-cyan-50 border border-blue-100 rounded-lg p-3 text-center transition-colors card-hover" onclick="resetForm()">
                   <i class="fas fa-undo mr-2"></i>
                   Réinitialiser
                 </button>
-                <button type="button" class="btn-preview" onclick="previewUser()">
+                <button type="button" class="bg-blue-50 hover:bg-cyan-50 border border-blue-100 rounded-lg p-3 text-center transition-colors card-hover" onclick="previewUser()">
                   <i class="fas fa-eye mr-2"></i>
                   Aperçu
                 </button>
-                <button type="submit" class="btn-primary-gradient">
+                <button type="submit" class="bg-blue-700/85 hover:bg-blue-50 text-white hover:text-black border border-blue-200 rounded-lg p-3 text-center transition-colors card-hover">
                   <i class="fas fa-user-plus mr-2"></i>
                   Créer l'Utilisateur
                   <div class="btn-shine"></div>
@@ -650,7 +661,7 @@
         const nom = document.getElementById('nom').value;
         const prenom = document.getElementById('prenom').value;
         const email = document.getElementById('email').value;
-        const role = document.querySelector('input[name="role"]:checked')?.value;
+        const role = document.getElementById('role').value;
         const actif = document.getElementById('actif').value;
 
         const previewContent = `
@@ -723,7 +734,7 @@
           });
 
           // Check if role is selected
-          const roleSelected = document.querySelector('input[name="role"]:checked');
+          const roleSelected = document.getElementById('role').value;
           if (!roleSelected) {
             isValid = false;
             alert('Veuillez sélectionner un rôle pour l\'utilisateur.');

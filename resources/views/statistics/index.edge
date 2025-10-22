@@ -69,11 +69,11 @@
         <ion-icon name="receipt-outline" class="mr-3 text-2xl"></ion-icon> Fiches de Paie
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
-      <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+      {{-- <a href="{{ route('orgcharts.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/orgcharts') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-clone mr-3"></i> --}}
         <ion-icon name="bonfire-outline" class="mr-3 text-2xl"></ion-icon> Organigramme
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
-      </a>
+      </a> --}}
       <a href="{{ route('careers.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/careers') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-briefcase mr-3"></i> --}}
         <ion-icon name="logo-slack" class="mr-3 text-2xl"></ion-icon> Carrières
@@ -84,6 +84,12 @@
         <ion-icon name="bar-chart-outline" class="mr-3 text-2xl"></ion-icon> Statistiques
         <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
       </a>
+      @if(auth.user.role === 'Admin')
+        <a href="{{ route('rwa_countries.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/rwa-countries') ? 'bg-blue-600 text-white font-semibold' : '' }}">
+          <ion-icon name="earth-outline" class="mr-3 text-2xl"></ion-icon>Instances RWA
+          <ion-icon name="chevron-forward-outline" class="ml-auto text-xs"></ion-icon>
+        </a>
+      @endif
       @if(auth.user.role === 'Admin')
       <a href="{{ route('users.index') }}" class="sidebar-link flex items-center px-5 py-4 rounded-lg hover:bg-gray-700 {{ request.url().includes('/users') ? 'bg-blue-600 text-white font-semibold' : '' }}">
         {{-- <i class="fas fa-user-cog mr-3"></i> --}}
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div class="ml-4">
-            <h1 class="text-xl font-bold text-gray-800">RELIANCE ESCALADE</h1>
+            <h1 class="text-xl font-bold text-gray-800"style="text-transform: uppercase;">RELIANCE ESCALADE {{instanceCountry}}</h1>
             <p class="text-sm text-gray-600">Gestion des Ressources Humaines</p>
           </div>
         </div>
@@ -167,12 +173,12 @@
       <!-- Page Header -->
       <div class="relative page-header bg-gradient-to-r from-indigo-600/80 via-purple-700/80 to-pink-800/80 rounded-2xl overflow-hidden mb-8"
           style="background-image: url('https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; background-blend-mode: overlay;">
-          <div class="absolute inset-0 bg-gradient-to-r from-cyan-950 to-orange-900/70"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-cyan-950 to-yellow-900/90"></div>
 
           <!-- Animated Background Elements -->
           <div class="absolute inset-0">
-            <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div>
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/25 rounded-full blur-3xl animate-pulse"></div>
+            {{-- <div class="absolute bottom-0 left-0 w-80 h-80 bg-blue-400/20 rounded-full blur-2xl animate-bounce" style="animation-duration: 4s;"></div> --}}
             {{-- <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-200/15 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div> --}}
           </div>
 
@@ -186,32 +192,32 @@
                 <h1 class="text-3xl font-bold text-white mb-2 text-shadow">
                   Statistiques RH
                 </h1>
-                <p class="text-orange-100 text-md">
+                <p class="text-blue-50 text-lg">
                   Analyse complète des données de ressources humaines
                 </p>
                 <div class="flex items-center gap-4 mt-4">
                   <div class="flex items-center gap-2">
                     {{-- <i class="fas fa-users text-blue-200"></i> --}}
                     {{-- <ion-icon name="people-outline" class="text-blue-200"></ion-icon> --}}
-                    <span class="text-md text-blue-100">Reliance West Africa</span>
+                    <span class="text-md text-blue-50">Reliance West Africa</span>
                   </div>
                   <div class="flex items-center gap-4">
                     {{-- <i class="fas fa-chart-line text-green-300"></i> --}}
-                    <ion-icon name="analytics-outline" class="text-2xl text-green-300"></ion-icon>
-                    <span class="text-md text-orange-100">Croissance interne : <span class="text-md text-blue-100 font-semibold">{{currentDate}}</span></span>
+                    <ion-icon name="analytics-outline" class="text-2xl text-teal-300"></ion-icon>
+                    <span class="text-md text-blue-50">Croissance interne : <span class="text-md text-blue-100 font-semibold">{{currentDate}}</span></span>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="flex gap-3">
-              <a href="{{ route('statistics.departments') }}" class="bg-white hover:bg-gray-800 backdrop-blur-sm text-black hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2">
+              <a href="{{ route('employees.index') }}" class="bg-white hover:bg-gray-800 backdrop-blur-sm text-black hover:text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2">
                 <ion-icon name="grid-outline" class="text-2xl mr-2"></ion-icon>
-                Départements
+                Employés
               </a>
-              <a href="{{ route('statistics.salaries') }}" class="bg-blue-700/95 hover:bg-gray-800 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2">
+              <a href="{{ route('pay_slips.index') }}" class="bg-blue-700/90 hover:bg-gray-800 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2">
                 <ion-icon name="cash-outline" class="text-2xl mr-2"></ion-icon>
-                Salaires
+                Bulletins de paye
               </a>
             </div>
           </div>
@@ -351,7 +357,7 @@
                   Salaire Moyen
                 </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Performance
+                  Répartition employés
                 </th>
               </tr>
             </thead>

@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Employee from '#models/employee'
 import { DateTime } from 'luxon'
+import RwaCountry from '#models/rwa_country'
 
 export default class EmployeesController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -29,18 +30,36 @@ export default class EmployeesController {
 
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
 
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
     return view.render('employees/index', {
       nemployee: {
         totalEmployees: totalEmployees[0].$extras.total,
       },
       employees,
       currentDate,
+      instanceCountry,
     })
   }
 
-  async create({ view }: HttpContext) {
+  async create({ response, auth, view }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.unauthorized('Utilisateur non authentifié')
+    }
+
+    const rwaCountryId = user.rwaCountryId
+    if (!rwaCountryId) {
+      return response.badRequest('Code pays non défini pour cet utilisateur')
+    }
+
     const currentDate = DateTime.local().setLocale('fr').toFormat("cccc d LLLL yyyy")
-    return view.render('employees/create', { currentDate })
+
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('employees/create', { currentDate, instanceCountry })
   }
 
   async store({ request, response, session, auth }: HttpContext) {
@@ -96,7 +115,10 @@ export default class EmployeesController {
       .preload('paySlips')
       .firstOrFail()
 
-    return view.render('employees/show', { employee, DateTime })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('employees/show', { employee, instanceCountry, DateTime })
   }
 
   async edit({ params, view, auth, response }: HttpContext) {
@@ -115,7 +137,10 @@ export default class EmployeesController {
       .where('rwa_country_id', rwaCountryId)
       .firstOrFail()
 
-    return view.render('employees/edit', { employee })
+    const rwaCountry = await RwaCountry.findBy('id', rwaCountryId)
+    const instanceCountry = rwaCountry?.instanceCountry
+
+    return view.render('employees/edit', { employee, instanceCountry })
   }
 
   async update({ params, request, response, session, auth }: HttpContext) {
@@ -137,7 +162,7 @@ export default class EmployeesController {
     const data = request.only([
       'nom', 'prenom', 'date_naissance', 'contact', 'adresse',
       'poste', 'departement', 'date_prise_fonction', 'salaire',
-      'type_contrat', 'duree_contrat', 'date_fin_contrat', 
+      'type_contrat', 'duree_contrat', 'date_fin_contrat',
     ])
 
     // Calculer la date de fin de contrat si nécessaire
