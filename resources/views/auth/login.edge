@@ -92,7 +92,7 @@
 
       <!-- Form -->
       <form action="{{ route('auth.login') }}" method="POST" class="space-y-6">
-        @csrf
+        {{ csrfField() }}
 
         <div>
           <label for="email" class="block text-md font-medium text-gray-800 mb-3">

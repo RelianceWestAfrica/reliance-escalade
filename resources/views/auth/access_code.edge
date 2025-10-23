@@ -40,7 +40,7 @@
 
       <!-- Form -->
       <form action="{{ route('auth.verify_access') }}" method="POST" class="space-y-6">
-        @csrf
+        {{ csrfField() }}
 
         <div>
           <label for="access_code" class="block text-sm font-medium text-blue-100 mb-3">
