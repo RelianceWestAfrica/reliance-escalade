@@ -36,8 +36,6 @@ server.use([
  */
 router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
-  () => import('@adonisjs/session/session_middleware'),
-  () => import('@adonisjs/shield/shield_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#middleware/share_view_globals'),
 ])
