@@ -4,6 +4,7 @@ import JobApplication from '#models/job_application'
 import { DateTime } from 'luxon'
 import Department from '#models/department'
 import RwaCountry from '#models/rwa_country'
+import UploadService from '../services/upload_service.js'
 
 export default class JobOffersController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -216,54 +217,35 @@ export default class JobOffersController {
     }
 
     const existingApplication = await existingApplicationQuery.first()
-
     if (existingApplication) {
       session.flash('error', 'Vous avez déjà postulé pour cette offre')
       return response.redirect().back()
     }
 
-
-    // Handle file uploads
-    const cvFile = request.file('cv_file', {
-      size: '3mb',
-      extnames: ['pdf', 'doc', 'docx']
-    })
-
-    const lettreMotivationFile = request.file('lettre_motivation_file', {
-      size: '3mb',
-      extnames: ['pdf', 'doc', 'docx']
-    })
-
-    const diplomeFile = request.file('diplome_file', {
-      size: '3mb',
-      extnames: ['pdf', 'jpg', 'jpeg', 'png']
-    })
+    // ==== NOUVEAU: Upload hors racine via Drive ====
+    const cvFile = request.file('cv_file', { size: '3mb', extnames: ['pdf', 'doc', 'docx'] })
+    const lettreMotivationFile = request.file('lettre_motivation_file', { size: '3mb', extnames: ['pdf', 'doc', 'docx'] })
+    const diplomeFile = request.file('diplome_file', { size: '3mb', extnames: ['pdf', 'jpg', 'jpeg', 'png'] })
 
     if (!cvFile || !lettreMotivationFile || !diplomeFile) {
       session.flash('error', 'Tous les fichiers sont requis')
       return response.redirect().back()
     }
 
-    // Save files
-    const uploadsPath = 'uploads/applications'
-    const timestamp = Date.now()
-
-    await cvFile.move(`public/${uploadsPath}`, {
-      name: `${timestamp}_cv_${cvFile.clientName}`
-    })
-
-    await lettreMotivationFile.move(`public/${uploadsPath}`, {
-      name: `${timestamp}_lettre_${lettreMotivationFile.clientName}`
-    })
-
-    await diplomeFile.move(`public/${uploadsPath}`, {
-      name: `${timestamp}_diplome_${diplomeFile.clientName}`
-    })
-
-    if (cvFile.hasErrors || lettreMotivationFile.hasErrors || diplomeFile.hasErrors) {
-      session.flash('error', 'Erreur lors du téléchargement des fichiers')
+    if (!cvFile.isValid || !lettreMotivationFile.isValid || !diplomeFile.isValid) {
+      session.flash('error', 'Un des fichiers est invalide')
       return response.redirect().back()
     }
+
+    const uploader = new UploadService()
+    const basePrefix = `applications/${offer.id}` // répertoire logique par offre
+
+    // Enregistrements privés (ex: /var/uploads/rwa/applications/<offerId>/...)
+    const savedCv = await uploader.save(cvFile, basePrefix, 'local_private')
+    const savedLettre = await uploader.save(lettreMotivationFile, basePrefix, 'local_private')
+    const savedDiplome = await uploader.save(diplomeFile, basePrefix, 'local_private')
+
+    // ==== FIN NOUVEAU ====
 
     await JobApplication.create({
       jobOfferId: offer.id,
@@ -271,9 +253,12 @@ export default class JobOffersController {
       emailProfessionnel: data.email_professionnel,
       telephone: data.telephone,
       motivation: data.motivation,
-      cvFilePath: `/${uploadsPath}/${cvFile.fileName}`,
-      lettreMotivationFilePath: `/${uploadsPath}/${lettreMotivationFile.fileName}`,
-      diplomeFilePath: `/${uploadsPath}/${diplomeFile.fileName}`,
+
+      // On enregistre la "clé interne" (chemin privé), PAS une URL publique :
+      cvFilePath: savedCv.key,
+      lettreMotivationFilePath: savedLettre.key,
+      diplomeFilePath: savedDiplome.key,
+
       statut: 'En attente',
       rwaCountryId: offerInstance,
     })
