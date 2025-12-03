@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import Department from '#models/department'
 import RwaCountry from '#models/rwa_country'
 import UploadService from '../services/upload_service.js'
+import { jobApplicationValidator } from '../validators/job_application.js'
 
 export default class JobOffersController {
   async index({ view, request, auth, response }: HttpContext) {
@@ -199,72 +200,75 @@ export default class JobOffersController {
   }
 
   async apply({ params, request, response, session }: HttpContext) {
+    // Récupération de l'offre
     const offer = await JobOffer.findOrFail(params.id)
     const offerInstance = offer?.rwaCountryId
-    const data = request.only(['nom_complet', 'email_professionnel', 'telephone', 'motivation'])
 
+    // Récupération des champs classiques
+    const data = request.only([
+      'nom_complet',
+      'email_professionnel',
+      'telephone',
+      'motivation'
+    ])
+
+
+    // Vérification si l'offre est disponible
     if (offer.statut !== 'Publiée' || offer.isExpired) {
       session.flash('error', "Cette offre n'est plus disponible")
       return response.redirect('/jobs')
     }
 
-    const existingApplicationQuery = JobApplication.query()
+    // Vérification de doublon
+    const existingQuery = JobApplication.query()
       .where('job_offer_id', offer.id)
       .where('email_professionnel', data.email_professionnel)
 
-    if (offerInstance !== null) {
-      existingApplicationQuery.where('rwa_country_id', offerInstance)
+    if (offerInstance) {
+      existingQuery.where('rwa_country_id', offerInstance)
     }
 
-    const existingApplication = await existingApplicationQuery.first()
-    if (existingApplication) {
+    const existing = await existingQuery.first()
+
+    if (existing) {
       session.flash('error', 'Vous avez déjà postulé pour cette offre')
       return response.redirect().back()
     }
 
-    // ==== NOUVEAU: Upload hors racine via Drive ====
-    const cvFile = request.file('cv_file', { size: '3mb', extnames: ['pdf', 'doc', 'docx'] })
-    const lettreMotivationFile = request.file('lettre_motivation_file', { size: '3mb', extnames: ['pdf', 'doc', 'docx'] })
-    const diplomeFile = request.file('diplome_file', { size: '3mb', extnames: ['pdf', 'jpg', 'jpeg', 'png'] })
+    // --- VALIDATION VIA VINEJS ---
+    const payload = await request.validateUsing(jobApplicationValidator)
 
-    if (!cvFile || !lettreMotivationFile || !diplomeFile) {
-      session.flash('error', 'Tous les fichiers sont requis')
-      return response.redirect().back()
-    }
+    console.log(payload)
 
-    if (!cvFile.isValid || !lettreMotivationFile.isValid || !diplomeFile.isValid) {
-      session.flash('error', 'Un des fichiers est invalide')
-      return response.redirect().back()
-    }
+    const cvFile = payload.cv
+    const lettreFile = payload.lettre
+    const diplomeFile = payload.diplome
 
+    // console.log(cvFile, lettreFile, diplomeFile)
+    // --- UPLOAD ---
     const uploader = new UploadService()
-    const basePrefix = `applications/${offer.id}` // répertoire logique par offre
+    const basePrefix = `applications/${offer.id}`
 
-    // Enregistrements privés (ex: /var/uploads/rwa/applications/<offerId>/...)
-    const savedCv = await uploader.save(cvFile, basePrefix, 'local_private')
-    const savedLettre = await uploader.save(lettreMotivationFile, basePrefix, 'local_private')
-    const savedDiplome = await uploader.save(diplomeFile, basePrefix, 'local_private')
+    const savedCv = await uploader.save(cvFile, basePrefix)
+    const savedLettre = await uploader.save(lettreFile, basePrefix)
+    const savedDiplome = await uploader.save(diplomeFile, basePrefix)
 
-    // ==== FIN NOUVEAU ====
-
+    // --- ENREGISTREMENT EN BDD ---
     await JobApplication.create({
       jobOfferId: offer.id,
       nomComplet: data.nom_complet,
       emailProfessionnel: data.email_professionnel,
       telephone: data.telephone,
       motivation: data.motivation,
-
-      // On enregistre la "clé interne" (chemin privé), PAS une URL publique :
       cvFilePath: savedCv.key,
       lettreMotivationFilePath: savedLettre.key,
       diplomeFilePath: savedDiplome.key,
-
       statut: 'En attente',
       rwaCountryId: offerInstance,
     })
 
     session.flash('success', 'Votre candidature a été soumise avec succès')
-    return response.redirect('/jobs')
+    // return response.redirect('/jobs')
   }
 
   async applications({ params, view, auth, response }: HttpContext) {
