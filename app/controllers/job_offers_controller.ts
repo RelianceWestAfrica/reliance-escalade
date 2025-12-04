@@ -362,7 +362,7 @@ export default class JobOffersController {
     session.flash('success', 'Statut de candidature mis à jour')
     return response.redirect().back()
   }
-  
+
   public async downloadCv({ params, response, auth }: HttpContext) {
     const user = auth.user
     if (!user) return response.unauthorized('Utilisateur non authentifié')
