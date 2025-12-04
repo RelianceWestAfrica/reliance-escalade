@@ -363,7 +363,6 @@ export default class JobOffersController {
     return response.redirect().back()
   }
 
-
   public async downloadCv({ params, response, auth }: HttpContext) {
     const user = auth.user
     if (!user) return response.unauthorized('Utilisateur non authentifié')
@@ -387,6 +386,7 @@ export default class JobOffersController {
     // return response.download(url)
   }
 
+
   /**
    * Pareil pour la lettre de motivation
    */
@@ -407,10 +407,10 @@ export default class JobOffersController {
     return response.redirect(url)
   }
 
+
   /**
    * Pareil pour le diplôme
    */
-  
   public async downloadDiplome({ params, response, auth }: HttpContext) {
     const user = auth.user
     if (!user) return response.unauthorized('Utilisateur non authentifié')
