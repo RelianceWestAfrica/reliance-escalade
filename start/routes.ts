@@ -13,6 +13,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import JobOffersController from '#controllers/job_offers_controller.js'
 
 
 // Route d'accès (page d'accueil)
@@ -122,3 +123,11 @@ router.get('/jobs', '#controllers/job_offers_controller.publicIndex').as('jobs.i
 router.get('/jobs/:id', '#controllers/job_offers_controller.publicShow').as('jobs.show')
 // Formulaire de candidature (soumission)
 router.post('/jobs/:id/apply', '#controllers/job_offers_controller.apply').as('jobs.apply')
+
+router
+  .group(() => {
+    router.get('/applications/:id/cv', [JobOffersController, 'downloadCv'])
+    router.get('/applications/:id/lettre', [JobOffersController, 'downloadLettre'])
+    router.get('/applications/:id/diplome', [JobOffersController, 'downloadDiplome'])
+  })
+  .middleware(middleware.auth())

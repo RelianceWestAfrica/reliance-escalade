@@ -235,23 +235,73 @@ export default class JobOffersController {
       return response.redirect().back()
     }
 
-    // --- VALIDATION VIA VINEJS ---
-    const payload = await request.validateUsing(jobApplicationValidator)
+    // Handle file uploads
+    const cvFile = request.file('cv_file', {
+      size: '3mb',
+      extnames: ['pdf', 'doc', 'docx']
+    })
 
-    console.log(payload)
+    const lettreMotivationFile = request.file('lettre_motivation_file', {
+      size: '3mb',
+      extnames: ['pdf', 'doc', 'docx']
+    })
 
-    const cvFile = payload.cv
-    const lettreFile = payload.lettre
-    const diplomeFile = payload.diplome
+    const diplomeFile = request.file('diplome_file', {
+      size: '3mb',
+      extnames: ['pdf', 'jpg', 'jpeg', 'png']
+    })
+
+    console.log(cvFile, lettreMotivationFile, diplomeFile)
+
+    if (!cvFile || !lettreMotivationFile || !diplomeFile) {
+      session.flash('error', 'Tous les fichiers sont requis')
+      return response.redirect().back()
+    }
+
+    // Save files
+    const uploader = new UploadService()
+    const basePrefix = `applications/${offer.id}`
+    //
+    const savedCv = await uploader.save(cvFile, basePrefix)
+    const savedLettre = await uploader.save(lettreMotivationFile, basePrefix)
+    const savedDiplome = await uploader.save(diplomeFile, basePrefix)
+
+    // const uploadsPath = 'uploads/applications'
+    // const timestamp = Date.now()
+
+    // await cvFile.move(`public/${uploadsPath}`, {
+    //   name: `${timestamp}_cv_${cvFile.clientName}`
+    // })
+    //
+    // await lettreMotivationFile.move(`public/${uploadsPath}`, {
+    //   name: `${timestamp}_lettre_${lettreMotivationFile.clientName}`
+    // })
+    //
+    // await diplomeFile.move(`public/${uploadsPath}`, {
+    //   name: `${timestamp}_diplome_${diplomeFile.clientName}`
+    // })
+
+    // if (cvFile.hasErrors || lettreMotivationFile.hasErrors || diplomeFile.hasErrors) {
+    //   session.flash('error', 'Erreur lors du téléchargement des fichiers')
+    //   return response.redirect().back()
+    // }
+
+    // await JobApplication.create({
+    //   jobOfferId: offer.id,
+    //   nomComplet: data.nom_complet,
+    //   emailProfessionnel: data.email_professionnel,
+    //   telephone: data.telephone,
+    //   motivation: data.motivation,
+    //   cvFilePath: `/${uploadsPath}/${cvFile.fileName}`,
+    //   lettreMotivationFilePath: `/${uploadsPath}/${lettreMotivationFile.fileName}`,
+    //   diplomeFilePath: `/${uploadsPath}/${diplomeFile.fileName}`,
+    //   statut: 'En attente',
+    //   rwaCountryId: offerInstance,
+    // })
 
     // console.log(cvFile, lettreFile, diplomeFile)
     // --- UPLOAD ---
-    const uploader = new UploadService()
-    const basePrefix = `applications/${offer.id}`
 
-    const savedCv = await uploader.save(cvFile, basePrefix)
-    const savedLettre = await uploader.save(lettreFile, basePrefix)
-    const savedDiplome = await uploader.save(diplomeFile, basePrefix)
 
     // --- ENREGISTREMENT EN BDD ---
     await JobApplication.create({
@@ -268,7 +318,7 @@ export default class JobOffersController {
     })
 
     session.flash('success', 'Votre candidature a été soumise avec succès')
-    // return response.redirect('/jobs')
+    return response.redirect('/jobs')
   }
 
   async applications({ params, view, auth, response }: HttpContext) {
@@ -311,5 +361,69 @@ export default class JobOffersController {
 
     session.flash('success', 'Statut de candidature mis à jour')
     return response.redirect().back()
+  }
+
+
+  public async downloadCv({ params, response, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) return response.unauthorized('Utilisateur non authentifié')
+
+    // on protège par pays si tu utilises rwaCountryId
+    const application = await JobApplication.query()
+      .where('id', params.id)
+      .firstOrFail()
+
+    if (!application.cvFilePath) {
+      return response.notFound('CV introuvable pour cette candidature')
+    }
+
+    const uploader = new UploadService()
+    const url = await uploader.getUrl(application.cvFilePath)
+
+    // Soit tu rediriges vers l'URL,
+    return response.redirect(url)
+
+    // soit tu peux stream le fichier directement (optionnel, autre style) :
+    // return response.download(url)
+  }
+
+  /**
+   * Pareil pour la lettre de motivation
+   */
+  public async downloadLettre({ params, response, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) return response.unauthorized('Utilisateur non authentifié')
+
+    const application = await JobApplication.query()
+      .where('id', params.id)
+      .firstOrFail()
+
+    if (!application.lettreMotivationFilePath) {
+      return response.notFound('Lettre introuvable pour cette candidature')
+    }
+
+    const uploader = new UploadService()
+    const url = await uploader.getUrl(application.lettreMotivationFilePath)
+    return response.redirect(url)
+  }
+
+  /**
+   * Pareil pour le diplôme
+   */
+  public async downloadDiplome({ params, response, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) return response.unauthorized('Utilisateur non authentifié')
+
+    const application = await JobApplication.query()
+      .where('id', params.id)
+      .firstOrFail()
+
+    if (!application.diplomeFilePath) {
+      return response.notFound('Diplôme introuvable pour cette candidature')
+    }
+
+    const uploader = new UploadService()
+    const url = await uploader.getUrl(application.diplomeFilePath)
+    return response.redirect(url)
   }
 }
