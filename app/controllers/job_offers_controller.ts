@@ -362,8 +362,7 @@ export default class JobOffersController {
     session.flash('success', 'Statut de candidature mis à jour')
     return response.redirect().back()
   }
-
-
+  
   public async downloadCv({ params, response, auth }: HttpContext) {
     const user = auth.user
     if (!user) return response.unauthorized('Utilisateur non authentifié')
@@ -387,6 +386,7 @@ export default class JobOffersController {
     // return response.download(url)
   }
 
+
   /**
    * Pareil pour la lettre de motivation
    */
@@ -406,6 +406,7 @@ export default class JobOffersController {
     const url = await uploader.getUrl(application.lettreMotivationFilePath)
     return response.redirect(url)
   }
+
 
   /**
    * Pareil pour le diplôme
