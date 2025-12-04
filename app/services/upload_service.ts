@@ -53,4 +53,17 @@ export default class UploadService {
       mime: file.headers?.['content-type'] ?? null,
     }
   }
+
+  /**
+   * Retourne une URL publique (ou signée selon le driver)
+   * Ex: pour fs + serveFiles: true → /uploads/<key>
+   */
+  public async getUrl(
+    key: string,
+    diskName: DiskName = ((process.env.DRIVE_DISK as DiskName) ?? 'fs')
+  ): Promise<string> {
+    const drive = Drive.use(diskName)
+    const url = await drive.getUrl(key)
+    return url
+  }
 }

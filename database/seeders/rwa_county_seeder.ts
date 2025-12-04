@@ -3,7 +3,7 @@ import RwaCountry from '#models/rwa_country'
 
 export default class RwaCountrySeeder extends BaseSeeder {
   public async run() {
-    await RwaCountry.createMany([
+    const countries = [
       {
         rwaInstanceName: 'RWA Togo',
         instanceCountry: 'Togo',
@@ -22,7 +22,17 @@ export default class RwaCountrySeeder extends BaseSeeder {
         accessCode: 'NG_RWAI3',
         instanceCeo: 'Obi CHINEDU',
       },
+    ]
 
-    ])
+    for (const country of countries) {
+      const existing = await RwaCountry.findBy('accessCode', country.accessCode)
+
+      if (!existing) {
+        await RwaCountry.create(country)
+        console.log(`✔ Créé : ${country.rwaInstanceName}`)
+      } else {
+        console.log(`↷ Déjà existant : ${country.rwaInstanceName} → SKIP`)
+      }
+    }
   }
 }
