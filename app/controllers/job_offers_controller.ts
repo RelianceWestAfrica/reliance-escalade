@@ -410,6 +410,7 @@ export default class JobOffersController {
   /**
    * Pareil pour le diplôme
    */
+  
   public async downloadDiplome({ params, response, auth }: HttpContext) {
     const user = auth.user
     if (!user) return response.unauthorized('Utilisateur non authentifié')
