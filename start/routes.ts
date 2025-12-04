@@ -13,7 +13,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import JobOffersController from '#controllers/job_offers_controller.js'
+import JobOffersController from '#controllers/job_offers_controller'
 
 
 // Route d'accès (page d'accueil)
