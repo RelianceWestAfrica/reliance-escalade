@@ -297,7 +297,7 @@
                     <h5 class="font-medium text-gray-800 mb-3">Documents soumis :</h5>
                     <div class="space-y-2">
                       @if(application.cvFilePath)
-                        <a href="{{ application.cvFilePath }}" target="_blank" class="flex items-center gap-2 bg-white/70 hover:bg-white rounded-lg p-3 text-sm transition-all group">
+                        <a href="/applications/{{ application.id }}/cv" target="_blank" class="flex items-center gap-2 bg-white/70 hover:bg-white rounded-lg p-3 text-sm transition-all group">
                           <div class="w-8 h-8 bg-gray-100/60 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                             <ion-icon name="reader-outline" class="text-lg ml-1 mr-1 text-blue-800/70"></ion-icon>
                           </div>
@@ -316,7 +316,7 @@
                       @endif
 
                       @if(application.lettreMotivationFilePath)
-                        <a href="{{ application.lettreMotivationFilePath }}" target="_blank" class="flex items-center gap-2 bg-white/70 hover:bg-white rounded-lg p-3 text-sm transition-all group">
+                        <a href="/applications/{{ application.id }}/lettre" target="_blank" class="flex items-center gap-2 bg-white/70 hover:bg-white rounded-lg p-3 text-sm transition-all group">
                           <div class="w-8 h-8 bg-gray-100/60 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                             <ion-icon name="document-text-outline" class="text-lg ml-1 mr-2 text-blue-800/70"></ion-icon>
                           </div>
@@ -336,7 +336,7 @@
                       @endif
 
                       @if(application.diplomeFilePath)
-                        <a href="{{ application.diplomeFilePath }}" target="_blank" class="flex items-center gap-2 bg-white/70 hover:bg-white rounded-lg p-3 text-sm transition-all group">
+                        <a href="/applications/{{ application.id }}/diplome" target="_blank" class="flex items-center gap-2 bg-white/70 hover:bg-white rounded-lg p-3 text-sm transition-all group">
                           <div class="w-8 h-8 bg-gray-100/60 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                             <ion-icon name="school-outline" class="text-lg ml-1 mr-1 text-blue-800/70"></ion-icon>
                           </div>
