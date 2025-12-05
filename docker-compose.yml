@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - /srv/reliance_hr/uploads:/var/www/reliance_hr/uploads:rw
     env_file:
       - .env   # mettez vos variables prod ici
     environment:
