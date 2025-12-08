@@ -78,7 +78,7 @@ export default class DemotionsController {
 
     const data = request.only([
       'employee_id', 'ancien_poste', 'nouveau_poste',
-      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction',
+      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction', 'statut'
     ])
 
     data.montant_reduction = data.ancien_salaire - data.nouveau_salaire
@@ -137,7 +137,7 @@ export default class DemotionsController {
 
     const data = request.only([
       'employee_id', 'ancien_poste', 'nouveau_poste',
-      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction',
+      'ancien_salaire', 'nouveau_salaire', 'motif_demotion', 'date_vigueur', 'montant_reduction', 'statut'
     ])
 
     data.montant_reduction = data.ancien_salaire - data.nouveau_salaire

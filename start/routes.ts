@@ -57,8 +57,8 @@ router.group(() => {
   router.resource('pay-slips', '#controllers/pay_slips_controller')
   router.post('/pay-slips/generate-all', '#controllers/pay_slips_controller.generateAll').as('pay_slips.generate_all')
   router.post('/pay-slips/:id/cancel', '#controllers/pay_slips_controller.cancel').as('pay_slips.cancel')
-  router.post('/pay-slips/:id/update', '#controllers/pay-slips_controller.update').as('pay-slips.update_payslip')
-  router.post('/pay-slips/:id/delete', '#controllers/pay-slips_controller.destroy').as('pay-slips.destroy_payslip')
+  router.post('/pay-slips/:id/update', '#controllers/pay_slips_controller.update').as('pay-slips.update_payslip')
+  router.post('/pay-slips/:id/delete', '#controllers/pay_slips_controller.destroy').as('pay-slips.destroy_payslip')
 
 
   // Suivi des employés (Employee Tracking)

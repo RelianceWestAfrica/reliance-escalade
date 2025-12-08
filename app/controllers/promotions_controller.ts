@@ -131,6 +131,7 @@ export default class PromotionsController {
       'nouveau_salaire',
       'date_vigueur',
       'montant_augmentation',
+      'statut'
 
     ])
 
@@ -171,6 +172,7 @@ export default class PromotionsController {
       'nouveau_salaire',
       'date_vigueur',
       'montant_augmentation',
+      'statut',
 
     ])
 
@@ -185,6 +187,45 @@ export default class PromotionsController {
     await promotion.save()
 
     session.flash('success', 'Promotion modifiée avec succès')
+    return response.redirect('/promotions')
+  }
+
+  async apply({ params, response, session, auth }: HttpContext) {
+    const rwaCountryId = session.get('rwa_country_id')
+    const userId = auth.user?.id
+
+    const promotion = await Promotion.query()
+          .where('id', params.id)
+          .where('rwa_country_id', rwaCountryId)
+          .preload('employee')
+          .firstOrFail()
+
+    // Appliquer la promotion
+    promotion.statut = 'Appliquée'
+    promotion.userId = userId ?? null
+    await promotion.save()
+
+    // Mettre à jour l'employé
+    const employee = promotion.employee
+    employee.poste = promotion.nouveauPoste
+    employee.salaire = promotion.nouveauSalaire
+    await employee.save()
+
+    session.flash('success', 'Promotion appliquée avec succès')
+    return response.redirect('/promotions')
+  }
+
+  async destroy({ params, response, session }: HttpContext) {
+    const rwaCountryId = session.get('rwa_country_id')
+
+    const promotion = await Promotion.query()
+          .where('id', params.id)
+          .where('rwa_country_id', rwaCountryId)
+          .firstOrFail()
+
+    await promotion.delete()
+
+    session.flash('success', 'Promotion supprimée avec succès')
     return response.redirect('/promotions')
   }
 
