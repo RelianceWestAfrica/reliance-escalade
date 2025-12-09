@@ -26,4 +26,4 @@ ENV NODE_ENV=production
 EXPOSE 4000
 
 # Commande de démarrage
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
