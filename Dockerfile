@@ -15,7 +15,7 @@ COPY . .
 
 # Copier .env.prod vers .env AVANT le démarrage
 # (Pour que le conteneur utilise les variables de prod automatiquement)
-RUN cp .env.prod .env
+#RUN #cp .env.prod .env
 
 # Définir les variables d'environnement par défaut
 ENV HOST=0.0.0.0
