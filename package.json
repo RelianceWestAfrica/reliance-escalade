@@ -76,7 +76,7 @@
     "@aws-sdk/s3-request-presigner": "^3.919.0",
     "@vinejs/vine": "^3.0.1",
     "bootstrap": "^5.3.8",
-    "edge.ts": "^6.2.1",
+    "edge.js": "^6.2.1",
     "luxon": "^3.7.1",
     "mysql2": "^3.14.2",
     "reflect-metadata": "^0.2.2"
